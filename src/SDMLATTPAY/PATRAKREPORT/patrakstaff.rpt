@@ -1,0 +1,2161 @@
+<?xml version="1.0" encoding="UTF-8  ?>"
+<!-- TReportWriter Document - A Textbased Report writer -->
+<DBInfo value="jdbc:mysql://200.0.0.227:3306/SDMLATTPAY"/>
+<ReportQuery value="SELECT  SUBSTRING(PAY_EMP_NO,4,1) AS EMP_TYPE,PAY_EMP_NO,EMP_NAME,DATE(EMP_JOIN_DATE) AS EMP_JOIN_DATE,DPTCODE FROM SDMLATTPAY.ATTPAY_EMPMST LEFT JOIN SDMLATTPAY.ATT_DEPARTMENT_MASTER ON EMP_DEPARTMENT=DPTID WHERE (PAY_EMP_NO LIKE 'BRD1%'  OR PAY_EMP_NO LIKE 'BRD2%') AND (EMP_LEFT_DATE='0000-00-00') ORDER BY PAY_EMP_NO"/>
+<ReportPage>
+<property name="PageHeight" value="72"/>
+<property name="PageWidth" value="160"/>
+<property name="PageSize" value="2"/>
+<property name="PaperOrientation" value="1"/>
+<property name="LeftMargin" value="0"/>
+<property name="RightMargin" value="0"/>
+<property name="TopMargin" value="1"/>
+<property name="BottomMargin" value="0"/>
+</ReportPage>
+<InputParameters count="1">
+<Parameter>
+<property name="ParameterName" value="PMONTH"/>
+<property name="DataType" value="String"/>
+<property name="ParameterValue" value="MARCH - 2020"/>
+</Parameter>
+</InputParameters>
+<Variables count="4">
+<Variable>
+<property name="VariableName" value="PAGE_NO"/>
+<property name="Expression" value="PAGE_NO"/>
+<property name="Function" value="None"/>
+<property name="EvaluationTime" value="3"/>
+<property name="EvaluationGroup" value=""/>
+<property name="BuiltInVariable" value="true"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="4"/>
+<property name="ResetGroupName" value=""/>
+</Variable>
+<Variable>
+<property name="VariableName" value="TOTAL_PAGES"/>
+<property name="Expression" value="TOTAL_PAGES"/>
+<property name="Function" value="None"/>
+<property name="EvaluationTime" value="1"/>
+<property name="EvaluationGroup" value=""/>
+<property name="BuiltInVariable" value="true"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="4"/>
+<property name="ResetGroupName" value=""/>
+</Variable>
+<Variable>
+<property name="VariableName" value="DATE"/>
+<property name="Expression" value="DATE"/>
+<property name="Function" value="None"/>
+<property name="EvaluationTime" value="0"/>
+<property name="EvaluationGroup" value=""/>
+<property name="BuiltInVariable" value="true"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="4"/>
+<property name="ResetGroupName" value=""/>
+</Variable>
+<Variable>
+<property name="VariableName" value="SRNO"/>
+<property name="Expression" value="$V{SRNO}+1"/>
+<property name="Function" value="None"/>
+<property name="EvaluationTime" value="0"/>
+<property name="EvaluationGroup" value=" "/>
+<property name="BuiltInVariable" value="false"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="4"/>
+<property name="ResetGroupName" value=" "/>
+</Variable>
+</Variables>
+<Band BandHeight="0" SplitBand="true" BandType="1" BandStartRow="0" BandName="Report Header" GroupExpression="" StartGroupOnNewPage="false" >
+</Band>
+<Band BandHeight="10" SplitBand="true" BandType="2" BandStartRow="0" BandName="Page Header" GroupExpression="" StartGroupOnNewPage="false" >
+<TextField>
+<property name="Text" value="31"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="112"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="96"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="66"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="26"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="97"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="Register of Adult Workers"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="25"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="5"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="140"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="1"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="26"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="PH"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="126"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="39"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="22"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="85"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="125"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="Remarks"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="10"/>
+<property name="PositionX" value="141"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="99"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="PL"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="129"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="13"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="58"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="Emp No."/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="7"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="30"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="109"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="19"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="76"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="5"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="35"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="8"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="44"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="N.B. For Particulars of Group and Relay vide"/>
+<property name="MultiLine" value="true"/>
+<property name="Width" value="44"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="90"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="16"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="67"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="45"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="SHRI DINESH MILLS LTD.,VADODARA"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="31"/>
+<property name="PositionX" value="65"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="122"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="87"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="10"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="49"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="118"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="134"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="30"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="21"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="Shift Report on Notice Board"/>
+<property name="MultiLine" value="true"/>
+<property name="Width" value="28"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="3"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="ATT"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="3"/>
+<property name="PositionX" value="119"/>
+<property name="PositionY" value="7"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="28"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="103"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="27"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="48"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="72"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="21"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="82"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="17"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="70"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="WO"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="123"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="108"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="36"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="131"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="75"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="================================================================================================================================================================"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="160"/>
+<property name="PositionX" value="0"/>
+<property name="PositionY" value="9"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="42"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="24"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="91"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="DEPARTMENT"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="10"/>
+<property name="PositionX" value="75"/>
+<property name="PositionY" value="5"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="60"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="114"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="SL"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="135"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="LO"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="138"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="11"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="52"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="SF"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="22"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="P=resent, L=Sanation Leave"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="26"/>
+<property name="PositionX" value="127"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="25"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="94"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="6"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="38"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="69"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="93"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="9"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="47"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="63"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="A=Absent, N=Empty No., S=Suspend"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="32"/>
+<property name="PositionX" value="127"/>
+<property name="PositionY" value="3"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="CL"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="132"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="57"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="SFT"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="3"/>
+<property name="PositionX" value="115"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="29"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="106"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="81"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="15"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="64"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="20"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="79"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="111"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="3"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="32"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="O=Layoff, B=Badli"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="17"/>
+<property name="PositionX" value="127"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="137"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="33"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="F O R M   N O.  2 8"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="19"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="24"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="18"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="73"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="7"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="41"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="14"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="61"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="54"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="84"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="DAILY ATTENDANE FOR THE MONTH"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="29"/>
+<property name="PositionX" value="58"/>
+<property name="PositionY" value="3"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="23"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="88"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="78"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="2"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="29"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="105"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="51"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="102"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="TTL"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="3"/>
+<property name="PositionX" value="119"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="128"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="ATT"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="3"/>
+<property name="PositionX" value="115"/>
+<property name="PositionY" value="7"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="27"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="100"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="================================================================================================================================================================"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="160"/>
+<property name="PositionX" value="0"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="12"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="55"/>
+<property name="PositionY" value="8"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<DBField>
+<property name="Text" value="$P{PMONTH}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="15"/>
+<property name="PositionX" value="88"/>
+<property name="PositionY" value="3"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+</Band>
+<Band BandHeight="0" SplitBand="true" BandType="3" BandStartRow="0" BandName="emp" GroupExpression="$F{EMP_TYPE}" StartGroupOnNewPage="true" >
+</Band>
+<Band BandHeight="6" SplitBand="true" BandType="4" BandStartRow="0" BandName="Detail" GroupExpression="" StartGroupOnNewPage="false" >
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="131"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="84"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="125"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="39"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="111"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="140"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="72"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="96"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="128"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="51"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="114"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="81"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="93"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="75"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="69"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="99"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="134"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="128"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="131"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="72"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="108"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="137"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="30"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="102"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="60"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="48"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="131"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="1"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="23"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="114"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="45"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="72"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="30"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="48"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="108"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="================================================================================================================================================================"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="160"/>
+<property name="PositionX" value="0"/>
+<property name="PositionY" value="5"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="3"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="23"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="36"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="81"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="66"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="90"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="134"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="105"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="125"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="54"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="81"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="-------------------------------------------------------------------------------------------------------------------------------------------"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="139"/>
+<property name="PositionX" value="21"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="84"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="27"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="33"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="42"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="30"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="111"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="118"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="108"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="66"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="96"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="122"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="87"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="118"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="24"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="45"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="99"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="93"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="57"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="51"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="84"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="114"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="60"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="69"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="21"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="140"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="27"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="96"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="63"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="63"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="137"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="69"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="87"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="63"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="128"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="51"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="33"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="122"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="134"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="90"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="48"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="42"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="36"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="39"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="99"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="105"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="60"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="42"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="75"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="54"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="78"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="75"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="45"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="118"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="66"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="36"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="137"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="24"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="78"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="57"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="21"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="90"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="140"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="111"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="102"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="87"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="-------------------------------------------------------------------------------------------------------------------------------------------"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="139"/>
+<property name="PositionX" value="21"/>
+<property name="PositionY" value="3"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="24"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="33"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="2"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="23"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="78"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="39"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="21"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="57"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="105"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="122"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="125"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="27"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="102"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="54"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="|"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="1"/>
+<property name="PositionX" value="93"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<DBField>
+<property name="Text" value="$V{SRNO}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="5"/>
+<property name="PositionX" value="142"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="#0"/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{PAY_EMP_NO}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="9"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{EMP_NAME}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="true"/>
+<property name="Width" value="21"/>
+<property name="PositionX" value="0"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{EMP_JOIN_DATE}"/>
+<property name="DataType" value="Date"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="10"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="DD/MM/YYYY"/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{DPTCODE}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="5"/>
+<property name="PositionX" value="12"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{PAY_EMP_NO}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="9"/>
+<property name="PositionX" value="142"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+</Band>
+<Band BandHeight="0" SplitBand="true" BandType="5" BandStartRow="0" BandName="emp" GroupExpression="$F{EMP_TYPE}" StartGroupOnNewPage="true" >
+</Band>
+<Band BandHeight="2" SplitBand="true" BandType="6" BandStartRow="0" BandName="Page Footer" GroupExpression="" StartGroupOnNewPage="false" >
+</Band>
+<Band BandHeight="0" SplitBand="true" BandType="7" BandStartRow="0" BandName="Report Footer" GroupExpression="" StartGroupOnNewPage="false" >
+</Band>

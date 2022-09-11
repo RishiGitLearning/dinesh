@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="NRGP"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="2" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<queryString><![CDATA[SELECT * FROM PRODUCTION.GIDC_FELT_NRGP G
+LEFT JOIN (SELECT PARA_CODE,D_COM_PARAMETER_MAST.DESC AS TRANSPORT_MODE FROM DINESHMILLS.D_COM_PARAMETER_MAST WHERE  PARA_ID='TRANSPORT_MODE') M
+ON G.TRANSPORTER=M.PARA_CODE
+WHERE G.GATEPASS_NO='MKP-000002']]></queryString>
+
+	<field name="COMPANY_ID" class="java.lang.Long"/>
+	<field name="GATEPASS_NO" class="java.lang.String"/>
+	<field name="GATEPASS_DATE" class="java.sql.Date"/>
+	<field name="GATEPASS_TYPE" class="java.lang.String"/>
+	<field name="MODE_TRANSPORT" class="java.lang.Long"/>
+	<field name="TRANSPORTER" class="java.lang.Long"/>
+	<field name="APPROVED" class="java.lang.Integer"/>
+	<field name="APPROVED_DATE" class="java.sql.Date"/>
+	<field name="REJECTED_DATE" class="java.sql.Date"/>
+	<field name="REJECTED_REMARKS" class="java.lang.String"/>
+	<field name="REMARKS" class="java.lang.String"/>
+	<field name="CANCELED" class="java.lang.Integer"/>
+	<field name="CREATED_BY" class="java.lang.Long"/>
+	<field name="CREATED_DATE" class="java.sql.Date"/>
+	<field name="MODIFIED_BY" class="java.lang.Long"/>
+	<field name="MODIFIED_DATE" class="java.sql.Date"/>
+	<field name="HIERARCHY_ID" class="java.lang.Long"/>
+	<field name="PARTY_NAME" class="java.lang.String"/>
+	<field name="ADD1" class="java.lang.String"/>
+	<field name="ADD2" class="java.lang.String"/>
+	<field name="ADD3" class="java.lang.String"/>
+	<field name="CITY" class="java.lang.String"/>
+	<field name="PURPOSE" class="java.lang.String"/>
+	<field name="DESPATCH_MODE" class="java.lang.String"/>
+	<field name="PACKING" class="java.lang.String"/>
+	<field name="REJECTED" class="java.lang.Integer"/>
+	<field name="CHANGED" class="java.lang.Integer"/>
+	<field name="CHANGED_DATE" class="java.sql.Date"/>
+	<field name="GROSS_WEIGHT" class="java.lang.String"/>
+	<field name="ITEM_CODE" class="java.lang.String"/>
+	<field name="PIECE_NO" class="java.lang.String"/>
+	<field name="NRGP_DESC" class="java.lang.String"/>
+	<field name="QTY" class="java.lang.String"/>
+	<field name="UNIT" class="java.lang.String"/>
+	<field name="GATEPASS_ISSUE_NO" class="java.lang.String"/>
+	<field name="GATEPASS_ISSUE_SR_NO" class="java.lang.String"/>
+	<field name="RATE" class="java.lang.String"/>
+	<field name="HSN" class="java.lang.String"/>
+	<field name="NET_AMOUNT" class="java.lang.String"/>
+	<field name="NET_AMOUNT_IN_WORDS" class="java.lang.String"/>
+	<field name="DELIVERY_CHALLAN_NO" class="java.lang.String"/>
+	<field name="DELIVERY_CHALLAN_DATE" class="java.sql.Date"/>
+	<field name="LENGTH" class="java.lang.String"/>
+	<field name="WIDTH" class="java.lang.String"/>
+	<field name="WEIGHT" class="java.lang.String"/>
+	<field name="SQMTR" class="java.lang.String"/>
+	<field name="WASTE_LENGTH_QTY" class="java.lang.String"/>
+	<field name="WASTE_WEFT_QTY" class="java.lang.String"/>
+	<field name="WASTE_HSN" class="java.lang.String"/>
+	<field name="WASTE_WEIGHT" class="java.lang.String"/>
+	<field name="PARA_CODE" class="java.lang.Long"/>
+	<field name="TRANSPORT_MODE" class="java.lang.String"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="53"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="7"
+						y="2"
+						width="525"
+						height="34"
+						key="staticText-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="24" isBold="true"/>
+					</textElement>
+				<text><![CDATA[S H R I  D I N E S H  M I L L S  L T D.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="154"
+						y="36"
+						width="237"
+						height="17"
+						key="staticText-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[P.O.Box No. 2501, Padra Road,VADODARA - 390 020]]></text>
+				</staticText>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="128"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="417"
+						y="3"
+						width="38"
+						height="18"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[No.  :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="417"
+						y="21"
+						width="38"
+						height="18"
+						key="staticText-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Date :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="5"
+						y="10"
+						width="229"
+						height="20"
+						key="staticText-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[NON-RETURNABLE GATE PASS]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="5"
+						y="37"
+						width="47"
+						height="18"
+						key="staticText-6"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[From :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="5"
+						y="55"
+						width="47"
+						height="18"
+						key="staticText-7"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[To     :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="56"
+						y="37"
+						width="58"
+						height="18"
+						key="staticText-8"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[STORES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="56"
+						y="55"
+						width="95"
+						height="18"
+						key="staticText-9"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[SECURITY DEPT.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="36"
+						y="84"
+						width="492"
+						height="22"
+						key="staticText-10"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Please allow Mr. _______________________ of M/s _______________________________________]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="4"
+						y="112"
+						width="523"
+						height="16"
+						key="staticText-11"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[___________________________________________to take following material out of Mill/Main Gate.]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="455"
+						y="3"
+						width="73"
+						height="18"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{GATEPASS_NO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="455"
+						y="21"
+						width="65"
+						height="18"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{GATEPASS_DATE}]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="34"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="5"
+						y="2"
+						width="24"
+						height="26"
+						key="staticText-12"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Sr.No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="97"
+						y="2"
+						width="103"
+						height="23"
+						key="staticText-13"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Description]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="353"
+						y="2"
+						width="47"
+						height="23"
+						key="staticText-14"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Unit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="403"
+						y="2"
+						width="47"
+						height="23"
+						key="staticText-15"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Quanity]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="456"
+						y="1"
+						width="67"
+						height="23"
+						key="staticText-16"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Purpose]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="52"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="5"
+						y="2"
+						width="18"
+						height="18"
+						key="staticText-17"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[1]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="39"
+						y="2"
+						width="304"
+						height="50"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{NRGP_DESC}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="347"
+						y="2"
+						width="50"
+						height="18"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{UNIT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="400"
+						y="2"
+						width="52"
+						height="18"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{QTY}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="453"
+						y="1"
+						width="77"
+						height="50"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PURPOSE}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="239"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="5"
+						y="28"
+						width="110"
+						height="17"
+						key="staticText-18"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[MODE OF DESPATCH :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="116"
+						y="28"
+						width="134"
+						height="20"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DESPATCH_MODE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="350"
+						y="4"
+						width="42"
+						height="19"
+						key="staticText-19"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[TOTAL]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="400"
+						y="4"
+						width="52"
+						height="18"
+						key="textField-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{QTY}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="5"
+						y="80"
+						width="76"
+						height="23"
+						key="staticText-20"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Prepared by]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="230"
+						y="80"
+						width="76"
+						height="23"
+						key="staticText-21"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Received by]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="435"
+						y="80"
+						width="76"
+						height="23"
+						key="staticText-22"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Authorised by]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="138"
+						width="245"
+						height="24"
+						key="staticText-23"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[MAIN GATE/GATE/STORE/SUPPLIER]]></text>
+				</staticText>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

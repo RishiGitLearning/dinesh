@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="UTF-8  ?>"
+<!-- TReportWriter Document - A Textbased Report writer -->
+<DBInfo value="jdbc:mysql://200.0.0.227:3306/DINESHMILLS"/>
+<ReportQuery value="SELECT AGENT_PREFIX,ZONE_ID,AREA_ID,AREA_NAME,CNT1,AMT,CNT2,TOTAL  ,(COALESCE(AMT,0) - COALESCE(TOTAL,0)),  CASE WHEN (COALESCE(AMT,0) - COALESCE(TOTAL,0))  >=0 THEN 'DR' ELSE 'CR'  END  , CNT3 AS EFF1,TOTAL3 AS EFFAMT,COALESCE(CNT3,0)+COALESCE(CNT2,0),COALESCE(TOTAL3,0)+COALESCE(TOTAL,0) AS TT, NOW() FROM     (SELECT *   FROM   (SELECT * FROM DINESHMILLS.D_SAL_AREA_MASTER ) AS AM  LEFT JOIN   (SELECT SUBSTRING(A.PARTY_CODE,1,2)  AS PARTY1,COUNT(QUALITY_NO) AS CNT1,SUM(TOTAL_NET_AMOUNT) AS AMT   FROM DINESHMILLS.D_SAL_INVOICE_HEADER A,DINESHMILLS.D_SAL_PARTY_MASTER B   WHERE INVOICE_TYPE =1 AND A.APPROVED =1 AND A.CANCELLED =0   AND A.PARTY_CODE = B.PARTY_CODE  AND A.INVOICE_DATE >= '2014-04-01' AND A.INVOICE_DATE <= '2015-03-31'  GROUP BY  SUBSTRING(A.PARTY_CODE,1,2) ) AS A  ON  AM.AGENT_PREFIX = PARTY1  LEFT JOIN  (  SELECT SUBSTRING(PP,1,2) AS PARTY2 , COUNT(DR) AS CNT2,SUM(DR) AS TOTAL  FROM   (  SELECT A.VOUCHER_NO, MAX(SUB_ACCOUNT_CODE) AS PP,  SUM(CASE WHEN EFFECT ='C' THEN AMOUNT END) AS CR,  SUM(CASE WHEN EFFECT ='D'  THEN AMOUNT END) AS  DR,  SUM(COALESCE(CASE WHEN EFFECT ='D'   AND MAIN_ACCOUNT_CODE IN (303019,435046,435053) THEN AMOUNT END,0)) AS DRA,  COUNT(COALESCE(CASE WHEN EFFECT ='D'   AND MAIN_ACCOUNT_CODE IN (303019,435046,435053) THEN AMOUNT END,0)) AS DRC,  SUM(CASE WHEN EFFECT ='D'  AND MAIN_ACCOUNT_CODE NOT IN (303019,435046,435053)  THEN AMOUNT END) AS DRB   FROM  FINANCE.D_FIN_VOUCHER_DETAIL A,FINANCE.D_FIN_VOUCHER_HEADER B  WHERE A.VOUCHER_NO = B.VOUCHER_NO   AND BOOK_CODE = 13   AND B.CANCELLED =0 AND B.APPROVED =1   AND VOUCHER_DATE >= '2014-04-01' AND VOUCHER_DATE <= '2015-03-31'  GROUP BY A.VOUCHER_NO) AS A  GROUP BY SUBSTRING(PP,1,2)  ) AS B  ON  AM.AGENT_PREFIX = PARTY2  ) AS MM  LEFT JOIN  (  SELECT SUBSTRING(PP3,1,2) AS PARTY3 , COUNT(DR3) AS CNT3,SUM(DR3) AS TOTAL3  FROM   (  SELECT A.VOUCHER_NO, MAX(SUB_ACCOUNT_CODE) AS PP3,  SUM(CASE WHEN EFFECT ='C' THEN AMOUNT END) AS CR3,  SUM(CASE WHEN EFFECT ='D'  THEN AMOUNT END) AS  DR3,  SUM(COALESCE(CASE WHEN EFFECT ='D'   AND MAIN_ACCOUNT_CODE IN (303019,435046,435053) THEN AMOUNT END,0)) AS DRA3,  COUNT(COALESCE(CASE WHEN EFFECT ='D'   AND MAIN_ACCOUNT_CODE IN (303019,435046,435053) THEN AMOUNT END,0)) AS DRC3,  SUM(CASE WHEN EFFECT ='D'  AND MAIN_ACCOUNT_CODE NOT IN (303019,435046,435053)  THEN AMOUNT END) AS DRB3   FROM  FINANCE.D_FIN_VOUCHER_DETAIL A,FINANCE.D_FIN_VOUCHER_HEADER B  WHERE A.VOUCHER_NO = B.VOUCHER_NO   AND BOOK_CODE = 15   AND B.CANCELLED =0 AND B.APPROVED =1   AND VOUCHER_DATE >= '2014-04-01' AND VOUCHER_DATE <= '2015-03-31'  GROUP BY A.VOUCHER_NO) AS A3  GROUP BY SUBSTRING(PP3,1,2)  ) AS C3  ON  MM.AGENT_PREFIX = PARTY3  WHERE COALESCE(AMT,0) - COALESCE(TOTAL,0) - COALESCE(TOTAL3,0)  != 0  ORDER BY AGENT_PREFIX "/>
+<ReportPage>
+<property name="PageHeight" value="72"/>
+<property name="PageWidth" value="176"/>
+<property name="PageSize" value="2"/>
+<property name="PaperOrientation" value="1"/>
+<property name="LeftMargin" value="0"/>
+<property name="RightMargin" value="0"/>
+<property name="TopMargin" value="0"/>
+<property name="BottomMargin" value="0"/>
+</ReportPage>
+<InputParameters count="0">
+</InputParameters>
+<Variables count="12">
+<Variable>
+<property name="VariableName" value="PAGE_NO"/>
+<property name="Expression" value="PAGE_NO"/>
+<property name="Function" value="None"/>
+<property name="EvaluationTime" value="3"/>
+<property name="EvaluationGroup" value=""/>
+<property name="BuiltInVariable" value="true"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="4"/>
+<property name="ResetGroupName" value=""/>
+</Variable>
+<Variable>
+<property name="VariableName" value="TOTAL_PAGES"/>
+<property name="Expression" value="TOTAL_PAGES"/>
+<property name="Function" value="None"/>
+<property name="EvaluationTime" value="1"/>
+<property name="EvaluationGroup" value=""/>
+<property name="BuiltInVariable" value="true"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="4"/>
+<property name="ResetGroupName" value=""/>
+</Variable>
+<Variable>
+<property name="VariableName" value="DATE"/>
+<property name="Expression" value="DATE"/>
+<property name="Function" value="None"/>
+<property name="EvaluationTime" value="0"/>
+<property name="EvaluationGroup" value=""/>
+<property name="BuiltInVariable" value="true"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="4"/>
+<property name="ResetGroupName" value=""/>
+</Variable>
+<Variable>
+<property name="VariableName" value="TOTAL_CNT1"/>
+<property name="Expression" value="$F{CNT1}"/>
+<property name="Function" value="Sum"/>
+<property name="EvaluationTime" value="0"/>
+<property name="EvaluationGroup" value=" "/>
+<property name="BuiltInVariable" value="false"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="3"/>
+<property name="ResetGroupName" value=" "/>
+</Variable>
+<Variable>
+<property name="VariableName" value="TOTAL_AMT"/>
+<property name="Expression" value="$F{AMT}"/>
+<property name="Function" value="Sum"/>
+<property name="EvaluationTime" value="0"/>
+<property name="EvaluationGroup" value=" "/>
+<property name="BuiltInVariable" value="false"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="3"/>
+<property name="ResetGroupName" value=" "/>
+</Variable>
+<Variable>
+<property name="VariableName" value="TOTAL_CNT2"/>
+<property name="Expression" value="$F{CNT2}"/>
+<property name="Function" value="Sum"/>
+<property name="EvaluationTime" value="0"/>
+<property name="EvaluationGroup" value=" "/>
+<property name="BuiltInVariable" value="false"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="3"/>
+<property name="ResetGroupName" value=" "/>
+</Variable>
+<Variable>
+<property name="VariableName" value="TOT_TOTAL"/>
+<property name="Expression" value="$F{TOTAL}"/>
+<property name="Function" value="Sum"/>
+<property name="EvaluationTime" value="0"/>
+<property name="EvaluationGroup" value=" "/>
+<property name="BuiltInVariable" value="false"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="3"/>
+<property name="ResetGroupName" value=" "/>
+</Variable>
+<Variable>
+<property name="VariableName" value="TOTAL_(COALESCE(AMT,0) - COALESCE(TOTAL,0))"/>
+<property name="Expression" value="$F{(COALESCE(AMT,0) - COALESCE(TOTAL,0))}"/>
+<property name="Function" value="Sum"/>
+<property name="EvaluationTime" value="0"/>
+<property name="EvaluationGroup" value=" "/>
+<property name="BuiltInVariable" value="false"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="3"/>
+<property name="ResetGroupName" value=" "/>
+</Variable>
+<Variable>
+<property name="VariableName" value="TOTAL_EFF1"/>
+<property name="Expression" value="$F{EFF1}"/>
+<property name="Function" value="Sum"/>
+<property name="EvaluationTime" value="0"/>
+<property name="EvaluationGroup" value=" "/>
+<property name="BuiltInVariable" value="false"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="3"/>
+<property name="ResetGroupName" value=" "/>
+</Variable>
+<Variable>
+<property name="VariableName" value="TOTAL_COALESCE(CNT3,0)+COALESCE(CNT2,0)"/>
+<property name="Expression" value="$F{COALESCE(CNT3,0)+COALESCE(CNT2,0)}"/>
+<property name="Function" value="Sum"/>
+<property name="EvaluationTime" value="0"/>
+<property name="EvaluationGroup" value=" "/>
+<property name="BuiltInVariable" value="false"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="3"/>
+<property name="ResetGroupName" value=" "/>
+</Variable>
+<Variable>
+<property name="VariableName" value="TOTAL_TT"/>
+<property name="Expression" value="$F{TT}"/>
+<property name="Function" value="Sum"/>
+<property name="EvaluationTime" value="0"/>
+<property name="EvaluationGroup" value=" "/>
+<property name="BuiltInVariable" value="false"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="3"/>
+<property name="ResetGroupName" value=" "/>
+</Variable>
+<Variable>
+<property name="VariableName" value="TOTAL_EFFAMT"/>
+<property name="Expression" value="$F{EFFAMT}"/>
+<property name="Function" value="Sum"/>
+<property name="EvaluationTime" value="0"/>
+<property name="EvaluationGroup" value=" "/>
+<property name="BuiltInVariable" value="false"/>
+<property name="VariableValue" value=""/>
+<property name="ResetOn" value="3"/>
+<property name="ResetGroupName" value=" "/>
+</Variable>
+</Variables>
+<Band BandHeight="0" SplitBand="true" BandType="1" BandStartRow="0" BandName="Report Header" GroupExpression="" StartGroupOnNewPage="false" >
+</Band>
+<Band BandHeight="8" SplitBand="true" BandType="2" BandStartRow="0" BandName="Page Header" GroupExpression="" StartGroupOnNewPage="false" >
+<TextField>
+<property name="Text" value="FOR THE PERIOD"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="14"/>
+<property name="PositionX" value="36"/>
+<property name="PositionY" value="3"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="YEARLY AGENT COMMISSION CONTROL SHEET AGENTWISE "/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="48"/>
+<property name="PositionX" value="34"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="______________________________________________________________________________________________________________________________________________________________________________"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="174"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="4"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="AMOUNT"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="6"/>
+<property name="PositionX" value="126"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="AMOUNT"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="6"/>
+<property name="PositionX" value="51"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="AGENT"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="5"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="5"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="AMOUNT"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="6"/>
+<property name="PositionX" value="149"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="TO"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="2"/>
+<property name="PositionX" value="65"/>
+<property name="PositionY" value="3"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="SHRI DINESH MILLS LIMITED."/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="26"/>
+<property name="PositionX" value="47"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="EFFECT"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="6"/>
+<property name="PositionX" value="102"/>
+<property name="PositionY" value="5"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="RUN DATE"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="8"/>
+<property name="PositionX" value="164"/>
+<property name="PositionY" value="5"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="TOTAL EFFECTIVE CREDIT NOTE "/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="28"/>
+<property name="PositionX" value="135"/>
+<property name="PositionY" value="5"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="RUN-DATE :"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="10"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="EFFECTIVE CREDIT NOTE "/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="22"/>
+<property name="PositionX" value="66"/>
+<property name="PositionY" value="5"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="AREA NAME"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="9"/>
+<property name="PositionX" value="18"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="CODE"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="4"/>
+<property name="PositionX" value="9"/>
+<property name="PositionY" value="5"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="Page No:"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="8"/>
+<property name="PositionX" value="108"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="OLD"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="3"/>
+<property name="PositionX" value="12"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="NON EFFECTIVE CREDIT NOTE"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="25"/>
+<property name="PositionX" value="109"/>
+<property name="PositionY" value="5"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="______________________________________________________________________________________________________________________________________________________________________________"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="174"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="7"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="REC"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="3"/>
+<property name="PositionX" value="43"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="AMOUNT"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="6"/>
+<property name="PositionX" value="91"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="REC"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="3"/>
+<property name="PositionX" value="138"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="TR-13 REC"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="9"/>
+<property name="PositionX" value="66"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="TOTAL  "/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="7"/>
+<property name="PositionX" value="91"/>
+<property name="PositionY" value="5"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="TR-15 REC "/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="10"/>
+<property name="PositionX" value="109"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="CR/DR"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="5"/>
+<property name="PositionX" value="102"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="NEW"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="3"/>
+<property name="PositionX" value="7"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="CODE"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="4"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="3"/>
+</TextField>
+<TextField>
+<property name="Text" value="AMOUNT"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="6"/>
+<property name="PositionX" value="79"/>
+<property name="PositionY" value="6"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<TextField>
+<property name="Text" value="INVOICE"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="7"/>
+<property name="PositionX" value="45"/>
+<property name="PositionY" value="5"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<DBField>
+<property name="Text" value="$P{FROM_DATE}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="13"/>
+<property name="PositionX" value="51"/>
+<property name="PositionY" value="3"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$V{PAGE_NO}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="5"/>
+<property name="PositionX" value="117"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$P{TO_DATE}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="13"/>
+<property name="PositionX" value="68"/>
+<property name="PositionY" value="3"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$P{SYS_DATE}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="15"/>
+<property name="PositionX" value="12"/>
+<property name="PositionY" value="2"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+</Band>
+<Band BandHeight="2" SplitBand="true" BandType="4" BandStartRow="0" BandName="Detail" GroupExpression="" StartGroupOnNewPage="false" >
+<DBField>
+<property name="Text" value="$F{CASE WHEN (COALESCE(AMT,0) - COALESCE(TOTAL,0))  >=0 THEN 'DR' ELSE 'CR'  END}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="5"/>
+<property name="PositionX" value="102"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="3"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{AMT}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="15"/>
+<property name="PositionX" value="48"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{(COALESCE(AMT,0) - COALESCE(TOTAL,0))}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="12"/>
+<property name="PositionX" value="88"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{ZONE_ID}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="4"/>
+<property name="PositionX" value="12"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{CNT1}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="5"/>
+<property name="PositionX" value="42"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{AREA_ID}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="4"/>
+<property name="PositionX" value="7"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{EFF1}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="10"/>
+<property name="PositionX" value="109"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{NOW()}"/>
+<property name="DataType" value="Date"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="12"/>
+<property name="PositionX" value="163"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="00/00/0000"/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{TT}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="12"/>
+<property name="PositionX" value="146"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{CNT2}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="10"/>
+<property name="PositionX" value="64"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{AREA_NAME}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="24"/>
+<property name="PositionX" value="17"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{EFFAMT}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="12"/>
+<property name="PositionX" value="122"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{AGENT_PREFIX}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="4"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="1"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{COALESCE(CNT3,0)+COALESCE(CNT2,0)}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="10"/>
+<property name="PositionX" value="135"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$F{TOTAL}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="12"/>
+<property name="PositionX" value="75"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+</Band>
+<Band BandHeight="3" SplitBand="true" BandType="6" BandStartRow="0" BandName="Page Footer" GroupExpression="" StartGroupOnNewPage="false" >
+<TextField>
+<property name="Text" value="______________________________________________________________________________________________________________________________________________________________________________"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="174"/>
+<property name="PositionX" value="1"/>
+<property name="PositionY" value="0"/>
+<property name="PrintCondition" value=""/>
+<property name="Alignment" value="1"/>
+</TextField>
+<DBField>
+<property name="Text" value="$V{TOTAL_EFF1}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="10"/>
+<property name="PositionX" value="109"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$V{TOT_TOTAL}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="10"/>
+<property name="PositionX" value="77"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$V{TOTAL_CNT2}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="10"/>
+<property name="PositionX" value="64"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$V{TOTAL_COALESCE(CNT3,0)+COALESCE(CNT2,0)}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="10"/>
+<property name="PositionX" value="135"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$V{TOTAL_AMT}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="15"/>
+<property name="PositionX" value="48"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$V{TOTAL_TT}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="12"/>
+<property name="PositionX" value="146"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$V{TOTAL_EFFAMT}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="12"/>
+<property name="PositionX" value="122"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$V{TOTAL_(COALESCE(AMT,0) - COALESCE(TOTAL,0))}"/>
+<property name="DataType" value="Numeric"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="13"/>
+<property name="PositionX" value="88"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value="##0.00"/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+<DBField>
+<property name="Text" value="$V{TOTAL_CNT1}"/>
+<property name="DataType" value="String"/>
+<property name="MultiLine" value="false"/>
+<property name="Width" value="7"/>
+<property name="PositionX" value="40"/>
+<property name="PositionY" value="1"/>
+<property name="PrintCondition" value=""/>
+<property name="FormatString" value=""/>
+<property name="Alignment" value="2"/>
+<property name="BlankWhenNull" value="false"/>
+<property name="ConvertToWords" value="false"/>
+</DBField>
+</Band>
+<Band BandHeight="0" SplitBand="true" BandType="7" BandStartRow="0" BandName="Report Footer" GroupExpression="" StartGroupOnNewPage="false" >
+</Band>

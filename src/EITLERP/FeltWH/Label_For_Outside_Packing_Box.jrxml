@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="Tag_Card"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="CONTEXT" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["/root/NetBeansProjects/dinesh/src/"]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT D.PI_PIECE_NO,D.BALE_NO,D.PARTY_NAME,PR_MACHINE_NO,M.POSITION_DESC,
+FORMAT(PR_BILL_LENGTH,2) AS PR_BILL_LENGTH,
+FORMAT(PR_BILL_WIDTH,2) AS PR_BILL_WIDTH,PR_SYN_PER,PR_BILL_GSM,FORMAT(PR_BILL_SQMTR,2) AS PR_BILL_SQMTR,
+PR_BILL_STYLE,FORMAT(PR_BILL_WEIGHT,2) AS PR_BILL_WEIGHT,COALESCE(FORMAT(D.GROSS_WEIGHT,2),'') AS GROSS_WEIGHT,D.DISPATCH_STATION
+ FROM PRODUCTION.FELT_POST_INVOICE_DATA D
+LEFT JOIN PRODUCTION.FELT_SALES_PIECE_REGISTER ON PI_PIECE_NO=PR_PIECE_NO
+LEFT JOIN PRODUCTION.FELT_MACHINE_POSITION_MST M ON PR_POSITION_NO=POSITION_NO
+LEFT JOIN PRODUCTION.FELT_SAL_INVOICE_HEADER H ON D.INV_NO=H.INVOICE_NO AND D.INV_DATE=H.INVOICE_DATE AND D.BALE_NO=H.BALE_NO
+LEFT JOIN PRODUCTION.FELT_PKG_SLIP_HEADER P ON H.BALE_NO=P.PKG_BALE_NO AND H.PACKING_DATE=P.PKG_BALE_DATE]]></queryString>
+
+	<field name="PI_PIECE_NO" class="java.lang.String"/>
+	<field name="BALE_NO" class="java.lang.String"/>
+	<field name="PARTY_NAME" class="java.lang.String"/>
+	<field name="PR_MACHINE_NO" class="java.lang.String"/>
+	<field name="POSITION_DESC" class="java.lang.String"/>
+	<field name="PR_BILL_LENGTH" class="java.lang.String"/>
+	<field name="PR_BILL_WIDTH" class="java.lang.String"/>
+	<field name="PR_SYN_PER" class="java.lang.String"/>
+	<field name="PR_BILL_GSM" class="java.lang.Integer"/>
+	<field name="PR_BILL_SQMTR" class="java.lang.String"/>
+	<field name="PR_BILL_STYLE" class="java.lang.String"/>
+	<field name="PR_BILL_WEIGHT" class="java.lang.String"/>
+	<field name="GROSS_WEIGHT" class="java.lang.String"/>
+	<field name="DISPATCH_STATION" class="java.lang.String"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="783"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="22"
+						y="500"
+						width="493"
+						height="47"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica" size="36" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[String.valueOf("Piece No             :")+$F{PI_PIECE_NO}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="16"
+						y="12"
+						width="509"
+						height="0"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch" pen="4Point"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="16"
+						y="163"
+						width="509"
+						height="0"
+						key="line-2"/>
+					<graphicElement stretchType="NoStretch" pen="2Point"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="22"
+						y="560"
+						width="493"
+						height="47"
+						key="textField-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica" size="36" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[String.valueOf("Bale No               :")+$F{BALE_NO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="22"
+						y="175"
+						width="493"
+						height="47"
+						key="textField-6"
+						stretchType="RelativeToBandHeight"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" size="36" isBold="true" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PARTY_NAME}+",  "+$F{DISPATCH_STATION}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="21"
+						y="348"
+						width="493"
+						height="47"
+						key="textField-7"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" size="36" isBold="true" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[String.valueOf("PM1 ")+$F{PR_MACHINE_NO}+String.valueOf("-")+$F{POSITION_DESC}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="21"
+						y="395"
+						width="493"
+						height="47"
+						key="textField-9"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" size="36" isBold="true" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PR_BILL_LENGTH}+String.valueOf(" X ")+$F{PR_BILL_WIDTH}+String.valueOf(" X ")+$F{PR_BILL_GSM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="22"
+						y="609"
+						width="493"
+						height="47"
+						key="textField-13"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica" size="36" isBold="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[String.valueOf("Net wt in Kgs      :")+$F{PR_BILL_WEIGHT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="22"
+						y="661"
+						width="493"
+						height="47"
+						key="textField-14"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica" size="36" isBold="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[String.valueOf("Gross wt in Kgs   :")+$F{GROSS_WEIGHT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="23"
+						y="104"
+						width="493"
+						height="26"
+						key="textField-16"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" size="18" isBold="true" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[String.valueOf("SHRI DINESH MILLS LTD.")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="22"
+						y="132"
+						width="493"
+						height="27"
+						key="textField-17"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font pdfFontName="Helvetica-Bold" size="18" isBold="true" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[String.valueOf("VADODARA - 390 020, GUJARAT (INDIA).")]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="16"
+						y="745"
+						width="509"
+						height="0"
+						key="line-5"/>
+					<graphicElement stretchType="NoStretch" pen="4Point"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="16"
+						y="162"
+						width="509"
+						height="0"
+						key="line-7"/>
+					<graphicElement stretchType="NoStretch" pen="2Point"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="14"
+						y="12"
+						width="0"
+						height="733"
+						key="line-8"/>
+					<graphicElement stretchType="NoStretch" pen="4Point"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="524"
+						y="12"
+						width="2"
+						height="734"
+						key="line-9"/>
+					<graphicElement stretchType="NoStretch" pen="4Point"/>
+				</line>
+				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="26"
+						y="18"
+						width="118"
+						height="82"
+						key="image-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{CONTEXT}.toString()+"EITLERP/Images/logo1.jpg"]]></imageExpression>
+				</image>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

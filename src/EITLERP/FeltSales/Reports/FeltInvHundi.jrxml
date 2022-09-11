@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="FeltInvHundi"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<queryString><![CDATA[SELECT * FROM PRODUCTION.FELT_SAL_INVOICE_HEADER WHERE PARTY_CHARGE_CODE=04 ORDER BY INVOICE_NO]]></queryString>
+
+	<field name="COMPANY_ID" class="java.lang.Long"/>
+	<field name="INVOICE_TYPE" class="java.lang.Integer"/>
+	<field name="INVOICE_NO" class="java.lang.String"/>
+	<field name="INVOICE_DATE" class="java.sql.Date"/>
+	<field name="BALE_NO" class="java.lang.String"/>
+	<field name="PARTY_CODE" class="java.lang.String"/>
+	<field name="NO_OF_PIECES" class="java.lang.Double"/>
+	<field name="DUE_DATE" class="java.sql.Date"/>
+	<field name="BAS_AMT" class="java.lang.String"/>
+	<field name="GROSS_AMT" class="java.lang.String"/>
+	<field name="DISC_AMT" class="java.lang.String"/>
+	<field name="DISC_BAS_AMT" class="java.lang.String"/>
+	<field name="EXCISE" class="java.lang.String"/>
+	<field name="SEAM_CHG" class="java.lang.String"/>
+	<field name="SEAM_CHG_PER" class="java.lang.String"/>
+	<field name="INSURANCE_AMT" class="java.lang.String"/>
+	<field name="BANK_CHARGES" class="java.lang.String"/>
+	<field name="CESS" class="java.lang.String"/>
+	<field name="GST_AMT" class="java.lang.String"/>
+	<field name="CHEM_TRT_CHG" class="java.lang.String"/>
+	<field name="PIN_CHG" class="java.lang.String"/>
+	<field name="SPIRAL_CHG" class="java.lang.String"/>
+	<field name="INS_IND" class="java.lang.Float"/>
+	<field name="CST" class="java.lang.String"/>
+	<field name="VAT" class="java.lang.String"/>
+	<field name="SD_AMT" class="java.lang.String"/>
+	<field name="NET_AMT" class="java.lang.String"/>
+	<field name="INVOICE_AMT" class="java.lang.String"/>
+	<field name="SQM_IND" class="java.lang.Integer"/>
+	<field name="OUT_STANDING_AMT" class="java.lang.Double"/>
+	<field name="ADV_AMT" class="java.lang.Double"/>
+	<field name="GRP_CRITICAL_LIMIT" class="java.lang.Double"/>
+	<field name="PARTY_CRITICAL_LIMIT" class="java.lang.Double"/>
+	<field name="CHARGE_CODE" class="java.lang.String"/>
+	<field name="GRP_OUT_STANDING_AMT" class="java.lang.Double"/>
+	<field name="GRP_MAIN_PARTY_CODE" class="java.lang.String"/>
+	<field name="INV_CRITICAL_LIMIT_AMT" class="java.lang.Double"/>
+	<field name="CRITICAL_LIMIT_AMT" class="java.lang.Double"/>
+	<field name="INDICATOR" class="java.lang.Integer"/>
+	<field name="FLAG" class="java.lang.Integer"/>
+	<field name="CST2" class="java.lang.String"/>
+	<field name="CST5" class="java.lang.String"/>
+	<field name="VAT1" class="java.lang.String"/>
+	<field name="VAT4" class="java.lang.String"/>
+	<field name="APPROVED" class="java.lang.Integer"/>
+	<field name="APPROVED_DATE" class="java.sql.Date"/>
+	<field name="REJECTED" class="java.lang.Integer"/>
+	<field name="REJECTED_DATE" class="java.sql.Date"/>
+	<field name="HIERARCHY_ID" class="java.lang.Long"/>
+	<field name="CANCELLED" class="java.lang.Integer"/>
+	<field name="CREATED_BY" class="java.lang.String"/>
+	<field name="CREATED_DATE" class="java.sql.Date"/>
+	<field name="MODIFIED_BY" class="java.lang.String"/>
+	<field name="MODIFIED_DATE" class="java.sql.Date"/>
+	<field name="REMARKS" class="java.lang.String"/>
+	<field name="CHANGED" class="java.lang.Integer"/>
+	<field name="CHANGED_DATE" class="java.sql.Date"/>
+	<field name="LOT_NO" class="java.lang.Integer"/>
+	<field name="TRANSPORTER_CODE" class="java.lang.Integer"/>
+	<field name="PACKING_DATE" class="java.sql.Date"/>
+	<field name="GATEPASS_NO" class="java.lang.String"/>
+	<field name="TAX_INV_NO" class="java.lang.String"/>
+	<field name="RETAIL_INV_NO" class="java.lang.String"/>
+	<field name="FINYR" class="java.lang.String"/>
+	<field name="IGST_PER" class="java.lang.String"/>
+	<field name="IGST_AMT" class="java.lang.String"/>
+	<field name="CGST_PER" class="java.lang.String"/>
+	<field name="CGST_AMT" class="java.lang.String"/>
+	<field name="SGST_PER" class="java.lang.String"/>
+	<field name="SGST_AMT" class="java.lang.String"/>
+	<field name="GST_COMP_CESS_PER" class="java.lang.String"/>
+	<field name="GST_COMP_CESS_AMT" class="java.lang.String"/>
+	<field name="ADV_DOC_NO" class="java.lang.String"/>
+	<field name="ADV_RECEIVED_AMT" class="java.lang.String"/>
+	<field name="ADV_AGN_INV_AMT" class="java.lang.String"/>
+	<field name="ADV_AGN_IGST_AMT" class="java.lang.String"/>
+	<field name="ADV_AGN_SGST_AMT" class="java.lang.String"/>
+	<field name="ADV_AGN_CGST_AMT" class="java.lang.String"/>
+	<field name="ADV_AGN_GST_COMP_CESS_AMT" class="java.lang.String"/>
+	<field name="VEHICLE_NO" class="java.lang.String"/>
+	<field name="HSN_CODE" class="java.lang.String"/>
+	<field name="DOCUMENT_THROUGH" class="java.lang.String"/>
+	<field name="PRODUCT_CODE" class="java.lang.String"/>
+	<field name="PRODUCT_DESC" class="java.lang.String"/>
+	<field name="PIECE_NO" class="java.lang.String"/>
+	<field name="MACHINE_NO" class="java.lang.String"/>
+	<field name="POSITION_NO" class="java.lang.String"/>
+	<field name="POSITION_DESC" class="java.lang.String"/>
+	<field name="STYLE" class="java.lang.String"/>
+	<field name="LENGTH" class="java.lang.String"/>
+	<field name="WIDTH" class="java.lang.String"/>
+	<field name="GSM" class="java.lang.String"/>
+	<field name="ACTUAL_WEIGHT" class="java.lang.String"/>
+	<field name="SQMTR" class="java.lang.String"/>
+	<field name="SYN_PER" class="java.lang.String"/>
+	<field name="RATE" class="java.lang.Double"/>
+	<field name="RATE_UNIT" class="java.lang.String"/>
+	<field name="TRANSPORTER_NAME" class="java.lang.String"/>
+	<field name="DESP_MODE" class="java.lang.String"/>
+	<field name="PARTY_NAME" class="java.lang.String"/>
+	<field name="GSTIN_NO" class="java.lang.String"/>
+	<field name="ADDRESS1" class="java.lang.String"/>
+	<field name="ADDRESS2" class="java.lang.String"/>
+	<field name="CITY_NAME" class="java.lang.String"/>
+	<field name="CITY_ID" class="java.lang.String"/>
+	<field name="DISPATCH_STATION" class="java.lang.String"/>
+	<field name="PLACE_OF_SUPPLY" class="java.lang.String"/>
+	<field name="DISC_PER" class="java.lang.Double"/>
+	<field name="PINCODE" class="java.lang.String"/>
+	<field name="PARTY_CHARGE_CODE" class="java.lang.String"/>
+	<field name="PARTY_BANK_NAME" class="java.lang.String"/>
+	<field name="PARTY_BANK_ADDRESS1" class="java.lang.String"/>
+	<field name="PARTY_BANK_ADDRESS2" class="java.lang.String"/>
+	<field name="CANCEL_REASON" class="java.lang.String"/>
+	<field name="INVOICE_AMT_IN_WORD" class="java.lang.String"/>
+	<field name="INV_PRINT_COUNT" class="java.lang.Integer"/>
+	<field name="INV_LAST_PRINT_DATE" class="java.sql.Timestamp"/>
+	<field name="HUNDI_NO" class="java.lang.Integer"/>
+
+
+		<group  name="INVOICE_NO" isStartNewPage="true" >
+			<groupExpression><![CDATA[$F{INVOICE_NO}]]></groupExpression>
+			<groupHeader>
+			<band height="400"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="4"
+						y="158"
+						width="58"
+						height="19"
+						key="staticText-43"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[HUNDI NO :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="4"
+						y="189"
+						width="80"
+						height="19"
+						key="staticText-44"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[AMOUNT       :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="190"
+						y="158"
+						width="56"
+						height="17"
+						key="staticText-45"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[INVNO :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="345"
+						y="158"
+						width="64"
+						height="16"
+						key="staticText-46"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<text><![CDATA[BILL DATE :]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="252"
+						y="158"
+						width="88"
+						height="17"
+						key="textField-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{INVOICE_NO}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="304"
+						y="189"
+						width="106"
+						height="19"
+						key="staticText-47"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<text><![CDATA[DUE DATE              :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="4"
+						y="238"
+						width="268"
+						height="15"
+						key="staticText-48"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[On demand please pay after 60 days to the order of]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="198"
+						y="256"
+						width="174"
+						height="16"
+						key="staticText-49"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[/-    against the delivery of MTR No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="4"
+						y="274"
+						width="40"
+						height="14"
+						key="staticText-50"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[dated]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="4"
+						y="369"
+						width="81"
+						height="14"
+						key="staticText-52"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Ex-Baroda to ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="220"
+						y="97"
+						width="81"
+						height="18"
+						key="staticText-53"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[HUNDI]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="4"
+						y="53"
+						width="521"
+						height="12"
+						key="staticText-54"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[FAX : 0265-336195 PHONE : 330060-65 email : sdml@icenet.net]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="4"
+						y="36"
+						width="527"
+						height="12"
+						key="staticText-55"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[REGD.OFFICE : PADRA ROAD,P.O.BOX NO.2501,VADODARA-390  005(INDIA)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="138"
+						y="15"
+						width="237"
+						height="17"
+						key="staticText-56"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Shri Dinesh Mills Ltd.,Vadodara]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="417"
+						y="158"
+						width="88"
+						height="19"
+						key="textField-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{INVOICE_DATE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="416"
+						y="189"
+						width="90"
+						height="14"
+						key="textField-6"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{DUE_DATE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="374"
+						y="256"
+						width="119"
+						height="14"
+						key="staticText-60"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[________________]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="45"
+						y="274"
+						width="148"
+						height="17"
+						key="staticText-61"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[______________________]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="111"
+						y="189"
+						width="124"
+						height="19"
+						key="textField-13"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{INVOICE_AMT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="88"
+						y="189"
+						width="20"
+						height="18"
+						key="staticText-62"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Rs.]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="106"
+						y="256"
+						width="92"
+						height="14"
+						key="textField-14"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{INVOICE_AMT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="55"
+						y="292"
+						width="434"
+						height="13"
+						key="textField-15"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{INVOICE_AMT_IN_WORD}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="4"
+						y="292"
+						width="46"
+						height="16"
+						key="staticText-63"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[RUPEES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="4"
+						y="256"
+						width="98"
+						height="16"
+						key="staticText-64"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[the sum of Rs. ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="88"
+						y="369"
+						width="180"
+						height="14"
+						key="textField-16"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{DISPATCH_STATION}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="4"
+						y="309"
+						width="507"
+						height="15"
+						key="staticText-66"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[If not paid within 60days from the date of Invoice, over due interest will be charged  @18% p.a. after ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="4"
+						y="324"
+						width="145"
+						height="15"
+						key="staticText-67"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[due date. Bank charges of ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="346"
+						y="324"
+						width="165"
+						height="15"
+						key="staticText-68"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[are to be debited to your a/c and ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="4"
+						y="339"
+						width="507"
+						height="15"
+						key="staticText-69"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Bank charges of Drawee's bank are to be recoverd from the drawee]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="152"
+						y="324"
+						width="190"
+						height="14"
+						key="textField-17"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PARTY_BANK_NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="274"
+						y="238"
+						width="228"
+						height="14"
+						key="textField-18"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PARTY_BANK_NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="62"
+						y="158"
+						width="39"
+						height="17"
+						key="textField-19"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{HUNDI_NO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="108"
+						y="158"
+						width="78"
+						height="17"
+						key="textField-20"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{FINYR}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="102"
+						y="158"
+						width="4"
+						height="15"
+						key="staticText-70"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[/]]></text>
+				</staticText>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="120"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="4"
+						y="29"
+						width="32"
+						height="14"
+						key="staticText-57"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[TO : ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="42"
+						y="45"
+						width="176"
+						height="13"
+						key="textField-7"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PARTY_NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="42"
+						y="60"
+						width="176"
+						height="13"
+						key="textField-8"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ADDRESS1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="42"
+						y="75"
+						width="178"
+						height="14"
+						key="textField-9"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ADDRESS2}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="4"
+						y="45"
+						width="32"
+						height="14"
+						key="staticText-65"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[M/S.]]></text>
+				</staticText>
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="1"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="120"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="329"
+						y="80"
+						width="177"
+						height="14"
+						key="staticText-58"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[AUTHORISED SIGNATORY]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="329"
+						y="7"
+						width="180"
+						height="14"
+						key="staticText-59"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[FOR SHRI DINESH MILLS LTD.]]></text>
+				</staticText>
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="10"  isSplitAllowed="false" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="rptMIR"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="612"
+		 pageHeight="864"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="36"
+		 rightMargin="36"
+		 topMargin="36"
+		 bottomMargin="36"
+		 whenNoDataType="BlankPage"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="2" />
+	<queryString><![CDATA[SELECT * FROM D_INV_MIR_HEADER A,D_INV_MIR_DETAIL B,
+D_COM_COMPANY_MASTER C,D_INV_ITEM_MASTER D WHERE 
+A.COMPANY_ID=B.COMPANY_ID AND
+A.COMPANY_ID=C.COMPANY_ID AND
+A.MIR_NO=B.MIR_NO AND
+A.MIR_TYPE=B.MIR_TYPE AND
+D.COMPANY_ID=B.COMPANY_ID AND
+D.ITEM_ID=B.ITEM_ID]]></queryString>
+	<field name="COMPANY_ID" class="java.lang.Long"/>
+	<field name="MIR_NO" class="java.lang.String"/>
+	<field name="MIR_DATE" class="java.util.Date"/>
+	<field name="SUPP_ID" class="java.lang.String"/>
+	<field name="CHALAN_NO" class="java.lang.String"/>
+	<field name="CHALAN_DATE" class="java.util.Date"/>
+	<field name="LR_NO" class="java.lang.String"/>
+	<field name="LR_DATE" class="java.util.Date"/>
+	<field name="INVOICE_NO" class="java.lang.String"/>
+	<field name="INVOICE_DATE" class="java.util.Date"/>
+	<field name="TRANSPORTER" class="java.lang.Long"/>
+	<field name="GATEPASS_NO" class="java.lang.String"/>
+	<field name="IMPORT_CONCESS" class="java.lang.Byte"/>
+	<field name="ACCESSABLE_VALUE" class="java.lang.Double"/>
+	<field name="CURRENCY_ID" class="java.lang.Long"/>
+	<field name="CURRENCY_RATE" class="java.lang.Double"/>
+	<field name="TOTAL_AMOUNT" class="java.lang.Double"/>
+	<field name="GROSS_AMOUNT" class="java.lang.Double"/>
+	<field name="APPROVED" class="java.lang.Byte"/>
+	<field name="APPROVED_DATE" class="java.util.Date"/>
+	<field name="REJECTED" class="java.lang.Byte"/>
+	<field name="REJECTED_DATE" class="java.util.Date"/>
+	<field name="HIERARCHY_ID" class="java.lang.Long"/>
+	<field name="CENVATED_ITEMS" class="java.lang.Byte"/>
+	<field name="CANCELLED" class="java.lang.Byte"/>
+	<field name="CREATED_BY" class="java.lang.Long"/>
+	<field name="CREATED_DATE" class="java.util.Date"/>
+	<field name="MODIFIED_BY" class="java.lang.Long"/>
+	<field name="MODIFIED_DATE" class="java.util.Date"/>
+	<field name="COLUMN_1_ID" class="java.lang.Long"/>
+	<field name="COLUMN_1_FORMULA" class="java.lang.String"/>
+	<field name="COLUMN_1_PER" class="java.lang.Double"/>
+	<field name="COLUMN_1_AMT" class="java.lang.Double"/>
+	<field name="COLUMN_1_CAPTION" class="java.lang.String"/>
+	<field name="COLUMN_2_ID" class="java.lang.Long"/>
+	<field name="COLUMN_2_FORMULA" class="java.lang.String"/>
+	<field name="COLUMN_2_PER" class="java.lang.Double"/>
+	<field name="COLUMN_2_AMT" class="java.lang.Double"/>
+	<field name="COLUMN_2_CAPTION" class="java.lang.String"/>
+	<field name="COLUMN_3_ID" class="java.lang.Long"/>
+	<field name="COLUMN_3_FORMULA" class="java.lang.String"/>
+	<field name="COLUMN_3_PER" class="java.lang.Double"/>
+	<field name="COLUMN_3_AMT" class="java.lang.Double"/>
+	<field name="COLUMN_3_CAPTION" class="java.lang.String"/>
+	<field name="COLUMN_4_ID" class="java.lang.Long"/>
+	<field name="COLUMN_4_FORMULA" class="java.lang.String"/>
+	<field name="COLUMN_4_PER" class="java.lang.Double"/>
+	<field name="COLUMN_4_AMT" class="java.lang.Double"/>
+	<field name="COLUMN_4_CAPTION" class="java.lang.String"/>
+	<field name="COLUMN_5_ID" class="java.lang.Long"/>
+	<field name="COLUMN_5_FORMULA" class="java.lang.String"/>
+	<field name="COLUMN_5_PER" class="java.lang.Double"/>
+	<field name="COLUMN_5_AMT" class="java.lang.Double"/>
+	<field name="COLUMN_5_CAPTION" class="java.lang.String"/>
+	<field name="COLUMN_6_ID" class="java.lang.Long"/>
+	<field name="COLUMN_6_FORMULA" class="java.lang.String"/>
+	<field name="COLUMN_6_PER" class="java.lang.Double"/>
+	<field name="COLUMN_6_AMT" class="java.lang.Double"/>
+	<field name="COLUMN_6_CAPTION" class="java.lang.String"/>
+	<field name="COLUMN_7_ID" class="java.lang.Long"/>
+	<field name="COLUMN_7_FORMULA" class="java.lang.String"/>
+	<field name="COLUMN_7_PER" class="java.lang.Double"/>
+	<field name="COLUMN_7_AMT" class="java.lang.Double"/>
+	<field name="COLUMN_7_CAPTION" class="java.lang.String"/>
+	<field name="COLUMN_8_ID" class="java.lang.Long"/>
+	<field name="COLUMN_8_FORMULA" class="java.lang.String"/>
+	<field name="COLUMN_8_PER" class="java.lang.Double"/>
+	<field name="COLUMN_8_AMT" class="java.lang.Double"/>
+	<field name="COLUMN_8_CAPTION" class="java.lang.String"/>
+	<field name="COLUMN_9_ID" class="java.lang.Long"/>
+	<field name="COLUMN_9_FORMULA" class="java.lang.String"/>
+	<field name="COLUMN_9_PER" class="java.lang.Double"/>
+	<field name="COLUMN_9_AMT" class="java.lang.Double"/>
+	<field name="COLUMN_9_CAPTION" class="java.lang.String"/>
+	<field name="COLUMN_10_ID" class="java.lang.Long"/>
+	<field name="COLUMN_10_FORMULA" class="java.lang.String"/>
+	<field name="COLUMN_10_PER" class="java.lang.Double"/>
+	<field name="COLUMN_10_AMT" class="java.lang.Double"/>
+	<field name="COLUMN_10_CAPTION" class="java.lang.String"/>
+	<field name="MIR_TYPE" class="java.lang.Long"/>
+	<field name="OPEN_STATUS" class="java.lang.String"/>
+	<field name="FOR_STORE" class="java.lang.Long"/>
+	<field name="REMARKS" class="java.lang.String"/>
+	<field name="SR_NO" class="java.lang.Long"/>
+	<field name="WAREHOUSE_ID" class="java.lang.String"/>
+	<field name="LOCATION_ID" class="java.lang.String"/>
+	<field name="PO_NO" class="java.lang.String"/>
+	<field name="PO_SR_NO" class="java.lang.Integer"/>
+	<field name="ITEM_ID" class="java.lang.String"/>
+	<field name="BOE_NO" class="java.lang.String"/>
+	<field name="BOE_SR_NO" class="java.lang.String"/>
+	<field name="BOE_DATE" class="java.util.Date"/>
+	<field name="QTY" class="java.lang.Double"/>
+	<field name="UNIT" class="java.lang.Long"/>
+	<field name="RATE" class="java.lang.Double"/>
+	<field name="SHADE" class="java.lang.String"/>
+	<field name="W_MIE" class="java.lang.String"/>
+	<field name="NO_CASE" class="java.lang.String"/>
+	<field name="MATERIAL_CODE" class="java.lang.String"/>
+	<field name="MATERIAL_DESC" class="java.lang.String"/>
+	<field name="QUALITY_NO" class="java.lang.String"/>
+	<field name="PAGE_NO" class="java.lang.String"/>
+	<field name="EXCESS" class="java.lang.Double"/>
+	<field name="SHORTAGE" class="java.lang.Double"/>
+	<field name="L_F_NO" class="java.lang.String"/>
+	<field name="CHALAN_QTY" class="java.lang.Double"/>
+	<field name="INDENT_NO" class="java.lang.String"/>
+	<field name="INDENT_SR_NO" class="java.lang.Long"/>
+	<field name="STM_NO" class="java.lang.String"/>
+	<field name="STM_SR_NO" class="java.lang.Long"/>
+	<field name="NET_AMOUNT" class="java.lang.Double"/>
+	<field name="GRN_RECD_QTY" class="java.lang.Double"/>
+	<field name="BAL_QTY" class="java.lang.Double"/>
+	<field name="PO_TYPE" class="java.lang.Integer"/>
+	<field name="STM_TYPE" class="java.lang.Integer"/>
+	<field name="COMPANY_NAME" class="java.lang.String"/>
+	<field name="ADD1" class="java.lang.String"/>
+	<field name="ADD2" class="java.lang.String"/>
+	<field name="ADD3" class="java.lang.String"/>
+	<field name="CITY" class="java.lang.String"/>
+	<field name="STATE" class="java.lang.String"/>
+	<field name="PINCODE" class="java.lang.String"/>
+	<field name="PHONE" class="java.lang.String"/>
+	<field name="FAX" class="java.lang.String"/>
+	<field name="E_MAIL" class="java.lang.String"/>
+	<field name="URL" class="java.lang.String"/>
+	<field name="ECC_NO" class="java.lang.String"/>
+	<field name="ECC_DATE" class="java.util.Date"/>
+	<field name="RANGE" class="java.lang.String"/>
+	<field name="COMMISIONRATE" class="java.lang.String"/>
+	<field name="DIVISION" class="java.lang.String"/>
+	<field name="CST_NO" class="java.lang.String"/>
+	<field name="CST_DATE" class="java.util.Date"/>
+	<field name="GST_NO" class="java.lang.String"/>
+	<field name="GST_DATE" class="java.util.Date"/>
+	<field name="LICENSE_NO" class="java.lang.String"/>
+	<field name="REGISTERATION_NO" class="java.lang.String"/>
+	<field name="ITEM_SYS_ID" class="java.lang.Long"/>
+	<field name="ITEM_DESCRIPTION" class="java.lang.String"/>
+	<field name="GROUP_CODE" class="java.lang.Long"/>
+	<field name="SEARCH_KEY" class="java.lang.String"/>
+	<field name="CATEGORY_ID" class="java.lang.Long"/>
+	<field name="DESC" class="java.lang.Long"/>
+	<field name="MAKE" class="java.lang.Long"/>
+	<field name="SIZE" class="java.lang.Long"/>
+	<field name="ABC" class="java.lang.String"/>
+	<field name="XYZ" class="java.lang.String"/>
+	<field name="VEN" class="java.lang.String"/>
+	<field name="FSN" class="java.lang.String"/>
+	<field name="MF" class="java.lang.String"/>
+	<field name="MAINTAIN_STOCK" class="java.lang.Byte"/>
+	<field name="AVG_QTY" class="java.lang.Double"/>
+	<field name="MIN_QTY" class="java.lang.Double"/>
+	<field name="MAX_QTY" class="java.lang.Double"/>
+	<field name="UNIT_RATE" class="java.lang.Double"/>
+	<field name="DNP" class="java.lang.Double"/>
+	<field name="AVG_RATE" class="java.lang.Double"/>
+	<field name="QTR1_RATE" class="java.lang.Double"/>
+	<field name="QTR2_RATE" class="java.lang.Double"/>
+	<field name="QTR3_RATE" class="java.lang.Double"/>
+	<field name="QTR4_RATE" class="java.lang.Double"/>
+	<field name="REBATE" class="java.lang.Double"/>
+	<field name="EXCISE_APPLICABLE" class="java.lang.Byte"/>
+	<field name="EXCISE" class="java.lang.Double"/>
+	<field name="CHAPTER_NO" class="java.lang.Long"/>
+	<field name="TAXABLE" class="java.lang.Byte"/>
+	<field name="OPENING_QTY" class="java.lang.Double"/>
+	<field name="OPENING_VALUE" class="java.lang.Double"/>
+	<field name="TOTAL_RECEIPT_QTY" class="java.lang.Double"/>
+	<field name="TOTAL_ISSUED_QTY" class="java.lang.Double"/>
+	<field name="LAST_RECEIPT_DATE" class="java.util.Date"/>
+	<field name="LAST_ISSUED_DATE" class="java.util.Date"/>
+	<field name="ZERO_RECEIPT_QTY" class="java.lang.Double"/>
+	<field name="ZERO_ISSUED_QTY" class="java.lang.Double"/>
+	<field name="ZERO_VALUE_QTY" class="java.lang.Double"/>
+	<field name="REJECTED_QTY" class="java.lang.Double"/>
+	<field name="ON_HAND_QTY" class="java.lang.Double"/>
+	<field name="AVAILABLE_QTY" class="java.lang.Double"/>
+	<field name="ALLOCATED_QTY" class="java.lang.Double"/>
+	<field name="LAST_TRANS_DATE" class="java.util.Date"/>
+	<field name="LAST_GRN_NO" class="java.lang.String"/>
+	<field name="LAST_GRN_DATE" class="java.util.Date"/>
+	<field name="LAST_PO_NO" class="java.lang.String"/>
+	<field name="LAST_PO_DATE" class="java.util.Date"/>
+	<field name="CAPTIVE_CONSUMABLE" class="java.lang.Byte"/>
+	<field name="BLOCKED" class="java.lang.Byte"/>
+	<field name="REORDER_LEVEL" class="java.lang.Double"/>
+	<field name="SUPPLIER_ID" class="java.lang.String"/>
+	<field name="ITEM_HIERARCHY_ID" class="java.lang.Long"/>
+		<group  name="MIR" isStartNewColumn="false" isStartNewPage="false" isResetPageNumber="false" isReprintHeaderOnEachPage="false" minHeightToStartNewPage="0" >
+			<groupExpression><![CDATA[$F{COMPANY_ID}.toString()+$F{MIR_NO}]]></groupExpression>
+			<groupHeader>
+			<band height="31"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="5"
+						y="9"
+						width="69"
+						height="15"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="element-31"
+						stretchType="NoStretch"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<text><![CDATA[MIR No.]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="77"
+						y="7"
+						width="118"
+						height="20"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="element-32"
+						stretchType="NoStretch"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{MIR_NO}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="16"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						mode="Opaque"
+						x="3"
+						y="5"
+						width="534"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="element-14"
+						stretchType="NoStretch"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<graphicElement stretchType="NoStretch" pen="Dotted" fill="Solid" />
+				</line>
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="46"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="8"
+						y="8"
+						width="517"
+						height="25"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="element-4"
+						stretchType="NoStretch"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font fontName="Arial" pdfFontName="Helvetica" size="14" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{COMPANY_NAME}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						mode="Opaque"
+						x="1"
+						y="38"
+						width="538"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="element-5"
+						stretchType="NoStretch"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<graphicElement stretchType="NoStretch" pen="Thin" fill="Solid" />
+				</line>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="37"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="84"
+						y="7"
+						width="146"
+						height="20"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="element-12"
+						stretchType="NoStretch"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ITEM_DESCRIPTION}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None" >					<reportElement
+						mode="Opaque"
+						x="8"
+						y="7"
+						width="47"
+						height="16"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="element-13"
+						stretchType="NoStretch"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<textElement textAlignment="Left" verticalAlignment="Top" lineSpacing="Single">
+						<font fontName="SansSerif" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.Long"><![CDATA[$F{SR_NO}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="4"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="50"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						mode="Opaque"
+						x="1"
+						y="26"
+						width="537"
+						height="0"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="element-12"
+						stretchType="NoStretch"
+						positionType="FixRelativeToTop"
+						isPrintRepeatedValues="true"
+						isRemoveLineWhenBlank="false"
+						isPrintInFirstWholeBand="false"
+						isPrintWhenDetailOverflows="false"/>
+					<graphicElement stretchType="NoStretch" pen="Thin" fill="Solid" />
+				</line>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

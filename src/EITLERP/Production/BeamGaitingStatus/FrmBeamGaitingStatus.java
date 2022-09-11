@@ -1,0 +1,2743 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package EITLERP.Production.BeamGaitingStatus;
+
+//import EITLERP.Production.WindingProduction.*;
+import EITLERP.ComboData;
+import EITLERP.EITLComboModel;
+import EITLERP.EITLERPGLOBAL;
+import EITLERP.EITLTableModel; 
+import EITLERP.FeltSales.FeltPacking.ReportRegister;
+import EITLERP.FeltSales.Order.searchkey;
+import EITLERP.FeltSales.common.LOV;
+import EITLERP.Loader;
+import EITLERP.Production.clsFeltProductionApprovalFlow;
+import EITLERP.SelectFirstFree;
+import EITLERP.clsAuthority;
+import EITLERP.clsDepartment;
+import EITLERP.clsDocFlow;
+import EITLERP.clsFirstFree;
+import EITLERP.clsHierarchy;
+import EITLERP.clsSales_Party;
+import EITLERP.clsUser;
+import EITLERP.data;
+import EITLERP.frmPendingApprovals;
+import TReportWriter.TReportEngine;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.text.MaskFormatter;
+import EITLERP.FeltSales.common.JavaMail;
+import EITLERP.Production.FeltCreditNote.clsExcelExporter;
+import java.awt.Component;
+import java.io.File;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.LookAndFeel;
+import javax.swing.table.TableCellRenderer;
+
+/**
+ *
+ * @author DAXESH PRAJAPATI
+ *
+ */
+//FELT_SALES_DESIGN_MASTER_HEADER
+//FELT_SALES_DESIGN_MASTER_DETAIL
+
+public class FrmBeamGaitingStatus extends javax.swing.JApplet {
+
+    private int EditMode = 0;
+    private EITLComboModel cmbHierarchyModel;
+    private EITLComboModel cmbToModel;  
+    private EITLTableModel DataModelApprovalStatus;
+    private EITLTableModel DataModelUpdateHistory;
+    private EITLTableModel DataModel;
+    //private EITLTableModel DataModel_OTHER;
+    private int SelHierarchyID = 0; //Selected Hierarchy
+    private int lnFromID = 0;
+    private int FFNo = 0;
+    private final int ModuleId = 846;
+    private String DOC_NO = "";
+    //private clsWindingProduction objDM;
+    private clsBeamGaitingStatus objDM;
+    private EITLComboModel cmbSendToModel;
+    private TReportEngine objEngine = new TReportEngine();
+    private static DecimalFormat df2 = new DecimalFormat("#.##");
+    
+    private clsExcelExporter exp = new clsExcelExporter();
+    
+    String seleval = "", seltyp = "", selqlt = "", selshd = "", selpiece = "", selext = "", selinv = "", selsz = "";
+    private int mlstrc;
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    DateFormat dateForDB = new SimpleDateFormat("yyyy-MM-dd");
+    public EITLERP.FeltSales.Reports.clsExcelExporter exprt = new EITLERP.FeltSales.Reports.clsExcelExporter();
+
+    public boolean PENDING_DOCUMENT = false; //for refresh pending document module
+    public frmPendingApprovals frmPA;
+    private EITLComboModel cmbIncharge;
+    private double F[] = new double[100];
+    /**
+     * Initializes the applet FrmobjDM
+     */
+    @Override
+    public void init() {
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(dim.width, dim.height);
+        initComponents();
+        GenerateCombos();
+        
+        GenerateFromCombo();
+        GenerateHierarchyCombo();
+        SetupApproval();
+        SetMenuForRights();
+        
+        FormatGridApprovalStatus();
+        FormatGridUpdateHistory();
+        
+        FormatGrid();
+        
+        DefaultSettings();
+        //Cancel();
+        try {
+            MaskFormatter dateMask = new MaskFormatter("##/##/####");
+            dateMask.setPlaceholderCharacter('_');
+            dateMask.install(txtDocDate);
+
+        } catch (ParseException ex) {
+            System.out.println("Error on Mask : " + ex.getLocalizedMessage());
+        }
+        txtDocDate.setText(df.format(new Date()));
+
+        objDM = new clsBeamGaitingStatus();
+        boolean load = objDM.LoadData();
+
+        if (load) {
+            DisplayData();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error occured while Loading Data. Error is " + objDM.LastError, "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        SelHierarchyID = EITLERPGLOBAL.getComboCode(cmbHierarchy);
+        SetFields(false);
+      
+    }
+
+    /**
+     * This method is called from within the init() method to initialize the
+     * form. WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    public void DefaultSettings() {
+
+        //String data = toString();
+        Object[] rowData = new Object[15];
+        rowData[0] = "1";
+      
+        cmdTop.setIcon(EITLERPGLOBAL.getImage("TOP"));
+        cmdBack.setIcon(EITLERPGLOBAL.getImage("BACK"));
+        cmdNext.setIcon(EITLERPGLOBAL.getImage("NEXT"));
+        cmdLast.setIcon(EITLERPGLOBAL.getImage("LAST"));
+        cmdNew.setIcon(EITLERPGLOBAL.getImage("NEW"));
+        cmdEdit.setIcon(EITLERPGLOBAL.getImage("EDIT"));
+        cmdDelete.setIcon(EITLERPGLOBAL.getImage("DELETE"));
+        cmdSave.setIcon(EITLERPGLOBAL.getImage("SAVE"));
+        cmdCancel.setIcon(EITLERPGLOBAL.getImage("UNDO"));
+        cmdFilter.setIcon(EITLERPGLOBAL.getImage("FIND"));
+        cmdPreview.setIcon(EITLERPGLOBAL.getImage("PREVIEW"));
+        cmdPrint.setIcon(EITLERPGLOBAL.getImage("PRINT"));
+        cmdExit.setIcon(EITLERPGLOBAL.getImage("EXIT"));
+        clearFields();
+    }
+
+    private void clearFields() {
+        txtDocNo.setText("0"); 
+        
+        //JOptionPane.showMessageDialog(null, "Data Model size : "+DataModel.getRowCount());
+        FormatGridApprovalStatus();
+        FormatGridUpdateHistory();
+        
+        FormatGrid();
+        
+        // FormatGridA();
+        FormatGridHS();
+    }
+
+    private void DisplayData() {
+
+        //=========== Color Indication ===============//
+        try {
+
+            if (objDM.getAttribute("APPROVED").getInt() == 1) {
+                lblTitle.setBackground(Color.BLUE);
+                lblTitle.setForeground(Color.WHITE);
+            }
+
+            if (objDM.getAttribute("APPROVED").getInt() == 0) {
+                lblTitle.setBackground(Color.GRAY);
+                lblTitle.setForeground(Color.BLACK);
+            }
+
+            if (objDM.getAttribute("CANCELED").getInt() == 1) {
+                lblTitle.setBackground(Color.RED);
+                lblTitle.setForeground(Color.BLACK);
+            }
+        } catch (Exception c) {
+
+            c.printStackTrace();
+        }
+        //============================================//
+
+        //========= Authority Delegation Check =====================//
+        if (EITLERPGLOBAL.gAuthorityUserID != EITLERPGLOBAL.gUserID) {
+
+            if (clsAuthority.IsAuthorityGiven(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gUserID, EITLERPGLOBAL.gAuthorityUserID, ModuleId)) {
+                EITLERPGLOBAL.gNewUserID = EITLERPGLOBAL.gAuthorityUserID;
+            } else {
+                EITLERPGLOBAL.gNewUserID = EITLERPGLOBAL.gUserID;
+            }
+        }
+        //==========================================================//
+
+        //clsobjDM.ChangeVoucherNo=false;
+        clearFields();
+        try {
+           // txtDocNo.setText(objDM.getAttribute("BGS_DOC_NO").getString());
+            lblTitle.setText("Felt Beam Gaiting Status "+objDM.getAttribute("BGS_DOC_NO").getString());
+            //txtDocDate.setText(EITLERPGLOBAL.formatDate(objDM.getAttribute("BGS_DOC_DATE").getString()));
+            //lblRevNo.setText(Integer.toString((int) objDM.getAttribute("REVISION_NO").getVal()));
+            
+            EITLERPGLOBAL.setComboIndex(cmbHierarchy, objDM.getAttribute("HIERARCHY_ID").getInt());
+
+            FormatGrid();
+//            FormatGrid_OTHER();
+
+            txtDocNo.setText(objDM.getAttribute("BGS_DOC_NO").getString());
+            lblTitle.setText("Felt Beam Gaiting Status - " + objDM.getAttribute("BGS_DOC_NO").getString());
+            txtDocDate.setText(EITLERPGLOBAL.formatDate(objDM.getAttribute("BGS_DOC_DATE").getString()));
+            lblRevNo.setText(Integer.toString((int) objDM.getAttribute("REVISION_NO").getVal()));
+            txtRemark.setText(objDM.getAttribute("REMARK").getString());
+            txtAsOnDate.setText(EITLERPGLOBAL.formatDate(objDM.getAttribute("AS_ON_DATE").getString()));
+            int NewRow = 0;
+            int NewRow2 = 0;
+            for (int i = 1; i <= objDM.hmFeltPerformanceTrackingDetails.size(); i++) {
+                clsBeamGaitingStatusDetails ObjItem = (clsBeamGaitingStatusDetails) objDM.hmFeltPerformanceTrackingDetails.get(Integer.toString(i));
+                
+               // int NewRow = i - 1;
+               // int NewRow2 = i - 1;
+                Object[] rowData = new Object[100];
+//                if(ObjItem.getAttribute("SUPPLIER").getString().equals("SDML"))
+//                {
+                    rowData[0] = (NewRow+1)+"";
+                    DataModel.addRow(rowData);
+                    
+                    DataModel.setValueByVariable("SR_NO", ObjItem.getAttribute("SR_NO").getString(), NewRow);
+                    DataModel.setValueByVariable("PRODUCT_GROUP", ObjItem.getAttribute("PRODUCT_GROUP").getString(), NewRow);
+                DataModel.setValueByVariable("LOOM_NO", ObjItem.getAttribute("LOOM_NO").getString(), NewRow);
+                DataModel.setValueByVariable("GAITING_STATUS", ObjItem.getAttribute("GAITING_STATUS").getString(), NewRow);
+                DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(ObjItem.getAttribute("BEAM_GETTING_STARTED_ACTUAL").getString()), NewRow);
+                
+                DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(ObjItem.getAttribute("BEAM_GETTING_DATE_AS_PER_PLAN").getString()), NewRow);
+                DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(ObjItem.getAttribute("TARGETTED_BEAM_GAITING_COMPLETE").getString()), NewRow);
+                DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(ObjItem.getAttribute("ACTUAL_BEAM_GAITING_COMPLETION_DATE").getString()), NewRow);
+                DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(ObjItem.getAttribute("PI_BEAM_LOADING").getString()), NewRow);
+                DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(ObjItem.getAttribute("PI_BEAM_UNLOADING").getString()), NewRow);
+                DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(ObjItem.getAttribute("PI_BEAM_LEASING").getString()), NewRow);
+                DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(ObjItem.getAttribute("PII_KNOTTING_DRAWING").getString()), NewRow);
+                DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(ObjItem.getAttribute("PIII_FRWD_KONTS").getString()), NewRow);
+                DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(ObjItem.getAttribute("PIV_CLOTH_START").getString()), NewRow);
+                DataModel.setValueByVariable("REMARKS", ObjItem.getAttribute("REMARKS").getString(), NewRow);
+                        
+                    NewRow++;
+ 
+            }
+            
+            //DoNotEvaluate=false;
+            //UpdateTotals();
+            //======== Generating Grid for Document Approval Flow ========//
+            FormatGridA();
+            HashMap List = new HashMap();
+            String DocNo = objDM.getAttribute("BGS_DOC_NO").getString();
+            List = clsFeltProductionApprovalFlow.getDocumentFlow(ModuleId, DocNo);
+            for (int i = 1; i <= List.size(); i++) {
+                clsDocFlow ObjFlow = (clsDocFlow) List.get(Integer.toString(i));
+                Object[] rowData = new Object[7];
+                //JOptionPane.showMessageDialog(null, "USER ID : "+ObjFlow.getAttribute("USER_ID").getVal());
+                rowData[0] = Integer.toString(i);
+                rowData[1] = clsUser.getUserName(EITLERPGLOBAL.gCompanyID, (int) ObjFlow.getAttribute("USER_ID").getVal());
+                rowData[2] = (String) ObjFlow.getAttribute("STATUS").getObj();
+                rowData[3] = clsDepartment.getDeptName(EITLERPGLOBAL.gCompanyID, (int) ObjFlow.getAttribute("DEPT_ID").getVal());
+                rowData[4] = EITLERPGLOBAL.formatDate((String) ObjFlow.getAttribute("RECEIVED_DATE").getObj());
+                rowData[5] = EITLERPGLOBAL.formatDate((String) ObjFlow.getAttribute("ACTION_DATE").getObj());
+                rowData[6] = (String) ObjFlow.getAttribute("REMARKS").getObj();
+
+                DataModelApprovalStatus.addRow(rowData);
+            }
+
+            //Showing Audit Trial History
+            FormatGridHS();
+            HashMap History = objDM.getHistoryList(EITLERPGLOBAL.gCompanyID + "", DocNo);
+            for (int i = 1; i <= History.size(); i++) {
+                clsBeamGaitingStatus ObjHistory = (clsBeamGaitingStatus) History.get(Integer.toString(i));
+                Object[] rowData = new Object[6];
+
+                rowData[0] = Integer.toString((int) ObjHistory.getAttribute("REVISION_NO").getVal());
+                rowData[1] = clsUser.getUserName(EITLERPGLOBAL.gCompanyID, Integer.parseInt(ObjHistory.getAttribute("MODIFIED_BY").getString()));
+                rowData[2] = ObjHistory.getAttribute("MODIFIED_DATE").getString();
+
+                String ApprovalStatus = "";
+
+                if (((String) ObjHistory.getAttribute("APPROVAL_STATUS").getString()).equals("A")) {
+                    ApprovalStatus = "Approved";
+                }
+
+                if (((String) ObjHistory.getAttribute("APPROVAL_STATUS").getString()).equals("F")) {
+                    ApprovalStatus = "Final Approved";
+                }
+
+                if (((String) ObjHistory.getAttribute("APPROVAL_STATUS").getString()).equals("W")) {
+                    ApprovalStatus = "Waiting";
+                }
+
+                if (((String) ObjHistory.getAttribute("APPROVAL_STATUS").getString()).equals("R")) {
+                    ApprovalStatus = "Rejected";
+                }
+
+                if (((String) ObjHistory.getAttribute("APPROVAL_STATUS").getString()).equals("P")) {
+                    ApprovalStatus = "Pending";
+                }
+
+                if (((String) ObjHistory.getAttribute("APPROVAL_STATUS").getString()).equals("C")) {
+                    ApprovalStatus = "Skiped";
+                }
+
+                if (((String) ObjHistory.getAttribute("APPROVAL_STATUS").getString()).equals("H")) {
+                    ApprovalStatus = "Hold";
+                }
+
+                rowData[3] = ApprovalStatus;
+                rowData[4] = ObjHistory.getAttribute("APPROVER_REMARKS").getString();
+                rowData[5] = ObjHistory.getAttribute("FROM_IP").getString();
+
+                DataModelUpdateHistory.addRow(rowData);
+            }
+            //txtPieceNoFocusLost(null);
+            //============================================================//
+            //setSTATUS();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    private void FormatGridA() {
+        DataModelApprovalStatus = new EITLTableModel();
+
+        TableApprovalStatus.removeAll();
+        TableApprovalStatus.setModel(DataModelApprovalStatus);
+
+        //Set the table Readonly
+        DataModelApprovalStatus.TableReadOnly(true);
+
+        //Add the columns
+        DataModelApprovalStatus.addColumn("Sr.");
+        DataModelApprovalStatus.addColumn("User");
+        DataModelApprovalStatus.addColumn("Status");
+        DataModelApprovalStatus.addColumn("Department");
+        DataModelApprovalStatus.addColumn("Received Date");
+        DataModelApprovalStatus.addColumn("Action Date");
+        DataModelApprovalStatus.addColumn("Remarks");
+
+        TableApprovalStatus.setAutoResizeMode(TableApprovalStatus.AUTO_RESIZE_OFF);
+
+    }
+
+    private void SetMenuForRights() {
+        // --- Add Rights --
+        if (clsUser.IsFunctionGranted(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gNewUserID, 7062, 70621)) {
+            cmdNew.setEnabled(true);
+        } else {
+            cmdNew.setEnabled(false);
+        }
+
+        // --- Edit Rights --
+        cmdEdit.setEnabled(true);
+        if (clsUser.IsFunctionGranted(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gNewUserID, 7062, 70622)) {
+            cmdEdit.setEnabled(true);
+        } else {
+            cmdEdit.setEnabled(false);
+        }
+
+        // --- Delete Rights --
+        if (clsUser.IsFunctionGranted(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gNewUserID, 7062, 70623)) {
+            cmdDelete.setEnabled(true);
+        } else {
+            cmdDelete.setEnabled(false);
+        }
+
+        // --- Print Rights --
+        if (clsUser.IsFunctionGranted(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gNewUserID, 7062, 70625)) {
+            cmdPreview.setEnabled(true);
+            cmdPrint.setEnabled(true);
+        } else {
+            //cmdPreview.setEnabled(false);
+            //cmdPrint.setEnabled(false);
+        }
+    }
+
+    private void SetupApproval() {
+
+        if (cmbHierarchy.getItemCount() > 1) {
+            cmbHierarchy.setEnabled(true);
+        }
+        //JOptionPane.showMessageDialog(null, "Approval Cmb : "+cmbHierarchy.getItemCount());
+        //In Edit Mode Hierarchy Should be disabled
+        if (EditMode == EITLERPGLOBAL.ADD) {
+            cmbHierarchy.setEnabled(true);
+        } else {
+            cmbHierarchy.setEnabled(false);
+        }
+
+        //Set Default Hierarchy ID for User
+        int DefaultID = clsHierarchy.getDefaultHierarchy((int) EITLERPGLOBAL.gCompanyID);
+        EITLERPGLOBAL.setComboIndex(cmbHierarchy, DefaultID);
+
+        if (EditMode == EITLERPGLOBAL.ADD) {
+            lnFromID = (int) EITLERPGLOBAL.gNewUserID;
+            txtFrom.setText(clsUser.getUserName(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gUserID));
+            txtFromRemarks.setText("Creator of Document");
+        } else {
+            lnFromID = (int) EITLERPGLOBAL.gNewUserID;
+            txtFrom.setText(clsUser.getUserName(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gUserID));
+            txtFromRemarks.setText("");
+        }
+
+        SelHierarchyID = EITLERPGLOBAL.getComboCode(cmbHierarchy);
+        //JOptionPane.showMessageDialog(null, "Hierarchy Id = "+SelHierarchyID);
+        //GenerateFromCombo();
+        //GenerateSendToCombo();
+
+        if (clsHierarchy.CanSkip((int) EITLERPGLOBAL.gCompanyID, SelHierarchyID, (int) EITLERPGLOBAL.gNewUserID)) {
+            cmbSendTo.setEnabled(true);
+        } else {
+            cmbSendTo.setEnabled(false);
+        }
+
+        if (clsHierarchy.CanFinalApprove((int) EITLERPGLOBAL.gCompanyID, SelHierarchyID, (int) EITLERPGLOBAL.gNewUserID)) {
+            OpgFinal.setEnabled(true);
+        } else {
+            OpgFinal.setEnabled(false);
+            OpgFinal.setSelected(false);
+        }
+
+        if (EditMode == EITLERPGLOBAL.EDIT) {
+            cmbHierarchy.setEnabled(false);
+        }
+
+        if (EditMode == 0) {
+            cmbHierarchy.setEnabled(false);
+            txtFrom.setEnabled(false);
+            //txtFromRemarks.setEnabled(false);
+            OpgApprove.setEnabled(false);
+            OpgFinal.setEnabled(false);
+            OpgReject.setEnabled(false);
+            cmbSendTo.setEnabled(false);
+            txtToRemarks.setEnabled(false);
+        }
+
+        if (clsHierarchy.IsCreator(EITLERPGLOBAL.gCompanyID, SelHierarchyID, EITLERPGLOBAL.gUserID)) {
+            OpgReject.setEnabled(false);
+        }
+        if (clsHierarchy.CanFinalApprove(EITLERPGLOBAL.gCompanyID, SelHierarchyID, EITLERPGLOBAL.gUserID)) {
+            //JOptionPane.showMessageDialog(null, "Final Approver");
+            OpgApprove.setEnabled(false);
+        }
+    }
+
+    private void FormatGrid()
+    {
+        try {
+            DataModel = new EITLTableModel();
+            tblSDML.removeAll();
+
+            tblSDML.setModel(DataModel);
+            tblSDML.setAutoResizeMode(0);
+
+            DataModel.addColumn("SR NO"); //0 - Read Only
+            DataModel.addColumn("PRODUCT GROUP"); //0 - Read Only
+            DataModel.addColumn("LOOM NO"); //1
+            DataModel.addColumn("Gaiting Status"); //1
+            DataModel.addColumn("Beam Getting Started Actual");
+            DataModel.addColumn("Beam Getting starting / previous Beam Finish Date"); 
+            DataModel.addColumn("Targetted Beam Gaiting Complete (Date)"); 
+            DataModel.addColumn("Actual beam Gaiting Completion Date As on Today Status");
+            DataModel.addColumn("PHASE I: Beam Unloading (Date)"); 
+            DataModel.addColumn("PHASE I: Beam Loading (Date)"); 
+            DataModel.addColumn("PHASE I: Beam Leasing (Date)"); 
+            DataModel.addColumn("PHASE II: Knotting and Drawing");
+            DataModel.addColumn("PHASE III: Forward Knots & Gaiting");
+            DataModel.addColumn("PHASE VI: Cloth Start after Loom Seting and Cloth Checking"); 
+            DataModel.addColumn("REMARK");            
+            
+            
+            DataModel.SetVariable(0,"SR_NO"); //0 - Read Only
+            DataModel.SetVariable(1,"PRODUCT_GROUP"); //0 - Read Only
+            DataModel.SetVariable(2,"LOOM_NO"); //1
+            DataModel.SetVariable(3,"GAITING_STATUS"); //1
+            DataModel.SetVariable(4,"BEAM_GETTING_STARTED_ACTUAL");
+            DataModel.SetVariable(5,"BEAM_GETTING_DATE_AS_PER_PLAN"); 
+            DataModel.SetVariable(6,"TARGETTED_BEAM_GAITING_COMPLETE"); 
+            DataModel.SetVariable(7,"ACTUAL_BEAM_GAITING_COMPLETION_DATE");
+            DataModel.SetVariable(8,"PI_BEAM_UNLOADING"); 
+            DataModel.SetVariable(9,"PI_BEAM_LOADING"); 
+            DataModel.SetVariable(10,"PI_BEAM_LEASING"); 
+            DataModel.SetVariable(11,"PII_KNOTTING_DRAWING");
+            DataModel.SetVariable(12,"PIII_FRWD_KONTS");
+            DataModel.SetVariable(13,"PIV_CLOTH_START"); 
+            DataModel.SetVariable(14,"REMARKS");            
+            
+            
+            
+            for (int i = 1; i <= 14; i++) {
+                tblSDML.getColumnModel().getColumn(i).setMinWidth(100);
+            }
+            
+            
+             
+            tblSDML.getColumnModel().getColumn(0).setMinWidth(50);
+            tblSDML.getColumnModel().getColumn(0).setMaxWidth(50);
+            
+            
+            
+            /*
+            tblSDML.getColumnModel().getColumn(1).setMinWidth(120);
+            tblSDML.getColumnModel().getColumn(1).setMaxWidth(120);
+            
+            tblSDML.getColumnModel().getColumn(2).setMinWidth(80);
+            tblSDML.getColumnModel().getColumn(2).setMaxWidth(80);
+            
+            tblSDML.getColumnModel().getColumn(3).setMinWidth(90);
+            tblSDML.getColumnModel().getColumn(3).setMaxWidth(90);
+            
+            tblSDML.getColumnModel().getColumn(4).setMinWidth(90);
+            tblSDML.getColumnModel().getColumn(4).setMaxWidth(90);
+            
+            tblSDML.getColumnModel().getColumn(5).setMinWidth(90);
+            tblSDML.getColumnModel().getColumn(5).setMaxWidth(90);
+            
+            tblSDML.getColumnModel().getColumn(6).setMinWidth(90);
+            tblSDML.getColumnModel().getColumn(6).setMaxWidth(90);
+            
+            tblSDML.getColumnModel().getColumn(7).setMinWidth(90);
+            tblSDML.getColumnModel().getColumn(7).setMaxWidth(90);
+            
+            tblSDML.getColumnModel().getColumn(8).setMinWidth(90);
+            tblSDML.getColumnModel().getColumn(8).setMaxWidth(90);
+            tblSDML.getColumnModel().getColumn(9).setMinWidth(90);
+            tblSDML.getColumnModel().getColumn(9).setMaxWidth(90);
+            tblSDML.getColumnModel().getColumn(10).setMinWidth(90);
+            tblSDML.getColumnModel().getColumn(10).setMaxWidth(90);
+            
+            tblSDML.getColumnModel().getColumn(11).setMinWidth(90);
+            tblSDML.getColumnModel().getColumn(11).setMaxWidth(90);
+            
+            tblSDML.getColumnModel().getColumn(12).setMinWidth(90);
+            tblSDML.getColumnModel().getColumn(12).setMaxWidth(90);
+            
+            tblSDML.getColumnModel().getColumn(13).setMinWidth(90);
+            tblSDML.getColumnModel().getColumn(13).setMaxWidth(90);
+            
+            tblSDML.getColumnModel().getColumn(14).setMinWidth(90);
+            tblSDML.getColumnModel().getColumn(14).setMaxWidth(90);
+            */ 
+            DataModel.SetReadOnly(0);
+            DataModel.SetReadOnly(1);
+            DataModel.SetReadOnly(2);
+           
+            JComboBox cmbGaitingStatus = new JComboBox();
+
+            EITLComboModel cmbGaitingStatusModel = new EITLComboModel();
+            cmbGaitingStatus.removeAllItems();
+            cmbGaitingStatus.setModel(cmbGaitingStatusModel);
+            
+            ComboData aData = new ComboData();
+            aData = new ComboData();
+            aData.strCode="YES";
+            aData.Text="YES";
+            cmbGaitingStatusModel.addElement(aData);
+
+            aData = new ComboData();
+            aData.strCode = "NO";
+            aData.Text = "NO";
+            cmbGaitingStatusModel.addElement(aData);
+            
+            
+            
+            //Renderer.setCustomComponent(tblDetailDataModel.getColFromVariable("LVT_LEAVE_TYPE"), "ComboBox");
+            //Renderer.setCustomComponent(tblDetailDataModel.getColFromVariable("LVT_LEAVE_TYPE"), cmbLeavaType);
+            
+            tblSDML.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(cmbGaitingStatus));
+            
+            tblSDML.getTableHeader().setDefaultRenderer(new MultiLineTableHeaderRenderer());
+            tblSDML.getTableHeader().setPreferredSize(new Dimension(tblSDML.getColumnModel().getTotalColumnWidth(), 84));
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+   
+    private void FormatGridHS() {
+        DataModelUpdateHistory = new EITLTableModel();
+
+        TableUpdateHistory.removeAll();
+        TableUpdateHistory.setModel(DataModelUpdateHistory);
+
+        //Set the table Readonly
+        DataModelUpdateHistory.TableReadOnly(true);
+
+        //Add the columns
+        DataModelUpdateHistory.addColumn("Rev No.");
+        DataModelUpdateHistory.addColumn("User");
+        DataModelUpdateHistory.addColumn("Date");
+        DataModelUpdateHistory.addColumn("Status");
+        DataModelUpdateHistory.addColumn("Remarks");
+        DataModelUpdateHistory.addColumn("FROM_IP");
+
+        TableColumnModel tcm = TableUpdateHistory.getColumnModel();
+        tcm.getColumn(0).setPreferredWidth(20);
+        tcm.getColumn(1).setPreferredWidth(120);
+        tcm.getColumn(2).setPreferredWidth(100);
+        tcm.getColumn(3).setPreferredWidth(80);
+        tcm.getColumn(4).setPreferredWidth(80);
+        tcm.getColumn(5).setPreferredWidth(100);
+        TableUpdateHistory.setAutoResizeMode(TableUpdateHistory.AUTO_RESIZE_OFF);
+    }
+
+    private void GenerateCombos() {
+        //Generates Combo Boxes
+        HashMap List = new HashMap();
+        String strCondition = "";
+
+        //----- Generate cmbType ------- //
+        cmbHierarchyModel = new EITLComboModel();
+        cmbHierarchy.removeAllItems();
+        cmbHierarchy.setModel(cmbHierarchyModel);
+
+        List = clsHierarchy.getListEx(" WHERE D_COM_HIERARCHY.COMPANY_ID=" + EITLERPGLOBAL.gCompanyID + " AND MODULE_ID=" + ModuleId);
+
+        if (EditMode == EITLERPGLOBAL.EDIT) {
+            List = clsHierarchy.getList(" WHERE COMPANY_ID=" + EITLERPGLOBAL.gCompanyID + " AND MODULE_ID=" + ModuleId);
+        }
+
+        if (EditMode == EITLERPGLOBAL.EDIT) {
+            if (EITLERPGLOBAL.gNewUserID == clsFeltProductionApprovalFlow.getCreator(ModuleId, DOC_NO + "")) {
+                List = clsHierarchy.getListEx(" WHERE D_COM_HIERARCHY.COMPANY_ID=" + EITLERPGLOBAL.gCompanyID + " AND MODULE_ID=" + (ModuleId));
+            } else {
+                List = clsHierarchy.getList(" WHERE COMPANY_ID=" + EITLERPGLOBAL.gCompanyID + " AND MODULE_ID=" + ModuleId);
+            }
+        }
+
+        for (int i = 1; i <= List.size(); i++) {
+            clsHierarchy ObjHierarchy = (clsHierarchy) List.get(Integer.toString(i));
+            ComboData aData = new ComboData();
+            aData.Code = (int) ObjHierarchy.getAttribute("HIERARCHY_ID").getVal();
+            aData.Text = (String) ObjHierarchy.getAttribute("HIERARCHY_NAME").getObj();
+            cmbHierarchyModel.addElement(aData);
+        }
+        //------------------------------ //
+    }
+
+    private void GenerateFromCombo() {
+        //Generates Combo Boxes
+        HashMap List = new HashMap();
+
+        try {
+            if (EditMode == EITLERPGLOBAL.ADD) {
+                //----- Generate cmbType ------- //
+                cmbToModel = new EITLComboModel();
+                cmbSendTo.removeAllItems();
+                cmbSendTo.setModel(cmbToModel);
+
+                List = clsHierarchy.getUserList((int) EITLERPGLOBAL.gCompanyID, SelHierarchyID, EITLERPGLOBAL.gNewUserID);
+                for (int i = 1; i <= List.size(); i++) {
+                    clsUser ObjUser = (clsUser) List.get(Integer.toString(i));
+                    ComboData aData = new ComboData();
+                    aData.Code = (int) ObjUser.getAttribute("USER_ID").getVal();
+                    aData.Text = (String) ObjUser.getAttribute("USER_NAME").getObj();
+
+                    if (ObjUser.getAttribute("USER_ID").getVal() == EITLERPGLOBAL.gNewUserID) {
+                        //Exclude Current User
+                    } else {
+                        cmbToModel.addElement(aData);
+                    }
+                }
+                //------------------------------ //
+            } else {
+                //----- Generate cmbType ------- //
+                cmbToModel = new EITLComboModel();
+                cmbSendTo.removeAllItems();
+                cmbSendTo.setModel(cmbToModel);
+
+                List = clsFeltProductionApprovalFlow.getRemainingUsers(ModuleId, DOC_NO + "");
+                for (int i = 1; i <= List.size(); i++) {
+                    clsUser ObjUser = (clsUser) List.get(Integer.toString(i));
+                    ComboData aData = new ComboData();
+                    aData.Code = (int) ObjUser.getAttribute("USER_ID").getVal();
+                    aData.Text = (String) ObjUser.getAttribute("USER_NAME").getObj();
+                    cmbToModel.addElement(aData);
+                }
+                //------------------------------ //
+            }
+        } catch (Exception e) {
+        }
+
+    }
+
+    private void FormatGridApprovalStatus() {
+        DataModelApprovalStatus = new EITLTableModel();
+
+        TableApprovalStatus.removeAll();
+        TableApprovalStatus.setModel(DataModelApprovalStatus);
+
+        //Set the table Readonly
+        DataModelApprovalStatus.TableReadOnly(true);
+
+        //Add the columns
+        DataModelApprovalStatus.addColumn("Sr.");
+        DataModelApprovalStatus.addColumn("User");
+        DataModelApprovalStatus.addColumn("Department");
+        DataModelApprovalStatus.addColumn("Status");
+        DataModelApprovalStatus.addColumn("Received Date");
+        DataModelApprovalStatus.addColumn("Action Date");
+        DataModelApprovalStatus.addColumn("Remarks");
+
+        TableColumnModel tcm = TableApprovalStatus.getColumnModel();
+        tcm.getColumn(0).setPreferredWidth(10);
+        tcm.getColumn(3).setPreferredWidth(20);
+        tcm.getColumn(4).setPreferredWidth(150);
+        tcm.getColumn(5).setPreferredWidth(150);
+    }
+
+    private void FormatGridUpdateHistory() {
+        DataModelUpdateHistory = new EITLTableModel();
+
+        TableUpdateHistory.removeAll();
+        TableUpdateHistory.setModel(DataModelUpdateHistory);
+
+        //Set the table Readonly
+        DataModelUpdateHistory.TableReadOnly(true);
+
+        //Add the columns
+        DataModelUpdateHistory.addColumn("Rev No.");
+        DataModelUpdateHistory.addColumn("User");
+        DataModelUpdateHistory.addColumn("Date");
+        DataModelUpdateHistory.addColumn("Status");
+        DataModelUpdateHistory.addColumn("Remarks");
+        DataModelUpdateHistory.addColumn("FROM_IP");
+
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
+        Tab = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtDocNo = new javax.swing.JTextField();
+        txtDocDate = new javax.swing.JFormattedTextField();
+        lblRevNo = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblSDML = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        txtRemark = new javax.swing.JTextField();
+        txtAsOnDate = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        Tab2 = new javax.swing.JPanel();
+        jLabel31 = new javax.swing.JLabel();
+        cmbHierarchy = new javax.swing.JComboBox();
+        jLabel32 = new javax.swing.JLabel();
+        txtFrom = new javax.swing.JTextField();
+        jLabel35 = new javax.swing.JLabel();
+        txtFromRemarks = new javax.swing.JTextField();
+        jLabel36 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        OpgApprove = new javax.swing.JRadioButton();
+        OpgFinal = new javax.swing.JRadioButton();
+        OpgReject = new javax.swing.JRadioButton();
+        OpgHold = new javax.swing.JRadioButton();
+        jLabel33 = new javax.swing.JLabel();
+        cmbSendTo = new javax.swing.JComboBox();
+        jLabel34 = new javax.swing.JLabel();
+        txtToRemarks = new javax.swing.JTextField();
+        cmdBackToTab0 = new javax.swing.JButton();
+        cmdFromRemarksBig = new javax.swing.JButton();
+        cmdNextToTab2 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        StatusPanel = new javax.swing.JPanel();
+        jLabel60 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TableApprovalStatus = new javax.swing.JTable();
+        jLabel19 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        TableUpdateHistory = new javax.swing.JTable();
+        cmdViewHistory = new javax.swing.JButton();
+        cmdNormalView = new javax.swing.JButton();
+        cmdShowRemarks = new javax.swing.JButton();
+        txtAuditRemarks = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        ToolBar = new javax.swing.JToolBar();
+        cmdTop = new javax.swing.JButton();
+        cmdBack = new javax.swing.JButton();
+        cmdNext = new javax.swing.JButton();
+        cmdLast = new javax.swing.JButton();
+        cmdNew = new javax.swing.JButton();
+        cmdEdit = new javax.swing.JButton();
+        cmdDelete = new javax.swing.JButton();
+        cmdSave = new javax.swing.JButton();
+        cmdCancel = new javax.swing.JButton();
+        cmdFilter = new javax.swing.JButton();
+        cmdPreview = new javax.swing.JButton();
+        cmdPrint = new javax.swing.JButton();
+        cmdExit = new javax.swing.JButton();
+        lblTitle = new javax.swing.JLabel();
+        lblStatus = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+
+        getContentPane().setLayout(null);
+
+        Tab.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Tab.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        Tab.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TabMouseClicked(evt);
+            }
+        });
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.setLayout(null);
+
+        jLabel2.setText("Doc Date");
+        jPanel1.add(jLabel2);
+        jLabel2.setBounds(230, 20, 70, 20);
+
+        jLabel3.setText("Doc No");
+        jPanel1.add(jLabel3);
+        jLabel3.setBounds(10, 20, 70, 20);
+
+        txtDocNo.setEditable(false);
+        txtDocNo.setBackground(new java.awt.Color(254, 242, 230));
+        txtDocNo.setText("PD000001");
+        txtDocNo.setEnabled(false);
+        jPanel1.add(txtDocNo);
+        txtDocNo.setBounds(70, 10, 110, 30);
+
+        txtDocDate.setEditable(false);
+        jPanel1.add(txtDocDate);
+        txtDocDate.setBounds(300, 10, 120, 30);
+
+        lblRevNo.setText("...");
+        jPanel1.add(lblRevNo);
+        lblRevNo.setBounds(180, 20, 34, 20);
+
+        tblSDML.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tblSDML.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblSDMLKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblSDMLKeyReleased(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblSDML);
+
+        jPanel1.add(jScrollPane3);
+        jScrollPane3.setBounds(10, 50, 1110, 390);
+
+        jLabel1.setText("Remark");
+        jPanel1.add(jLabel1);
+        jLabel1.setBounds(670, 20, 60, 20);
+        jPanel1.add(txtRemark);
+        txtRemark.setBounds(730, 10, 390, 30);
+
+        txtAsOnDate = new EITLERP.FeltSales.common.DatePicker.DateTextFieldAdvanceSearch();
+        jPanel1.add(txtAsOnDate);
+        txtAsOnDate.setBounds(530, 10, 130, 30);
+
+        jLabel4.setText("Dated");
+        jPanel1.add(jLabel4);
+        jLabel4.setBounds(470, 20, 70, 20);
+
+        jButton1.setText("EXPORT TO EXCEL");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1);
+        jButton1.setBounds(944, 470, 170, 25);
+
+        Tab.addTab("Beam Gaiting Status", jPanel1);
+
+        jPanel2.setLayout(null);
+
+        Tab2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        Tab2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                Tab2FocusGained(evt);
+            }
+        });
+        Tab2.setLayout(null);
+
+        jLabel31.setText("Hierarchy ");
+        Tab2.add(jLabel31);
+        jLabel31.setBounds(10, 23, 66, 15);
+
+        cmbHierarchy.setEnabled(false);
+        cmbHierarchy.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbHierarchyItemStateChanged(evt);
+            }
+        });
+        cmbHierarchy.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                cmbHierarchyFocusGained(evt);
+            }
+        });
+        Tab2.add(cmbHierarchy);
+        cmbHierarchy.setBounds(90, 20, 180, 24);
+
+        jLabel32.setText("From");
+        Tab2.add(jLabel32);
+        jLabel32.setBounds(10, 62, 56, 15);
+
+        txtFrom.setBackground(new java.awt.Color(246, 238, 238));
+        txtFrom.setForeground(new java.awt.Color(11, 7, 7));
+        Tab2.add(txtFrom);
+        txtFrom.setBounds(90, 60, 180, 19);
+
+        jLabel35.setText("Remarks");
+        Tab2.add(jLabel35);
+        jLabel35.setBounds(10, 95, 62, 15);
+
+        txtFromRemarks.setBackground(new java.awt.Color(204, 204, 204));
+        Tab2.add(txtFromRemarks);
+        txtFromRemarks.setBounds(90, 95, 530, 19);
+
+        jLabel36.setText("Your Action  ");
+        Tab2.add(jLabel36);
+        jLabel36.setBounds(10, 130, 81, 15);
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel6.setLayout(null);
+
+        buttonGroup1.add(OpgApprove);
+        OpgApprove.setText("Approve & Forward");
+        OpgApprove.setEnabled(false);
+        OpgApprove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                OpgApproveMouseClicked(evt);
+            }
+        });
+        OpgApprove.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                OpgApproveItemStateChanged(evt);
+            }
+        });
+        OpgApprove.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                OpgApproveFocusGained(evt);
+            }
+        });
+        jPanel6.add(OpgApprove);
+        OpgApprove.setBounds(6, 6, 171, 23);
+
+        buttonGroup1.add(OpgFinal);
+        OpgFinal.setText("Final Approve");
+        OpgFinal.setEnabled(false);
+        OpgFinal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                OpgFinalMouseClicked(evt);
+            }
+        });
+        OpgFinal.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                OpgFinalItemStateChanged(evt);
+            }
+        });
+        OpgFinal.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                OpgFinalFocusGained(evt);
+            }
+        });
+        jPanel6.add(OpgFinal);
+        OpgFinal.setBounds(6, 32, 136, 20);
+
+        buttonGroup1.add(OpgReject);
+        OpgReject.setText("Reject");
+        OpgReject.setEnabled(false);
+        OpgReject.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                OpgRejectMouseClicked(evt);
+            }
+        });
+        OpgReject.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                OpgRejectItemStateChanged(evt);
+            }
+        });
+        OpgReject.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                OpgRejectFocusGained(evt);
+            }
+        });
+        jPanel6.add(OpgReject);
+        OpgReject.setBounds(6, 54, 136, 20);
+
+        buttonGroup1.add(OpgHold);
+        OpgHold.setSelected(true);
+        OpgHold.setText("Hold Document");
+        OpgHold.setEnabled(false);
+        OpgHold.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                OpgHoldMouseClicked(evt);
+            }
+        });
+        OpgHold.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                OpgHoldItemStateChanged(evt);
+            }
+        });
+        OpgHold.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                OpgHoldFocusGained(evt);
+            }
+        });
+        jPanel6.add(OpgHold);
+        OpgHold.setBounds(6, 76, 136, 20);
+
+        Tab2.add(jPanel6);
+        jPanel6.setBounds(90, 130, 180, 100);
+
+        jLabel33.setText("Send To");
+        Tab2.add(jLabel33);
+        jLabel33.setBounds(10, 253, 60, 15);
+
+        cmbSendTo.setEnabled(false);
+        cmbSendTo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                cmbSendToFocusGained(evt);
+            }
+        });
+        Tab2.add(cmbSendTo);
+        cmbSendTo.setBounds(90, 250, 180, 24);
+
+        jLabel34.setText("Remarks");
+        Tab2.add(jLabel34);
+        jLabel34.setBounds(10, 292, 60, 15);
+
+        txtToRemarks.setEnabled(false);
+        txtToRemarks.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtToRemarksFocusGained(evt);
+            }
+        });
+        Tab2.add(txtToRemarks);
+        txtToRemarks.setBounds(90, 290, 570, 19);
+
+        cmdBackToTab0.setText("<< Back");
+        cmdBackToTab0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdBackToTab0ActionPerformed(evt);
+            }
+        });
+        Tab2.add(cmdBackToTab0);
+        cmdBackToTab0.setBounds(450, 400, 102, 25);
+
+        cmdFromRemarksBig.setText("...");
+        cmdFromRemarksBig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdFromRemarksBigActionPerformed(evt);
+            }
+        });
+        Tab2.add(cmdFromRemarksBig);
+        cmdFromRemarksBig.setBounds(630, 95, 33, 21);
+
+        cmdNextToTab2.setMnemonic('N');
+        cmdNextToTab2.setText("Next >>");
+        cmdNextToTab2.setToolTipText("Next Tab");
+        cmdNextToTab2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdNextToTab2ActionPerformed(evt);
+            }
+        });
+        Tab2.add(cmdNextToTab2);
+        cmdNextToTab2.setBounds(570, 400, 102, 25);
+
+        jPanel2.add(Tab2);
+        Tab2.setBounds(0, 0, 770, 460);
+
+        Tab.addTab("Approval", jPanel2);
+
+        jPanel3.setLayout(null);
+
+        StatusPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        StatusPanel.setLayout(null);
+
+        jLabel60.setText("Document Approval Status");
+        StatusPanel.add(jLabel60);
+        jLabel60.setBounds(12, 10, 242, 15);
+
+        TableApprovalStatus.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(TableApprovalStatus);
+
+        StatusPanel.add(jScrollPane2);
+        jScrollPane2.setBounds(0, 40, 694, 120);
+
+        jLabel19.setText("Document Update History");
+        StatusPanel.add(jLabel19);
+        jLabel19.setBounds(10, 170, 182, 15);
+
+        TableUpdateHistory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane6.setViewportView(TableUpdateHistory);
+
+        StatusPanel.add(jScrollPane6);
+        jScrollPane6.setBounds(10, 190, 540, 130);
+
+        cmdViewHistory.setText("View Revisions");
+        cmdViewHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdViewHistoryActionPerformed(evt);
+            }
+        });
+        StatusPanel.add(cmdViewHistory);
+        cmdViewHistory.setBounds(570, 170, 132, 24);
+
+        cmdNormalView.setText("Back to Normal");
+        cmdNormalView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdNormalViewActionPerformed(evt);
+            }
+        });
+        StatusPanel.add(cmdNormalView);
+        cmdNormalView.setBounds(570, 200, 132, 24);
+
+        cmdShowRemarks.setText("Show Remarks");
+        cmdShowRemarks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdShowRemarksActionPerformed(evt);
+            }
+        });
+        StatusPanel.add(cmdShowRemarks);
+        cmdShowRemarks.setBounds(570, 230, 132, 24);
+
+        txtAuditRemarks.setEnabled(false);
+        StatusPanel.add(txtAuditRemarks);
+        txtAuditRemarks.setBounds(570, 260, 129, 19);
+
+        jButton4.setText("Next >>");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        StatusPanel.add(jButton4);
+        jButton4.setBounds(660, 290, 100, 30);
+
+        jButton5.setText("<<Previous");
+        jButton5.setMargin(new java.awt.Insets(2, 5, 2, 5));
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        StatusPanel.add(jButton5);
+        jButton5.setBounds(560, 290, 100, 30);
+
+        jPanel3.add(StatusPanel);
+        StatusPanel.setBounds(10, 0, 790, 380);
+
+        Tab.addTab("Status", jPanel3);
+
+        getContentPane().add(Tab);
+        Tab.setBounds(0, 70, 1140, 560);
+
+        ToolBar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        ToolBar.setRollover(true);
+
+        cmdTop.setToolTipText("First Record");
+        cmdTop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdTopActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdTop);
+
+        cmdBack.setToolTipText("Previous Record");
+        cmdBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdBackActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdBack);
+
+        cmdNext.setToolTipText("Next Record");
+        cmdNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdNextActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdNext);
+
+        cmdLast.setToolTipText("Last Record");
+        cmdLast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdLastActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdLast);
+
+        cmdNew.setToolTipText("New Record");
+        cmdNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdNewActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdNew);
+
+        cmdEdit.setToolTipText("Edit");
+        cmdEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdEditActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdEdit);
+
+        cmdDelete.setToolTipText("Delete");
+        cmdDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdDeleteActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdDelete);
+
+        cmdSave.setToolTipText("Save");
+        cmdSave.setEnabled(false);
+        cmdSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdSaveActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdSave);
+
+        cmdCancel.setToolTipText("Cancel");
+        cmdCancel.setEnabled(false);
+        cmdCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdCancelActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdCancel);
+
+        cmdFilter.setToolTipText("Find");
+        cmdFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdFilterActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdFilter);
+
+        cmdPreview.setToolTipText("Preview");
+        cmdPreview.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdPreviewActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdPreview);
+
+        cmdPrint.setToolTipText("Print");
+        cmdPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdPrintActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdPrint);
+
+        cmdExit.setToolTipText("Exit");
+        cmdExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdExitActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdExit);
+
+        getContentPane().add(ToolBar);
+        ToolBar.setBounds(0, 0, 1140, 40);
+
+        lblTitle.setBackground(new java.awt.Color(0, 102, 153));
+        lblTitle.setFont(new java.awt.Font("Cantarell", 1, 15)); // NOI18N
+        lblTitle.setText("FELT WINDNG PRODUCTION");
+        lblTitle.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        lblTitle.setOpaque(true);
+        getContentPane().add(lblTitle);
+        lblTitle.setBounds(0, 40, 1140, 25);
+
+        lblStatus.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblStatus.setForeground(new java.awt.Color(51, 51, 255));
+        lblStatus.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        getContentPane().add(lblStatus);
+        lblStatus.setBounds(0, 630, 1140, 30);
+        getContentPane().add(jPanel5);
+        jPanel5.setBounds(210, 50, 10, 10);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void GenerateRejectedSendToCombo() {
+        HashMap hmRejectedSendToList = new HashMap();
+
+        cmbSendToModel = new EITLComboModel();
+        cmbSendTo.removeAllItems();
+        cmbSendTo.setModel(cmbSendToModel);
+        DOC_NO = txtDocNo.getText();
+        //Now Add other hierarchy Users
+        SelHierarchyID = EITLERPGLOBAL.getComboCode(cmbHierarchy);
+
+        hmRejectedSendToList = clsHierarchy.getUserList((int) EITLERPGLOBAL.gCompanyID, SelHierarchyID, EITLERPGLOBAL.gNewUserID, true);
+
+        for (int i = 1; i <= hmRejectedSendToList.size(); i++) {
+            clsUser ObjUser = (clsUser) hmRejectedSendToList.get(Integer.toString(i));
+
+            ComboData aData = new ComboData();
+            aData.Code = (int) ObjUser.getAttribute("USER_ID").getVal();
+            aData.Text = ObjUser.getAttribute("USER_NAME").getString();
+
+            boolean IncludeUser = false;
+            //Decide to include user or not
+            if (EditMode == EITLERPGLOBAL.EDIT) {
+
+                if (OpgApprove.isSelected()) {
+                    IncludeUser = clsFeltProductionApprovalFlow.IncludeUserInApproval(ModuleId, DOC_NO + "", ObjUser.getAttribute("USER_ID").getInt(), EITLERPGLOBAL.gNewUserID);
+                }
+
+                if (OpgReject.isSelected()) {
+                    //JOptionPane.showMessageDialog(null, "Module Id :"+ModuleId+", DOC No : "+sorder_no+", User Id : "+ObjUser.getAttribute("USER_ID").getInt()+", New user Id "+SDMLERPGLOBAL.gNewUserID);
+                    IncludeUser = clsFeltProductionApprovalFlow.IncludeUserInRejection(ModuleId, DOC_NO + "", ObjUser.getAttribute("USER_ID").getInt(), EITLERPGLOBAL.gNewUserID);
+                    // JOptionPane.showMessageDialog(null, "IncludeUser = "+IncludeUser);
+                }
+
+                if (IncludeUser && (((int) ObjUser.getAttribute("USER_ID").getVal()) != EITLERPGLOBAL.gNewUserID)) {
+                    cmbSendToModel.addElement(aData);
+                }
+            } else {
+                if ((ObjUser.getAttribute("USER_ID").getInt()) != EITLERPGLOBAL.gNewUserID) {
+                    cmbSendToModel.addElement(aData);
+                }
+            }
+        }
+
+        if (EditMode == EITLERPGLOBAL.EDIT) {
+            int Creator = clsFeltProductionApprovalFlow.getCreator(ModuleId, DOC_NO + "");
+            EITLERPGLOBAL.setComboIndex(cmbSendTo, Creator);
+        }
+    }
+    private void cmdTopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdTopActionPerformed
+        MoveFirst();
+    }//GEN-LAST:event_cmdTopActionPerformed
+
+    private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
+        MovePrevious();
+    }//GEN-LAST:event_cmdBackActionPerformed
+
+    private void cmdNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdNextActionPerformed
+        MoveNext();
+
+    }//GEN-LAST:event_cmdNextActionPerformed
+
+    private void cmdLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLastActionPerformed
+        MoveLast();
+    }//GEN-LAST:event_cmdLastActionPerformed
+
+    private void cmdNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdNewActionPerformed
+        try {
+                Add();
+                
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        
+    }//GEN-LAST:event_cmdNewActionPerformed
+
+    private void cmdEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdEditActionPerformed
+        Edit();
+    }//GEN-LAST:event_cmdEditActionPerformed
+
+    private void cmdDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdDeleteActionPerformed
+        if (JOptionPane.showConfirmDialog(this, "Are you sure want to delete this record ?", "DELETE RECORD", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            Delete();
+        }
+    }//GEN-LAST:event_cmdDeleteActionPerformed
+
+    private void cmdSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdSaveActionPerformed
+        Save();
+    }//GEN-LAST:event_cmdSaveActionPerformed
+
+    private void cmdCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
+        Cancel();
+    }//GEN-LAST:event_cmdCancelActionPerformed
+
+    private void cmdFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdFilterActionPerformed
+        Find();
+    }//GEN-LAST:event_cmdFilterActionPerformed
+
+    private void cmdExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdExitActionPerformed
+        ((JFrame) getParent().getParent().getParent().getParent()).dispose();
+    }//GEN-LAST:event_cmdExitActionPerformed
+
+    private void cmdPreviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdPreviewActionPerformed
+        // TODO add your handling code here:
+        ReportShow();
+    }//GEN-LAST:event_cmdPreviewActionPerformed
+
+    private void cmdPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdPrintActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_cmdPrintActionPerformed
+
+    private void TabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabMouseClicked
+
+    }//GEN-LAST:event_TabMouseClicked
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void cmdShowRemarksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowRemarksActionPerformed
+
+    }//GEN-LAST:event_cmdShowRemarksActionPerformed
+
+    private void cmdNormalViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdNormalViewActionPerformed
+        objDM.HistoryView = false;
+        objDM.LoadData();
+        MoveLast();
+    }//GEN-LAST:event_cmdNormalViewActionPerformed
+
+    private void cmdViewHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdViewHistoryActionPerformed
+        String DocNo1 = txtDocNo.getText();
+        objDM.ShowHistory(DocNo1);
+        MoveLast();
+
+    }//GEN-LAST:event_cmdViewHistoryActionPerformed
+
+    private void Tab2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_Tab2FocusGained
+
+    }//GEN-LAST:event_Tab2FocusGained
+
+    private void cmdNextToTab2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdNextToTab2ActionPerformed
+
+    }//GEN-LAST:event_cmdNextToTab2ActionPerformed
+
+    private void cmdFromRemarksBigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdFromRemarksBigActionPerformed
+
+    }//GEN-LAST:event_cmdFromRemarksBigActionPerformed
+
+    private void cmdBackToTab0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackToTab0ActionPerformed
+
+    }//GEN-LAST:event_cmdBackToTab0ActionPerformed
+
+    private void txtToRemarksFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtToRemarksFocusGained
+
+    }//GEN-LAST:event_txtToRemarksFocusGained
+
+    private void cmbSendToFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbSendToFocusGained
+
+    }//GEN-LAST:event_cmbSendToFocusGained
+
+    private void OpgHoldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_OpgHoldFocusGained
+
+    }//GEN-LAST:event_OpgHoldFocusGained
+
+    private void OpgHoldItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_OpgHoldItemStateChanged
+
+    }//GEN-LAST:event_OpgHoldItemStateChanged
+
+    private void OpgHoldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OpgHoldMouseClicked
+        // TODO add your handling code here:
+        OpgApprove.setSelected(false);
+        OpgFinal.setSelected(false);
+        OpgReject.setSelected(false);
+        OpgHold.setSelected(true);
+    }//GEN-LAST:event_OpgHoldMouseClicked
+
+    private void OpgRejectFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_OpgRejectFocusGained
+
+    }//GEN-LAST:event_OpgRejectFocusGained
+
+    private void OpgRejectItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_OpgRejectItemStateChanged
+
+    }//GEN-LAST:event_OpgRejectItemStateChanged
+
+    private void OpgRejectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OpgRejectMouseClicked
+        OpgReject.setSelected(true);
+        OpgFinal.setSelected(false);
+        OpgApprove.setSelected(false);
+        OpgHold.setSelected(false);
+
+        GenerateRejectedSendToCombo();
+        cmbSendTo.setEnabled(true);
+    }//GEN-LAST:event_OpgRejectMouseClicked
+
+    private void OpgFinalFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_OpgFinalFocusGained
+
+    }//GEN-LAST:event_OpgFinalFocusGained
+
+    private void OpgFinalItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_OpgFinalItemStateChanged
+
+    }//GEN-LAST:event_OpgFinalItemStateChanged
+
+    private void OpgFinalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OpgFinalMouseClicked
+        // TODO add your handling code here:
+        OpgApprove.setSelected(false);
+        OpgFinal.setSelected(true);
+        OpgReject.setSelected(false);
+        OpgHold.setSelected(false);
+
+        if (!OpgFinal.isEnabled()) {
+            OpgHold.setSelected(true);
+        }
+    }//GEN-LAST:event_OpgFinalMouseClicked
+
+    private void OpgApproveFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_OpgApproveFocusGained
+        lblStatus.setText("Select the approval action");
+    }//GEN-LAST:event_OpgApproveFocusGained
+
+    private void OpgApproveItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_OpgApproveItemStateChanged
+
+    }//GEN-LAST:event_OpgApproveItemStateChanged
+
+    private void OpgApproveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OpgApproveMouseClicked
+
+        if (!OpgApprove.isEnabled()) {
+            return;
+        }
+
+        SelHierarchyID = EITLERPGLOBAL.getComboCode(cmbHierarchy);
+        //JOptionPane.showMessageDialog(null, "SelHierarchyId : "+SelHierarchyID);
+
+        //cmbSendTo.setEnabled(true);
+        if (EditMode == EITLERPGLOBAL.EDIT) {
+            GenerateRejectedSendToCombo();
+            if (clsFeltProductionApprovalFlow.IsOnceRejectedDoc(ModuleId, DOC_NO + "")) {
+                cmbSendTo.setEnabled(true);
+                txtToRemarks.setEnabled(true);
+                txtFromRemarks.setEnabled(true);
+            } else {
+                cmbSendTo.setEnabled(false);
+            }
+        }
+        if (cmbSendTo.getItemCount() <= 0) {
+            GenerateSendToCombo();
+        }
+
+        OpgFinal.setSelected(false);
+        OpgReject.setSelected(false);
+        OpgApprove.setSelected(true);
+        OpgHold.setSelected(false);
+        txtToRemarks.setEnabled(false);
+        if (!OpgApprove.isEnabled()) {
+            OpgHold.setSelected(true);
+        }
+    }//GEN-LAST:event_OpgApproveMouseClicked
+
+    private void cmbHierarchyFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbHierarchyFocusGained
+        lblStatus.setText("Select the hierarchy for approval");
+    }//GEN-LAST:event_cmbHierarchyFocusGained
+
+    private void cmbHierarchyItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbHierarchyItemStateChanged
+
+        SelHierarchyID = EITLERPGLOBAL.getComboCode(cmbHierarchy);
+
+        GenerateSendToCombo();
+
+        if (clsHierarchy.CanSkip((int) EITLERPGLOBAL.gCompanyID, SelHierarchyID, (int) EITLERPGLOBAL.gNewUserID)) {
+            cmbSendTo.setEnabled(true);
+        } else {
+            cmbSendTo.setEnabled(false);
+        }
+
+        if (clsHierarchy.CanFinalApprove((int) EITLERPGLOBAL.gCompanyID, SelHierarchyID, (int) EITLERPGLOBAL.gNewUserID)) {
+            if (EditMode == EITLERPGLOBAL.ADD || EditMode == EITLERPGLOBAL.EDIT) {
+                OpgFinal.setEnabled(true);
+            }
+        } else {
+            OpgApprove.setEnabled(false);
+            OpgApprove.setSelected(false);
+        }
+
+        if (clsHierarchy.IsCreator((int) EITLERPGLOBAL.gCompanyID, SelHierarchyID, (int) EITLERPGLOBAL.gNewUserID)) {
+            OpgApprove.setEnabled(true);
+            OpgReject.setEnabled(false);
+            OpgReject.setSelected(false);
+        }
+    }//GEN-LAST:event_cmbHierarchyItemStateChanged
+
+    private void tblSDMLKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblSDMLKeyPressed
+        
+    }//GEN-LAST:event_tblSDMLKeyPressed
+
+    private void tblSDMLKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblSDMLKeyReleased
+        // TODO add your handling code here:
+        
+        for(int i=0;i<tblSDML.getRowCount();i++)
+        {
+            int daysProductionCounter = 0;
+            int daysProductionDoff = 0;
+            int daysProductionKgs = 0;
+            double WARP_TO_BE_ALLOTED_MTS = 0;
+            try{
+                if(DataModel.getValueByVariable("ACTUAL_TARGET", i).equals("ACTUAL")){
+                if(!DataModel.getValueByVariable("SHIFT_A_COUNTER", i).equals("")){
+                daysProductionCounter += Integer.parseInt(DataModel.getValueByVariable("SHIFT_A_COUNTER", i));
+                }
+                if(!DataModel.getValueByVariable("SHIFT_B_COUNTER", i).equals("")){
+                daysProductionCounter += Integer.parseInt(DataModel.getValueByVariable("SHIFT_B_COUNTER", i));
+                }
+                if(!DataModel.getValueByVariable("SHIFT_C_COUNTER", i).equals("")){
+                daysProductionCounter += Integer.parseInt(DataModel.getValueByVariable("SHIFT_C_COUNTER", i));
+                }
+                
+                if(!DataModel.getValueByVariable("SHIFT_A_DOFF", i).equals("")){
+                daysProductionDoff += Integer.parseInt(DataModel.getValueByVariable("SHIFT_A_DOFF", i));
+                }
+                if(!DataModel.getValueByVariable("SHIFT_B_DOFF", i).equals("")){
+                daysProductionDoff += Integer.parseInt(DataModel.getValueByVariable("SHIFT_B_DOFF", i));
+                }
+                if(!DataModel.getValueByVariable("SHIFT_C_DOFF", i).equals("")){
+                daysProductionDoff += Integer.parseInt(DataModel.getValueByVariable("SHIFT_C_DOFF", i));
+                }
+                if(!DataModel.getValueByVariable("SHIFT_A_KGS", i).equals("")){
+                daysProductionKgs += Integer.parseInt(DataModel.getValueByVariable("SHIFT_A_KGS", i));
+                }
+                if(!DataModel.getValueByVariable("SHIFT_B_KGS", i).equals("")){
+                daysProductionKgs += Integer.parseInt(DataModel.getValueByVariable("SHIFT_B_KGS", i));
+                }
+                if(!DataModel.getValueByVariable("SHIFT_C_KGS", i).equals("")){
+                daysProductionKgs += Integer.parseInt(DataModel.getValueByVariable("SHIFT_C_KGS", i));
+                }
+                DataModel.setValueByVariable("DAYS_PRODUCTION_COUNTER", Integer.toString(daysProductionCounter), i);
+                DataModel.setValueByVariable("DAYS_PRODUCTION_DOFF", Integer.toString(daysProductionDoff), i);
+                DataModel.setValueByVariable("DAYS_PRODUCTION_KGS", Integer.toString(daysProductionKgs), i);
+                
+                }
+            }catch(Exception e)
+            {
+                e.printStackTrace(); 
+            }
+            
+        }
+        
+        for (int i = 0; i < tblSDML.getRowCount(); i++) {
+            int LOOM_NO = Integer.parseInt(DataModel.getValueByVariable("LOOM_NO", i));
+            String GAITING_STATUS = ""; 
+            try {
+                GAITING_STATUS = DataModel.getValueByVariable("GAITING_STATUS", i);
+            } catch (Exception e) {//e.printStackTrace(); 
+            }
+            
+            if(GAITING_STATUS.equals("YES"))
+            {
+                int WARPING_DAYS = Integer.parseInt(data.getStringValueFromDB("SELECT WARPING_DAYS FROM PRODUCTION.LOOMWISE_PICK_WARP_MASTER where LOOM_NO=" + LOOM_NO + ""));
+                String BEAM_GETTING_STARTED_ACTUAL = DataModel.getValueByVariable("BEAM_GETTING_STARTED_ACTUAL", i);
+                
+                String TARGETTED_BEAM_GAITING_COMPLETE = EITLERPGLOBAL.formatDate(data.getStringValueFromDB("SELECT DATE_ADD('" + EITLERPGLOBAL.formatDateDB(BEAM_GETTING_STARTED_ACTUAL) + "', INTERVAL " + WARPING_DAYS + " DAY)"));        
+                DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", TARGETTED_BEAM_GAITING_COMPLETE + "", i);
+            }
+        }
+        
+    }//GEN-LAST:event_tblSDMLKeyReleased
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        try {
+
+            //            exp.fillData(Table_Diversion, new File("/root/Desktop/DIVERSION_REPORT.xls"));
+            exp.fillData(tblSDML, new File("D://FELT_BEAM_GAITING_STATUS.xls"));
+            //            JOptionPane.showMessageDialog(null, "Data saved at "
+                //                    + "'/root/Desktop/DIVERSION_REPORT.xls' successfully in Linux PC or 'D://DIVERSION_REPORT.xls' successfully in Windows PC    ", "Message",
+                //                    JOptionPane.INFORMATION_MESSAGE);
+
+            exp.fillData(tblSDML, new File(System.getProperty("user.home") + "/Desktop/FELT_BEAM_GAITING_STATUS.xls"));
+            JOptionPane.showMessageDialog(null, "Data saved at "
+                + "'" + System.getProperty("user.home") + "/Desktop/FELT_BEAM_GAITING_STATUS.xls' or 'D://FELT_BEAM_GAITING_STATUS.xls' successfully in PC    ", "Message",
+                JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+        
+    
+        /*    */
+    private void ReportShow() {
+        
+    }
+    
+    
+    private void MoveFirst() {
+        objDM.MoveFirst();
+        DisplayData();
+    }
+
+    private void MovePrevious() {
+        objDM.MovePrevious();
+        DisplayData();
+    }
+
+    private void MoveNext() {
+        objDM.MoveNext();
+        DisplayData();
+    }
+
+    private void MoveLast() {
+        objDM.MoveLast();
+        DisplayData();
+    }
+
+    private void Add() {
+        //  EditMode=EITLERPGLOBAL.ADD;
+
+        if (!EITLERPGLOBAL.YearIsOpen) {
+            JOptionPane.showMessageDialog(null, "The year is closed. You cannot enter/edit any transaction");
+            return;
+        }
+        clearFields();
+
+        EditMode = EITLERPGLOBAL.ADD;
+        DisableToolbar();
+        SetFields(true);
+        SetupApproval();
+        lblTitle.setBackground(new Color(0, 102, 153));
+        lblTitle.setForeground(Color.WHITE);
+
+        SelectFirstFree aList = new SelectFirstFree();
+        aList.ModuleID = ModuleId;
+        aList.FirstFreeNo = 361;
+
+        txtDocDate.setText(df.format(new Date()));
+        txtAsOnDate.setText(df.format(new Date()));
+        FFNo = aList.FirstFreeNo;
+        txtDocNo.setText(clsFirstFree.getNextFreeNo(EITLERPGLOBAL.gCompanyID, ModuleId, FFNo, false));
+        lblTitle.setText("Felt Beam Gaiting Status - " + txtDocNo.getText());
+       
+        try{
+            
+            String PREVIOS_DOC_NO = data.getStringValueFromDB("SELECT BGS_DOC_NO FROM  PRODUCTION.BEAM_GAITING_STATUS_HEADER ORDER BY AS_ON_DATE DESC LIMIT 1");
+            
+            
+                Object[] rowData = new Object[1];
+                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "1", 0);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "A.ACNE", 0);
+                DataModel.setValueByVariable("LOOM_NO", "7", 0);
+                String LOOM_NO="7";
+                ResultSet rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                int row = 0;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "2", 1);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "A.ACNE", 1);
+                DataModel.setValueByVariable("LOOM_NO", "8", 1);               
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 1);
+                LOOM_NO="8";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 1;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "3", 2);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "B.MNE", 2);
+                DataModel.setValueByVariable("LOOM_NO", "81", 2);
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 2);
+                LOOM_NO="81";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 2;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "4", 3);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "B.MNE", 3);
+                DataModel.setValueByVariable("LOOM_NO", "82", 3);     
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 3);
+                LOOM_NO="82";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 3;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "5", 4);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "B.MNE", 4);
+                DataModel.setValueByVariable("LOOM_NO", "83", 4);
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 4);
+                LOOM_NO="83";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 4;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "6", 5);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "B.MNE", 5);
+                DataModel.setValueByVariable("LOOM_NO", "84", 5);
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 5);
+                LOOM_NO="84";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 5;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "7", 6);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "B.MNE", 6);
+                DataModel.setValueByVariable("LOOM_NO", "85", 6);
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 6);
+                LOOM_NO="85";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 6;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                
+                                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "8", 7);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "A.ACNE", 7);
+                DataModel.setValueByVariable("LOOM_NO", "86", 7);
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 7);
+                LOOM_NO="86";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 7;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "9", 8);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "B.MNE", 8);
+                DataModel.setValueByVariable("LOOM_NO", "87", 8);
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 8);
+                LOOM_NO="87";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 8;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "10", 9);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "A.ACNE", 9);
+                DataModel.setValueByVariable("LOOM_NO", "88", 9);     
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 9);
+                LOOM_NO="88";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 9;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                
+                DataModel.addRow(rowData);                
+                DataModel.setValueByVariable("SR_NO", "11", 10);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "B.MNE", 10);
+                DataModel.setValueByVariable("LOOM_NO", "89", 10);
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 10);
+                LOOM_NO="89";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 10;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "12", 11);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "C.HDS", 11);
+                DataModel.setValueByVariable("LOOM_NO", "90", 11);
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 11);
+                LOOM_NO="90";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 11;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "13", 12);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "B.MNE", 12);
+                DataModel.setValueByVariable("LOOM_NO", "91", 12);
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 12);
+                LOOM_NO="91";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 12;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "14", 13);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "B.MNE", 13);
+                DataModel.setValueByVariable("LOOM_NO", "92", 13);     
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 13);
+                LOOM_NO="92";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 13;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+                
+                DataModel.addRow(rowData);
+                DataModel.setValueByVariable("SR_NO", "15", 14);
+                DataModel.setValueByVariable("PRODUCT_GROUP", "B.MNE", 14);
+                DataModel.setValueByVariable("LOOM_NO", "93", 14);
+                DataModel.setValueByVariable("GAITING_STATUS", "NO", 14);
+                LOOM_NO="93";
+                rsData = data.getResult("SELECT * FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL WHERE BGS_DOC_NO='"+PREVIOS_DOC_NO+"' AND GAITING_STATUS='YES' AND LOOM_NO="+LOOM_NO+" AND PIV_CLOTH_START='0000-00-00'");
+                row = 14;
+                if(rsData.first())
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "YES", row);
+                    DataModel.setValueByVariable("BEAM_GETTING_STARTED_ACTUAL", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_STARTED_ACTUAL")), row);
+                    DataModel.setValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", EITLERPGLOBAL.formatDate(rsData.getString("BEAM_GETTING_DATE_AS_PER_PLAN")), row);
+                    DataModel.setValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", EITLERPGLOBAL.formatDate(rsData.getString("TARGETTED_BEAM_GAITING_COMPLETE")), row);
+                    DataModel.setValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", EITLERPGLOBAL.formatDate(rsData.getString("ACTUAL_BEAM_GAITING_COMPLETION_DATE")), row);
+                    DataModel.setValueByVariable("PI_BEAM_UNLOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_UNLOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LOADING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LOADING")), row);
+                    DataModel.setValueByVariable("PI_BEAM_LEASING", EITLERPGLOBAL.formatDate(rsData.getString("PI_BEAM_LEASING")), row);
+                    DataModel.setValueByVariable("PII_KNOTTING_DRAWING", EITLERPGLOBAL.formatDate(rsData.getString("PII_KNOTTING_DRAWING")), row);
+                    DataModel.setValueByVariable("PIII_FRWD_KONTS", EITLERPGLOBAL.formatDate(rsData.getString("PIII_FRWD_KONTS")), row);
+                    DataModel.setValueByVariable("PIV_CLOTH_START", EITLERPGLOBAL.formatDate(rsData.getString("PIV_CLOTH_START")), row);
+                    DataModel.setValueByVariable("REMARKS", rsData.getString("REMARKS"), row);
+                }
+                else
+                {
+                    DataModel.setValueByVariable("GAITING_STATUS", "NO", row);
+                }
+                
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void Find() {
+        Loader ObjLoader = new Loader(this, "EITLERP.Production.BeamGaitingStatus.frmFindBeamGaitingStatus", true);
+        frmFindBeamGaitingStatus ObjFindobjDM = (frmFindBeamGaitingStatus) ObjLoader.getObj();
+
+        if (ObjFindobjDM.Cancelled == false) {
+            if (!objDM.Filter(ObjFindobjDM.stringFindQuery)) {
+                JOptionPane.showMessageDialog(this, "No records found.", "Find Beam Gaiting Status", JOptionPane.YES_OPTION);
+            }
+            MoveLast();
+        }
+    }
+
+    public void FindEx(int pCompanyID, String AmendID) {
+        objDM.Filter(" BGS_DOC_NO='" + AmendID + "'");
+        objDM.MoveFirst();
+        DisplayData();
+    }
+
+    // find rate update by doc no
+    public void Find(String docNo) {
+        objDM.Filter(" BGS_DOC_NO='" + docNo + "'");
+        SetMenuForRights();
+        DisplayData();
+    }
+
+    public void FindWaiting() {
+        objDM.Filter(" AND PROD_DOC_NO IN (SELECT DISTINCT PROD_DOC_NO FROM PRODUCTION.FELT_PROD_DATA, PRODUCTION.FELT_PROD_DOC_DATA WHERE PROD_DOC_NO=DOC_NO AND USER_ID=" + EITLERPGLOBAL.gNewUserID + " AND STATUS='W' AND MODULE_ID=" + ModuleId + " AND CANCELED=0) ");
+        SetMenuForRights();
+        DisplayData();
+    }
+
+    private void Save() {
+
+        
+        SetData();
+
+        if (cmbHierarchy.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "Select the hierarchy.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if ((!OpgApprove.isSelected()) && (!OpgReject.isSelected()) && (!OpgFinal.isSelected()) && (!OpgHold.isSelected())) {
+            JOptionPane.showMessageDialog(this, "Select the Approval Action.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (OpgReject.isSelected() && txtToRemarks.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(this, "Enter the remarks for rejection", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if ((OpgApprove.isSelected() || OpgReject.isSelected()) && cmbSendTo.getItemCount() <= 0) {
+            JOptionPane.showMessageDialog(this, "Select the user, to whom rejected document to be send", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        //objDM.LoadData();
+        if (EditMode == EITLERPGLOBAL.ADD) {
+            if (objDM.Insert()) {
+                SelectFirstFree aList = new SelectFirstFree();
+                aList.ModuleID = ModuleId;
+                aList.FirstFreeNo = 361;
+                FFNo = aList.FirstFreeNo;
+                clsFirstFree.getNextFreeNo(EITLERPGLOBAL.gCompanyID, ModuleId, FFNo, true);
+                EditMode = 0;
+
+                if (OpgFinal.isSelected()) {
+
+                    try{
+                            //SendMail();
+                        }catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    
+                }
+
+                DisplayData();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error occured while saving. Error is " + objDM.LastError, " SAVING ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        if (EditMode == EITLERPGLOBAL.EDIT) {
+            if (objDM.Update()) {
+                if (OpgFinal.isSelected())  {
+                        try{
+                            //SendMail();
+                        }catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                }
+                EditMode = 0;
+                DisplayData();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error occured while saving editing. Error is " + objDM.LastError, "SAVING ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        EditMode = 0;
+        SetFields(false);
+        EnableToolbar();
+        SetMenuForRights();
+        try {
+            if (PENDING_DOCUMENT) {
+                frmPA.RefreshView();
+                PENDING_DOCUMENT = false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void Cancel() {
+        EditMode = 0;
+        DisplayData();
+        EnableToolbar();
+        SetMenuForRights();
+        SetFields(false);
+    }
+
+    private void EnableToolbar() {
+        cmdTop.setEnabled(true);
+        cmdBack.setEnabled(true);
+        cmdNext.setEnabled(true);
+        cmdLast.setEnabled(true);
+        cmdNew.setEnabled(true);
+        cmdEdit.setEnabled(true);
+        cmdDelete.setEnabled(true);
+        cmdSave.setEnabled(false);
+        cmdCancel.setEnabled(false);
+        cmdFilter.setEnabled(true);
+        cmdPreview.setEnabled(true);
+        cmdPrint.setEnabled(true);
+        cmdExit.setEnabled(true);
+    }
+
+    private void Edit() {
+
+        String productionDocumentNo = (String) objDM.getAttribute("BGS_DOC_NO").getObj();
+        if (objDM.IsEditable(productionDocumentNo, EITLERPGLOBAL.gNewUserID)) {
+            EditMode = EITLERPGLOBAL.EDIT;
+            
+            DisableToolbar();
+            
+            GenerateHierarchyCombo();
+            GenerateSendToCombo();
+            DisplayData();
+            
+            
+            SetupApproval();
+            //ReasonResetReadonly();
+            //cmbOrderReason.setEnabled(false);
+            if (clsFeltProductionApprovalFlow.IsCreator(ModuleId, productionDocumentNo)) {
+                SetFields(true);
+            } else {
+                EnableApproval();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "You cannot edit this record. It is either approved/rejected or waiting approval for other user", "EDITING ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void Delete() {
+        if (objDM.CanDelete(txtDocNo.getText() + "", txtDocDate.getText(), EITLERPGLOBAL.gNewUserID)) {
+            DisplayData();
+        } else {
+            JOptionPane.showMessageDialog(this, objDM.LastError, "DELETION ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void GenerateHierarchyCombo() {
+        HashMap hmHierarchyList = new HashMap();
+
+        cmbHierarchyModel = new EITLComboModel();
+        cmbHierarchy.removeAllItems();
+        cmbHierarchy.setModel(cmbHierarchyModel);
+
+        hmHierarchyList = clsHierarchy.getListEx(" WHERE D_COM_HIERARCHY.COMPANY_ID=" + EITLERPGLOBAL.gCompanyID + " AND MODULE_ID=" + ModuleId + " ");
+
+        if (EditMode == EITLERPGLOBAL.EDIT) {
+            hmHierarchyList = clsHierarchy.getList(" WHERE COMPANY_ID=" + EITLERPGLOBAL.gCompanyID + " AND MODULE_ID=" + ModuleId + " ");
+        }
+        for (int i = 1; i <= hmHierarchyList.size(); i++) {
+            clsHierarchy ObjHierarchy = (clsHierarchy) hmHierarchyList.get(Integer.toString(i));
+            ComboData aData = new ComboData();
+            aData.Code = (int) ObjHierarchy.getAttribute("HIERARCHY_ID").getVal();
+            aData.Text = (String) ObjHierarchy.getAttribute("HIERARCHY_NAME").getObj();
+            cmbHierarchyModel.addElement(aData);
+        }
+    }
+
+    private void GenerateSendToCombo() {
+        HashMap hmSendToList = new HashMap();
+        try {
+            cmbSendToModel = new EITLComboModel();
+            cmbSendTo.removeAllItems();
+            cmbSendTo.setModel(cmbSendToModel);
+            if (EditMode == EITLERPGLOBAL.ADD) {
+                hmSendToList = clsHierarchy.getUserList((int) EITLERPGLOBAL.gCompanyID, SelHierarchyID, EITLERPGLOBAL.gNewUserID);
+                for (int i = 1; i <= hmSendToList.size(); i++) {
+                    clsUser ObjUser = (clsUser) hmSendToList.get(Integer.toString(i));
+                    ComboData aData = new ComboData();
+                    aData.Code = (int) ObjUser.getAttribute("USER_ID").getVal();
+                    aData.Text = (String) ObjUser.getAttribute("USER_NAME").getObj();
+
+                    if (ObjUser.getAttribute("USER_ID").getVal() == EITLERPGLOBAL.gNewUserID) {
+                        //Exclude Current User
+                    } else {
+                        cmbSendToModel.addElement(aData);
+                    }
+                }
+            } else {
+                hmSendToList = clsFeltProductionApprovalFlow.getRemainingUsers(ModuleId, txtDocNo.getText() + "");
+                for (int i = 1; i <= hmSendToList.size(); i++) {
+                    clsUser ObjUser = (clsUser) hmSendToList.get(Integer.toString(i));
+                    ComboData aData = new ComboData();
+                    aData.Code = (int) ObjUser.getAttribute("USER_ID").getVal();
+                    aData.Text = (String) ObjUser.getAttribute("USER_NAME").getObj();
+                    cmbSendToModel.addElement(aData);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void EnableApproval() {
+        cmbSendTo.setEnabled(true);
+        OpgApprove.setEnabled(true);
+        OpgFinal.setEnabled(true);
+        OpgReject.setEnabled(true);
+        OpgHold.setEnabled(true);
+        txtToRemarks.setEnabled(true);
+        SetupApproval();
+        SetFields(true);
+        //========== Setting Up Header Fields ================//
+        String FieldName = "";
+        SelHierarchyID = EITLERPGLOBAL.getComboCode(cmbHierarchy);
+
+    }
+
+    private void SetFields(boolean pStat) {
+        txtDocDate.setEnabled(pStat);
+        txtDocNo.setEnabled(pStat);
+        txtRemark.setEnabled(pStat);
+        cmbHierarchy.setEnabled(pStat);
+        OpgApprove.setEnabled(pStat);
+        OpgReject.setEnabled(pStat);
+        OpgFinal.setEnabled(pStat);
+        OpgHold.setEnabled(pStat);
+        cmbSendTo.setEnabled(pStat);
+        txtToRemarks.setEnabled(pStat);
+        
+        tblSDML.setEnabled(pStat);
+
+        SetupApproval();
+        if (clsHierarchy.IsCreator(EITLERPGLOBAL.gCompanyID, SelHierarchyID, EITLERPGLOBAL.gUserID)) {
+            OpgReject.setEnabled(false);
+        }
+        if (clsHierarchy.CanFinalApprove(EITLERPGLOBAL.gCompanyID, SelHierarchyID, EITLERPGLOBAL.gUserID)) {
+            //JOptionPane.showMessageDialog(null, "Final Approver");
+            OpgApprove.setEnabled(false);
+        }
+        
+    }
+
+    private void DisableToolbar() {
+        cmdTop.setEnabled(false);
+        cmdBack.setEnabled(false);
+        cmdNext.setEnabled(false);
+        cmdLast.setEnabled(false);
+        cmdNew.setEnabled(false);
+        cmdEdit.setEnabled(false);
+        cmdDelete.setEnabled(false);
+        cmdSave.setEnabled(true);
+        cmdCancel.setEnabled(true);
+        cmdFilter.setEnabled(false);
+        cmdPreview.setEnabled(false);
+        cmdPrint.setEnabled(false);
+        cmdExit.setEnabled(false);
+
+    }
+
+    
+
+    private void SetData() {
+
+        objDM.setAttribute("BGS_DOC_NO", txtDocNo.getText());
+        objDM.setAttribute("BGS_DOC_DATE", txtDocDate.getText());
+        objDM.setAttribute("AS_ON_DATE", txtAsOnDate.getText());
+        
+        objDM.setAttribute("REMARK", txtRemark.getText());
+   
+        DOC_NO = txtDocNo.getText();
+        objDM.setAttribute("DOC_NO", txtDocNo.getText());
+        objDM.setAttribute("DOC_DATE", txtDocDate.getText());
+        objDM.setAttribute("MODULE_ID", ModuleId);
+        objDM.setAttribute("USER_ID", EITLERPGLOBAL.gNewUserID);
+
+        //----- Update Approval Specific Fields -----------//
+        objDM.setAttribute("HIERARCHY_ID", EITLERPGLOBAL.getComboCode(cmbHierarchy));
+        objDM.setAttribute("FROM", EITLERPGLOBAL.gNewUserID);
+        objDM.setAttribute("TO", EITLERPGLOBAL.getComboCode(cmbSendTo));
+        objDM.setAttribute("FROM_REMARKS", txtToRemarks.getText());
+
+        if (OpgApprove.isSelected()) {
+            objDM.setAttribute("APPROVAL_STATUS", "A");
+        }
+
+        if (OpgFinal.isSelected()) {
+            objDM.setAttribute("APPROVAL_STATUS", "F");
+        }
+
+        if (OpgReject.isSelected()) {
+            objDM.setAttribute("APPROVAL_STATUS", "R");
+            objDM.setAttribute("SEND_DOC_TO", EITLERPGLOBAL.getComboCode(cmbSendTo));
+        }
+
+        if (OpgHold.isSelected()) {
+            objDM.setAttribute("APPROVAL_STATUS", "H");
+        }
+
+        if (EditMode == EITLERPGLOBAL.ADD) {
+            objDM.setAttribute("CREATED_BY", EITLERPGLOBAL.gNewUserID);
+            objDM.setAttribute("CREATED_DATE", EITLERPGLOBAL.getCurrentDateTimeDB());
+        } else {
+            objDM.setAttribute("MODIFIED_BY", EITLERPGLOBAL.gNewUserID);
+            objDM.setAttribute("MODIFIED_DATE", EITLERPGLOBAL.getCurrentDateDB());
+            objDM.setAttribute("UPDATED_BY", EITLERPGLOBAL.gNewUserID);
+            objDM.setAttribute("UPDATED_DATE", EITLERPGLOBAL.getCurrentDateDB());
+        }
+
+        //======= Set Line part ============
+        try {
+            objDM.hmFeltPerformanceTrackingDetails.clear();
+
+            for (int i = 0; i <= tblSDML.getRowCount() - 1; i++) {
+
+                clsBeamGaitingStatusDetails objDMDetails = new clsBeamGaitingStatusDetails();
+
+                //objobjDMDetails.setAttribute("S_ORDER_DETAIL_CODE","");
+                objDMDetails.setAttribute("BGS_DOC_NO", txtDocNo.getText());
+                objDMDetails.setAttribute("SR_NO", (i+1)+"");//SR_NO
+                
+                objDMDetails.setAttribute("BGS_DOC_DATE", txtDocDate.getText());//SR_NO
+                
+                objDMDetails.setAttribute("PRODUCT_GROUP", DataModel.getValueByVariable("PRODUCT_GROUP", i)+"");//SR_NO
+                objDMDetails.setAttribute("LOOM_NO", DataModel.getValueByVariable("LOOM_NO", i)+"");//
+                objDMDetails.setAttribute("GAITING_STATUS", DataModel.getValueByVariable("GAITING_STATUS", i)+"");//
+                objDMDetails.setAttribute("BEAM_GETTING_STARTED_ACTUAL", DataModel.getValueByVariable("BEAM_GETTING_STARTED_ACTUAL", i)+"");//
+                objDMDetails.setAttribute("BEAM_GETTING_DATE_AS_PER_PLAN", DataModel.getValueByVariable("BEAM_GETTING_DATE_AS_PER_PLAN", i)+"");//
+                objDMDetails.setAttribute("TARGETTED_BEAM_GAITING_COMPLETE", DataModel.getValueByVariable("TARGETTED_BEAM_GAITING_COMPLETE", i)+"");//
+                objDMDetails.setAttribute("ACTUAL_BEAM_GAITING_COMPLETION_DATE", DataModel.getValueByVariable("ACTUAL_BEAM_GAITING_COMPLETION_DATE", i)+"");//
+                objDMDetails.setAttribute("PI_BEAM_LOADING", DataModel.getValueByVariable("PI_BEAM_LOADING", i)+"");//
+                objDMDetails.setAttribute("PI_BEAM_UNLOADING", DataModel.getValueByVariable("PI_BEAM_UNLOADING", i)+"");//
+                objDMDetails.setAttribute("PI_BEAM_LEASING", DataModel.getValueByVariable("PI_BEAM_LEASING", i)+"");//
+                objDMDetails.setAttribute("PII_KNOTTING_DRAWING", DataModel.getValueByVariable("PII_KNOTTING_DRAWING", i)+"");//
+                objDMDetails.setAttribute("PIII_FRWD_KONTS", DataModel.getValueByVariable("PIII_FRWD_KONTS", i)+"");//
+                objDMDetails.setAttribute("PIV_CLOTH_START", DataModel.getValueByVariable("PIV_CLOTH_START", i)+"");//
+                objDMDetails.setAttribute("REMARKS", DataModel.getValueByVariable("REMARKS", i)+"");//
+                
+                objDM.hmFeltPerformanceTrackingDetails.put(Integer.toString(objDM.hmFeltPerformanceTrackingDetails.size() + 1), objDMDetails);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error on setData : " + e.getMessage());
+            e.printStackTrace();
+        };
+    }
+
+    
+    
+       
+    
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton OpgApprove;
+    private javax.swing.JRadioButton OpgFinal;
+    private javax.swing.JRadioButton OpgHold;
+    private javax.swing.JRadioButton OpgReject;
+    private javax.swing.JPanel StatusPanel;
+    private javax.swing.JTabbedPane Tab;
+    private javax.swing.JPanel Tab2;
+    private javax.swing.JTable TableApprovalStatus;
+    private javax.swing.JTable TableUpdateHistory;
+    private javax.swing.JToolBar ToolBar;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JComboBox cmbHierarchy;
+    private javax.swing.JComboBox cmbSendTo;
+    private javax.swing.JButton cmdBack;
+    private javax.swing.JButton cmdBackToTab0;
+    private javax.swing.JButton cmdCancel;
+    private javax.swing.JButton cmdDelete;
+    private javax.swing.JButton cmdEdit;
+    private javax.swing.JButton cmdExit;
+    private javax.swing.JButton cmdFilter;
+    private javax.swing.JButton cmdFromRemarksBig;
+    private javax.swing.JButton cmdLast;
+    private javax.swing.JButton cmdNew;
+    private javax.swing.JButton cmdNext;
+    private javax.swing.JButton cmdNextToTab2;
+    private javax.swing.JButton cmdNormalView;
+    private javax.swing.JButton cmdPreview;
+    private javax.swing.JButton cmdPrint;
+    private javax.swing.JButton cmdSave;
+    private javax.swing.JButton cmdShowRemarks;
+    private javax.swing.JButton cmdTop;
+    private javax.swing.JButton cmdViewHistory;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel60;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JLabel lblRevNo;
+    private javax.swing.JLabel lblStatus;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JTable tblSDML;
+    private javax.swing.JTextField txtAsOnDate;
+    private javax.swing.JTextField txtAuditRemarks;
+    private javax.swing.JFormattedTextField txtDocDate;
+    private javax.swing.JTextField txtDocNo;
+    private javax.swing.JTextField txtFrom;
+    private javax.swing.JTextField txtFromRemarks;
+    private javax.swing.JTextField txtRemark;
+    private javax.swing.JTextField txtToRemarks;
+    // End of variables declaration//GEN-END:variables
+
+
+    private void SendMail() {
+        try {
+            String pMessage = "<html>  ";
+
+            pMessage = pMessage + "Dear Sir,<br><br> Felt Beam Gaiting Status entry final approved for (" + data.getStringValueFromDB("SELECT DAYNAME('" + EITLERPGLOBAL.getCurrentDateDB() + "')") + ", " + EITLERPGLOBAL.getCurrentDateDB() + ").<br><br>Please find attachment. ";
+
+            System.out.println("MESAGE : " + pMessage);
+            //String recievers = "brdfltweave1@dineshmills.com";
+            String recievers = "ashutosh@dineshmills.com";
+
+            //String SQL = "SELECT SR_NO, PRODUCT_GROUP, LOOM_NO, NO_OF_PIECE, LOOM_PICKS, WARP_TO_BE_ALLOTED_MTS, WARP_TO_BE_ALLOTED_LOOM_PICKS, TOTAL_PICK_PENDING, DAY_PENDING_FOR_BEAM_FALL, EXPECTED_DATE_OF_BEAM_FALL, DAYS_REQUIRED_FOR_WARPING, EXPECTED_DATE_TO_START_WARPING, APPOX_WARP_QUANTITY_REQUIRED, DAYS_REQUIRED_TO_MAKE_THIS_WARP_QUANTITY, EXPECTED_DATE_TO_START_FOR_WARP_YARN FROM PRODUCTION.LOOMWISE_BEAM_FALL_WARP_PREPARATION_PLANNING_DETAIL where LPP_DOC_NO='"+EITLERPGLOBAL.formatDateDB(txtDocNo.getText())+"'";
+            String SQL="SELECT AS_ON_DATE,D.* FROM PRODUCTION.BEAM_GAITING_STATUS_DETAIL D, PRODUCTION.BEAM_GAITING_STATUS_HEADER H where D.BGS_DOC_NO=H.BGS_DOC_NO AND H.BGS_DOC_NO='\"+EITLERPGLOBAL.formatDateDB(txtDocNo.getText())+\"'";
+            //exprt.fillData(SQL, new File("/Email_Attachment/LOOMWISE_BEAM_FALL_WARPING_PLANNING.xls"), "LOOMWISE_BEAM_FALL_WARPING_PLANNING");
+            exprt.fillData(SQL, new File("/Email_Attachment/FELT_BEAM_GAITING_STATUS.xls"), "FELT_BEAM_GAITING_STATUS");
+
+            String pSubject = "Felt Beam Gaiting Status ";
+            //String pcc = "aditya@dineshmills.com,abtewary@dineshmills.com,yrpatel@dineshmills.com,amitkanti@dineshmills.com,raghavendra@dineshmills.com,sdmlerp@dineshmills.com";
+            String pcc = "";
+            String Path = "/Email_Attachment/FELT_BEAM_GAITING_STATUS.xls";
+            String PFiles = "FELT_BEAM_GAITING_STATUS.xls";
+
+            JavaMail.SendMailwithAttachment(recievers, pMessage, pSubject, pcc, Path, PFiles);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+  /*  class MultiLineTableHeaderRenderer extends JTextArea implements TableCellRenderer
+{
+  public MultiLineTableHeaderRenderer() {
+    setEditable(false);
+    setLineWrap(true);
+    setOpaque(false);
+    setFocusable(false);
+    setWrapStyleWord(true);
+    LookAndFeel.installBorder(this, "TableHeader.cellBorder");
+  }
+
+  @Override
+  public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+    int width = table.getColumnModel().getColumn(column).getWidth();
+    setText((String)value);
+    setSize(width, getPreferredSize().height);
+    return this;
+  }
+}*/
+
+}

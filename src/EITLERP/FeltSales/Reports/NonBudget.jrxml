@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="NonBudget"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="782"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="2" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="YEAR" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["2018"]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT PARTY_CODE,PARTY_NAME,MACHINE_NO,POSITION,POSITION_DESC,STYLE FROM (SELECT PARTY_CODE,PARTY_NAME,MACHINE_NO,MM_MACHINE_POSITION AS POSITION,POSITION_DESC,MM_FELT_STYLE AS STYLE,
+ROUND(MM_FELT_LENGTH*1,2) AS PRESS_LENGTH,ROUND(MM_FELT_WIDTH*1,2) AS PRESS_WIDTH,ROUND(MM_FELT_GSM*1,2) AS PRESS_GSM,
+ROUND(MM_TH_WEIGHT*1,2) AS PRESS_WEIGHT,ROUND(AREA_SQMTR*1,2) AS PRESS_SQMTR,ROUND(MM_FABRIC_LENGTH*1,2) DRY_LENGTH,
+ROUND(MM_FABRIC_WIDTH*1,2) AS DRY_WIDTH,ROUND(MM_SIZE_M2*1,2) AS DRY_SQMTR,ROUND(MM_FABRIC_TH_WEIGHT*1,2) AS DRY_WEIGHT,MM_ITEM_CODE AS QUALITY_NO,
+GROUP_NAME,ROUND(FELT_RATE*1,2) AS SELLING_PRICE,ROUND(COALESCE(DISC_PER,0)*1,2) AS SP_DISCOUNT,ROUND(COALESCE(WIP,0)*1,2) AS WIP,
+ROUND(COALESCE(STOCK,0)*1,2) AS STOCK,'' AS Q1,'' AS Q2,'' AS Q3,'' AS Q4,'BP' AS PARTY_STATUS,COALESCE(PARTY_STATUS,'NEW') AS SYSTEM_STATUS,
+'' AS REMARKS
+FROM
+(SELECT A.PARTY_CODE,PARTY_NAME,A.MACHINE_NO,MM_MACHINE_POSITION,POSITION_DESC,MM_FELT_STYLE,MM_FELT_LENGTH,MM_FELT_WIDTH,MM_FELT_GSM,MM_TH_WEIGHT,
+AREA_SQMTR,MM_FABRIC_LENGTH,MM_FABRIC_WIDTH,MM_SIZE_M2,MM_FABRIC_TH_WEIGHT,MM_ITEM_CODE,GROUP_NAME,FELT_RATE,DISC_PER
+FROM
+( SELECT D.MM_PARTY_CODE AS PARTY_CODE,PARTY_NAME,D.MM_MACHINE_NO AS MACHINE_NO,MM_MACHINE_POSITION,POSITION_DESC,MM_FELT_STYLE,MM_FELT_LENGTH,
+MM_FELT_WIDTH,MM_FELT_GSM,(MM_FELT_LENGTH*MM_FELT_WIDTH*MM_FELT_GSM/1000) AS MM_TH_WEIGHT,MM_FELT_LENGTH*MM_FELT_WIDTH AS AREA_SQMTR,MM_FABRIC_LENGTH,
+MM_FABRIC_WIDTH,MM_SIZE_M2,(MM_FABRIC_LENGTH*MM_FABRIC_WIDTH*MM_FELT_GSM/1000) AS MM_FABRIC_TH_WEIGHT,MM_ITEM_CODE,GROUP_NAME,
+CASE WHEN WT_RATE =0 THEN SQM_CHRG ELSE WT_RATE END  AS FELT_RATE
+FROM PRODUCTION.FELT_MACHINE_MASTER_HEADER H,  PRODUCTION.FELT_MACHINE_MASTER_DETAIL D, PRODUCTION.FELT_QLT_RATE_MASTER R,
+DINESHMILLS.D_SAL_PARTY_MASTER P , PRODUCTION.FELT_MACHINE_POSITION_MST MP
+WHERE H.MM_DOC_NO=D.MM_DOC_NO AND H.APPROVED=1 AND H.CANCELED=0  AND MM_ITEM_CODE = PRODUCT_CODE  AND EFFECTIVE_TO ='0000-00-00'  AND
+P.PARTY_CODE = H.MM_PARTY_CODE AND POSITION_NO = MM_MACHINE_POSITION )  AS A
+LEFT JOIN ( SELECT * FROM  (SELECT PARTY_CODE,PRODUCT_CODE,DISC_PER,EFFECTIVE_FROM,EFFECTIVE_TO,
+CASE WHEN EFFECTIVE_TO IS NULL THEN COALESCE(EFFECTIVE_TO,CURDATE()) WHEN EFFECTIVE_TO ='0000-00-00' THEN COALESCE(EFFECTIVE_TO,CURDATE())
+ELSE EFFECTIVE_TO END AS EFFECTIVE_TILL_DATE  FROM PRODUCTION.FELT_RATE_DISC_MASTER_DETAIL ) AS RDM
+WHERE CURDATE() BETWEEN EFFECTIVE_FROM AND EFFECTIVE_TILL_DATE ) AS B ON A.MM_ITEM_CODE=B.PRODUCT_CODE AND A.PARTY_CODE=B.PARTY_CODE) AS MM
+LEFT JOIN  (SELECT PR_PARTY_CODE,PR_MACHINE_NO,PR_POSITION_NO,PR_PRODUCT_CODE,
+SUM(COALESCE(CASE WHEN PR_PIECE_STAGE IN ('WEAVING','MENDING','NEEDLING','FONISHING') THEN 1 END,0)) AS WIP,
+SUM(COALESCE(CASE WHEN PR_PIECE_STAGE IN ('IN STOCK','BSR') THEN 1 END,0)) AS STOCK
+FROM PRODUCTION.FELT_SALES_PIECE_REGISTER WHERE  PR_PRIORITY_HOLD_CAN_FLAG IN (0,1,2,3,4,5)
+GROUP BY PR_PARTY_CODE,PR_MACHINE_NO,PR_POSITION_NO,PR_PRODUCT_CODE) AS PR
+ON MM_ITEM_CODE=PR_PRODUCT_CODE AND PARTY_CODE=PR_PARTY_CODE AND PR_MACHINE_NO = MACHINE_NO AND PR_POSITION_NO = MM_MACHINE_POSITION
+LEFT JOIN (SELECT PARTY_CODE AS B_PARTY_CODE,PARTY_STATUS FROM PRODUCTION.FELT_BUDGET WHERE YEAR_FROM='2018' ) AS BUDJET
+ON PARTY_CODE=B_PARTY_CODE  WHERE  LEFT(PARTY_CODE,1)='8'
+ORDER BY PARTY_CODE,MM_ITEM_CODE,MACHINE_NO,MM_MACHINE_POSITION,MM_ITEM_CODE) AS DDD
+WHERE SYSTEM_STATUS='NEW']]></queryString>
+
+	<field name="PARTY_CODE" class="java.lang.String"/>
+	<field name="PARTY_NAME" class="java.lang.String"/>
+	<field name="MACHINE_NO" class="java.lang.String"/>
+	<field name="POSITION" class="java.lang.Long"/>
+	<field name="POSITION_DESC" class="java.lang.String"/>
+	<field name="STYLE" class="java.lang.String"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="37"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="242"
+						y="2"
+						width="224"
+						height="17"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="12" isBold="true" isUnderline="false"/>
+					</textElement>
+				<text><![CDATA[S H R I   D I N E S H   M I L L S   L T D. ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="653"
+						y="3"
+						width="53"
+						height="14"
+						key="staticText-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Run Date]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy h.m a" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="601"
+						y="18"
+						width="107"
+						height="15"
+						key="textField-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="208"
+						y="19"
+						width="238"
+						height="17"
+						key="staticText-9"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<text><![CDATA[N o n   B u d g e t   D e t a i l s   F o r  Y e a r : ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="446"
+						y="19"
+						width="57"
+						height="18"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{YEAR}]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="18"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="3"
+						y="2"
+						width="56"
+						height="13"
+						key="staticText-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Party Code]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="71"
+						y="2"
+						width="71"
+						height="13"
+						key="staticText-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="437"
+						y="4"
+						width="43"
+						height="14"
+						key="staticText-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Machine]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="485"
+						y="4"
+						width="40"
+						height="14"
+						key="staticText-6"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Position]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="526"
+						y="4"
+						width="110"
+						height="14"
+						key="staticText-7"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Position Description]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="644"
+						y="4"
+						width="59"
+						height="14"
+						key="staticText-8"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<text><![CDATA[Style]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="1"
+						y="17"
+						width="715"
+						height="0"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="18"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="437"
+						y="3"
+						width="39"
+						height="15"
+						key="textField-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{MACHINE_NO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="489"
+						y="3"
+						width="24"
+						height="15"
+						key="textField-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{POSITION}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="526"
+						y="3"
+						width="117"
+						height="15"
+						key="textField-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{POSITION_DESC}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="644"
+						y="3"
+						width="68"
+						height="15"
+						key="textField-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{STYLE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="3"
+						y="3"
+						width="62"
+						height="14"
+						key="textField-6"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PARTY_CODE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="71"
+						y="3"
+						width="354"
+						height="14"
+						key="textField-7"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PARTY_NAME}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

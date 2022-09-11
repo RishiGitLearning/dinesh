@@ -1,0 +1,9124 @@
+/* frmFeltSalesInfo.java 
+ * 
+ * 
+ * Created on July 13, 2005, 10:47 AM
+ */
+package EITLERP.Production.ReportUI;
+
+import EITLERP.*;
+import EITLERP.Stores.*;
+import EITLERP.Purchase.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import java.sql.*;
+import java.net.*;
+import java.math.*;
+import java.lang.*;
+import java.text.DecimalFormat;
+import java.lang.Double;
+import java.io.File;
+import EITLERP.Production.ReportUI.*;
+import java.awt.Cursor;
+
+/**
+ *
+ * @author ashutosh/RISHI
+ */
+public class frmFeltSalesInfo extends javax.swing.JApplet {
+    
+      String SelUserID="";
+      String strSQL="";
+      String strLengthFrom="";
+      String strLengthTo="";
+      String strWidthFrom="";
+      String strWidthTo="";
+      String strGSQFrom="";
+      String strGSQTo="";
+      String strDiscountPerFrom="";
+      String strDiscountPerTo="";
+      String strPieceNo="";
+      String strProductCode = "";
+      String strZone = "";
+      String strAgreedDateFrom ="";
+      String strAgreedDateTo ="";
+      
+    private clsExcelExporter exp = new clsExcelExporter();  
+    private EITLTableCellRenderer Renderer=new EITLTableCellRenderer();
+    private EITLTableCellRenderer CellPainter=new EITLTableCellRenderer();
+    private EITLTableCellRenderer CellPaint=new EITLTableCellRenderer();
+    private EITLTableCellRenderer CellPainterA=new EITLTableCellRenderer();
+    
+    private EITLTableModel DataModelProductionProcess=new EITLTableModel();
+    private EITLTableModel DataModelStock=new EITLTableModel();
+    private EITLTableModel DataModelDespatched=new EITLTableModel();
+    private EITLTableModel DataModelDiscount = new EITLTableModel();
+    private EITLTableModel DataModelTarget = new EITLTableModel();
+    private EITLTableModel DataModelTargetA = new EITLTableModel();
+    private EITLTableModel DataModelMisc = new EITLTableModel();
+    private EITLTableModel DataModelSeam = new EITLTableModel();
+    private EITLTableModel DataModelSalesY = new EITLTableModel();
+    private EITLTableModel DataModelSalesM = new EITLTableModel();
+    private EITLTableModel DataModelDiverted = new EITLTableModel();
+    private EITLTableModel DataModelAgeing = new EITLTableModel();
+    private EITLTableModel DataModelMISAgeing = new EITLTableModel();
+    private EITLTableModel DataModelMISAgeing1 = new EITLTableModel();
+    private EITLTableModel DataModelPackedNotDespatched = new EITLTableModel();
+    private EITLTableModel DataModelContacts = new EITLTableModel(); 
+    private EITLTableModel DataModelHold = new EITLTableModel();
+    private EITLTableModel DataModelCancelled = new EITLTableModel();
+    private EITLTableModel DataModelMachine = new EITLTableModel();
+    private EITLTableModel DataModelComplaint = new EITLTableModel();
+    private EITLTableModel DataModelAgreedDate = new EITLTableModel();
+      
+    private EITLComboModel cmbBuyerModel=new EITLComboModel();
+    private EITLComboModel cmbOrderModel=new EITLComboModel();
+    private EITLComboModel cmbDespatchModel = new EITLComboModel();
+    private EITLComboModel cmbStockModel = new EITLComboModel();
+    private EITLComboModel cmbDiscountModel = new EITLComboModel();
+    private EITLComboModel cmbSeamModel = new EITLComboModel();
+    private EITLComboModel cmbTargetModel = new EITLComboModel();
+    private EITLComboModel cmbDeptModel=new EITLComboModel();
+    private EITLComboModel cmbApprovalModel=new EITLComboModel();
+    private EITLComboModel cmbCancelledModel=new EITLComboModel();
+    private EITLComboModel cmbHoldModel=new EITLComboModel();
+    private EITLComboModel cmbInchargeModel=new EITLComboModel();
+    private EITLComboModel cmbMachineModel=new EITLComboModel();
+    private EITLComboModel cmbComplaintModel=new EITLComboModel();
+    private EITLComboModel cmbAgreedDateModel=new EITLComboModel();
+    private EITLComboModel cmbAgreedOrderModel=new EITLComboModel();
+        
+    
+ 
+    public void init() {
+        System.gc();
+        setSize(1000, 670);
+        initComponents();
+        GenerateCombo();
+        GenerateInchargeCombo();
+        FormatGridProductionProcess();
+        FormatGridStock();
+        FormatGridDespatched();
+        FormatGridDiscount();
+        FormatGridTarget();
+   //     FormatGridTargetA();
+        FormatGridMisc();
+        FormatGridSeam();
+        FormatGridSalesY();
+        FormatGridSalesM();
+        ForamtGridDiverted();
+        FormatGridAgeing();
+        FormatGridMISAgeing();
+        FormatGridMISAgeing1();
+        FormatGridPackedNotDespatched();
+        FormatGridContacts();
+        FormatGridHold();
+        FormatGridCancelled();
+        FormatGridMachine();
+        FormatGridComplaint();
+        FormatGridAgreedDate();
+
+        txtRIA.setVisible(false);  
+    }
+    
+    /** This method is called from within the init() method to
+     * initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    private void initComponents() {//GEN-BEGIN:initComponents
+        lblStatus = new javax.swing.JLabel();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        ProductionProcessPanel = new javax.swing.JPanel();
+        cmdShowProductionProcess = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TableProductionProcess = new javax.swing.JTable();
+        cmdOpenProductionProcess = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        cmbOrder = new javax.swing.JComboBox();
+        txtRIA = new javax.swing.JTextField();
+        txtkgtotal = new javax.swing.JTextField();
+        txtinvtotal = new javax.swing.JTextField();
+        txtrecordtotal = new javax.swing.JTextField();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        cmdProductionProcessExporttoExcel = new javax.swing.JButton();
+        StockAvailablePanel = new javax.swing.JPanel();
+        cmdShowStock = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TableStock = new javax.swing.JTable();
+        cmbStock = new javax.swing.JComboBox();
+        jLabel8 = new javax.swing.JLabel();
+        txtstockkgtotal = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        txtrecord = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        txtstockamttotal = new javax.swing.JTextField();
+        cmdStockExporttoExcel = new javax.swing.JButton();
+        cmdStockLockpiece = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel21 = new javax.swing.JLabel();
+        PackednotDespatchedPanel = new javax.swing.JPanel();
+        cmdShowPacknotDesp = new javax.swing.JButton();
+        jScrollPane13 = new javax.swing.JScrollPane();
+        TablePackedNotDespatched = new javax.swing.JTable();
+        jLabel63 = new javax.swing.JLabel();
+        txtpackednotdespatchedtotal = new javax.swing.JTextField();
+        jLabel64 = new javax.swing.JLabel();
+        txtpackednotdespatchedkgtotal = new javax.swing.JTextField();
+        txtpackednotdespatchedamttotal = new javax.swing.JTextField();
+        jLabel65 = new javax.swing.JLabel();
+        cmdPackntDespExporttoExcel = new javax.swing.JButton();
+        DespatchPanel = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        TableDespatched = new javax.swing.JTable();
+        cmdshowDespatched = new javax.swing.JButton();
+        cmbDespatch = new javax.swing.JComboBox();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel37 = new javax.swing.JLabel();
+        txtdespatchedtotal = new javax.swing.JTextField();
+        jLabel40 = new javax.swing.JLabel();
+        txtdespatchedkgtotal = new javax.swing.JTextField();
+        jLabel41 = new javax.swing.JLabel();
+        txtdespatchedamttotal = new javax.swing.JTextField();
+        cmddespatchedExporttoExcel = new javax.swing.JButton();
+        DivertedPanel = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        TableDiverted = new javax.swing.JTable();
+        cmdshowDiverted = new javax.swing.JButton();
+        jLabel36 = new javax.swing.JLabel();
+        txtdivertedtotal = new javax.swing.JTextField();
+        jLabel38 = new javax.swing.JLabel();
+        txtdivertedkgtotal = new javax.swing.JTextField();
+        txtdivertedamttotal = new javax.swing.JTextField();
+        jLabel39 = new javax.swing.JLabel();
+        cmddivertedExportToExcel = new javax.swing.JButton();
+        SalesPanel = new javax.swing.JPanel();
+        cmdshowSalesY = new javax.swing.JButton();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        TableSalesY = new javax.swing.JTable();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        TableSalesM = new javax.swing.JTable();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel42 = new javax.swing.JLabel();
+        txtsalestotal = new javax.swing.JTextField();
+        jLabel43 = new javax.swing.JLabel();
+        txtsalestotal1 = new javax.swing.JTextField();
+        cmdsalesyrExporttoExcel = new javax.swing.JButton();
+        cmdsalesmonthExportToExcel = new javax.swing.JButton();
+        DiscountPanel = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        TableDiscount = new javax.swing.JTable();
+        cmdshowDiscount = new javax.swing.JButton();
+        cmbDiscount = new javax.swing.JComboBox();
+        jLabel9 = new javax.swing.JLabel();
+        txtdiscountperfrom = new javax.swing.JTextField();
+        txtdiscountperto = new javax.swing.JTextField();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel44 = new javax.swing.JLabel();
+        txtdiscounttotal = new javax.swing.JTextField();
+        cmdDiscountExportToExcel = new javax.swing.JButton();
+        TargetdataPanel = new javax.swing.JPanel();
+        cmdShowTargetData = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        TableTarget = new javax.swing.JTable();
+        jLabel16 = new javax.swing.JLabel();
+        cmbTarget = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel45 = new javax.swing.JLabel();
+        txttargettotal = new javax.swing.JTextField();
+        cmdSalestargetExportToExcel = new javax.swing.JButton();
+        AgeingPanel = new javax.swing.JPanel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        TableAgeing = new javax.swing.JTable();
+        cmdShowAgeing = new javax.swing.JButton();
+        jLabel47 = new javax.swing.JLabel();
+        txtageingtotal = new javax.swing.JTextField();
+        txtless45counttotal = new javax.swing.JTextField();
+        txtless90counttotal = new javax.swing.JTextField();
+        txtless180counttotal = new javax.swing.JTextField();
+        txtless365counttotal = new javax.swing.JTextField();
+        txtless730counttotal = new javax.swing.JTextField();
+        txtmore730counttotal = new javax.swing.JTextField();
+        txtlesscounttotal = new javax.swing.JTextField();
+        txtless45qtytotal = new javax.swing.JTextField();
+        txtless90qtytotal = new javax.swing.JTextField();
+        txtless180qtytotal = new javax.swing.JTextField();
+        txtless365qtytotal = new javax.swing.JTextField();
+        txtless730qtytotal = new javax.swing.JTextField();
+        txtmore730qtytotal = new javax.swing.JTextField();
+        txtlessqtytotal = new javax.swing.JTextField();
+        txtless45amttotal = new javax.swing.JTextField();
+        txtless90amttotal = new javax.swing.JTextField();
+        txtless180amttotal = new javax.swing.JTextField();
+        txtless365amttotal = new javax.swing.JTextField();
+        txtless730amttotal = new javax.swing.JTextField();
+        txtmore730amttotal = new javax.swing.JTextField();
+        txtlessamttotal = new javax.swing.JTextField();
+        jLabel48 = new javax.swing.JLabel();
+        jLabel49 = new javax.swing.JLabel();
+        jLabel50 = new javax.swing.JLabel();
+        jLabel51 = new javax.swing.JLabel();
+        jLabel52 = new javax.swing.JLabel();
+        jLabel53 = new javax.swing.JLabel();
+        jLabel54 = new javax.swing.JLabel();
+        jLabel55 = new javax.swing.JLabel();
+        jLabel56 = new javax.swing.JLabel();
+        jLabel57 = new javax.swing.JLabel();
+        cmdAgeingExportToExcel = new javax.swing.JButton();
+        MisageingPanel = new javax.swing.JPanel();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        TableMISAgeing = new javax.swing.JTable();
+        cmdShowMISAgeing = new javax.swing.JButton();
+        jScrollPane12 = new javax.swing.JScrollPane();
+        TableMISAgeing1 = new javax.swing.JTable();
+        jLabel58 = new javax.swing.JLabel();
+        txtmisageingtotal = new javax.swing.JTextField();
+        jLabel59 = new javax.swing.JLabel();
+        txtmisageingtotal1 = new javax.swing.JTextField();
+        txtamttotal = new javax.swing.JTextField();
+        jLabel60 = new javax.swing.JLabel();
+        txtqtytotal = new javax.swing.JTextField();
+        jLabel61 = new javax.swing.JLabel();
+        txtcounttotal = new javax.swing.JTextField();
+        jLabel62 = new javax.swing.JLabel();
+        cmdMISAgeingExportToExcel = new javax.swing.JButton();
+        cmdmisagingaExportToExcel = new javax.swing.JButton();
+        ContactsPanel = new javax.swing.JPanel();
+        cmdShowContacts = new javax.swing.JButton();
+        jScrollPane14 = new javax.swing.JScrollPane();
+        TableContacts = new javax.swing.JTable();
+        jLabel66 = new javax.swing.JLabel();
+        txtcontactstotal = new javax.swing.JTextField();
+        cmdcontactsExporttoExcel = new javax.swing.JButton();
+        CancelledPanel = new javax.swing.JPanel();
+        jScrollPane16 = new javax.swing.JScrollPane();
+        TableCancelled = new javax.swing.JTable();
+        cmdShowCancelled = new javax.swing.JButton();
+        txtCancelledtotal = new javax.swing.JTextField();
+        txtCancelledinvtotal = new javax.swing.JTextField();
+        txtCancelledkgtotal = new javax.swing.JTextField();
+        jLabel67 = new javax.swing.JLabel();
+        jLabel68 = new javax.swing.JLabel();
+        jLabel69 = new javax.swing.JLabel();
+        cmdCancelledopenDocument = new javax.swing.JButton();
+        cmdCancelledExportToExcel = new javax.swing.JButton();
+        cmbCancelled = new javax.swing.JComboBox();
+        jLabel74 = new javax.swing.JLabel();
+        HoldPanel = new javax.swing.JPanel();
+        jScrollPane15 = new javax.swing.JScrollPane();
+        TableHold = new javax.swing.JTable();
+        cmdShowHold = new javax.swing.JButton();
+        txtHoldtotal = new javax.swing.JTextField();
+        txtHoldkgtotal = new javax.swing.JTextField();
+        txtHoldinvtotal = new javax.swing.JTextField();
+        jLabel70 = new javax.swing.JLabel();
+        jPanel15 = new javax.swing.JPanel();
+        jScrollPane17 = new javax.swing.JScrollPane();
+        TableHold1 = new javax.swing.JTable();
+        cmdShowHold1 = new javax.swing.JButton();
+        txtHoldtotal1 = new javax.swing.JTextField();
+        txtHoldkgtotal1 = new javax.swing.JTextField();
+        txtHoldinvtotal1 = new javax.swing.JTextField();
+        jLabel71 = new javax.swing.JLabel();
+        jLabel72 = new javax.swing.JLabel();
+        jLabel73 = new javax.swing.JLabel();
+        cmdHoldExportToExcel = new javax.swing.JButton();
+        cmdHoldopendoc = new javax.swing.JButton();
+        cmbHold = new javax.swing.JComboBox();
+        jLabel75 = new javax.swing.JLabel();
+        MachinePanel = new javax.swing.JPanel();
+        jScrollPane18 = new javax.swing.JScrollPane();
+        TableMachine = new javax.swing.JTable();
+        cmdShowMachine = new javax.swing.JButton();
+        txtMachineTotal = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        cmbMachine = new javax.swing.JComboBox();
+        jLabel27 = new javax.swing.JLabel();
+        CmdmachineExportExcel = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane19 = new javax.swing.JScrollPane();
+        TableComplaint = new javax.swing.JTable();
+        cmdShowComplaint = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
+        cmdComplaintOpenDoc = new javax.swing.JButton();
+        cmbComplaint = new javax.swing.JComboBox();
+        jLabel30 = new javax.swing.JLabel();
+        cmdComplaintExportToExcel = new javax.swing.JButton();
+        AgreedDatePanel = new javax.swing.JPanel();
+        jScrollPane20 = new javax.swing.JScrollPane();
+        TableAgreedDate = new javax.swing.JTable();
+        cmbAgreedDate = new javax.swing.JComboBox();
+        cmdAgreedDate = new javax.swing.JButton();
+        cmbAgreedExportExcel = new javax.swing.JButton();
+        txtAgreedNature = new javax.swing.JTextField();
+        jLabel31 = new javax.swing.JLabel();
+        txtAgreedrecordtotal = new javax.swing.JTextField();
+        jLabel77 = new javax.swing.JLabel();
+        jLabel78 = new javax.swing.JLabel();
+        cmbAgreedOrder = new javax.swing.JComboBox();
+        txtpartycode = new javax.swing.JTextField();
+        txtpartyname = new javax.swing.JTextField();
+        txtlengthto = new javax.swing.JTextField();
+        txtlengthfrom = new javax.swing.JTextField();
+        txtwidthfrom = new javax.swing.JTextField();
+        txtwidthto = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        txtgsqfrom = new javax.swing.JTextField();
+        txtgsqto = new javax.swing.JTextField();
+        jLabel34 = new javax.swing.JLabel();
+        txtpieceno = new javax.swing.JTextField();
+        jLabel35 = new javax.swing.JLabel();
+        txtproductcode = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        txtdatefrom = new javax.swing.JTextField();
+        txtdateto = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        cmdClearAll = new javax.swing.JButton();
+        txtzone = new javax.swing.JTextField();
+        jLabel26 = new javax.swing.JLabel();
+        cmbIncharge = new javax.swing.JComboBox();
+        jLabel76 = new javax.swing.JLabel();
+
+        lblStatus.setFont(new java.awt.Font("Tahoma", 1, 12));
+        lblStatus.setForeground(new java.awt.Color(51, 51, 255));
+        lblStatus.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        getContentPane().setLayout(null);
+
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
+
+        jPanel1.setLayout(null);
+
+        jPanel1.setBackground(new java.awt.Color(0, 102, 255));
+        jPanel1.setBorder(new javax.swing.border.BevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel1.setMinimumSize(new java.awt.Dimension(1000, 29));
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Felt's Information System  ");
+        jPanel1.add(jLabel1);
+        jLabel1.setBounds(2, 4, 360, 20);
+
+        getContentPane().add(jPanel1);
+        jPanel1.setBounds(2, 2, 1020, 29);
+
+        jLabel2.setText("Party Code");
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(30, 40, 70, 15);
+
+        jTabbedPane1.setToolTipText("");
+        jTabbedPane1.setAutoscrolls(true);
+        jTabbedPane1.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
+        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jTabbedPane1MouseEntered(evt);
+            }
+        });
+
+        ProductionProcessPanel.setLayout(null);
+
+        ProductionProcessPanel.setBorder(new javax.swing.border.EtchedBorder());
+        ProductionProcessPanel.setToolTipText("Production Process");
+        ProductionProcessPanel.setFont(new java.awt.Font("Dialog", 0, 10));
+        ProductionProcessPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                ProductionProcessPanelMouseEntered(evt);
+            }
+        });
+
+        cmdShowProductionProcess.setText("Show List");
+        cmdShowProductionProcess.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdShowProductionProcessActionPerformed(evt);
+            }
+        });
+
+        ProductionProcessPanel.add(cmdShowProductionProcess);
+        cmdShowProductionProcess.setBounds(870, 10, 118, 25);
+
+        TableProductionProcess.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        TableProductionProcess.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        TableProductionProcess.setMinimumSize(new java.awt.Dimension(1, 64));
+        TableProductionProcess.getTableHeader().setFont(new Font("Plain", Font.BOLD, 12));
+        TableProductionProcess.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableProductionProcessMouseClicked(evt);
+            }
+        });
+
+        jScrollPane1.setViewportView(TableProductionProcess);
+
+        ProductionProcessPanel.add(jScrollPane1);
+        jScrollPane1.setBounds(9, 48, 980, 380);
+
+        cmdOpenProductionProcess.setText("Open Document");
+        cmdOpenProductionProcess.setFocusable(false);
+        cmdOpenProductionProcess.setEnabled(false);
+        cmdOpenProductionProcess.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdOpenProductionProcessActionPerformed(evt);
+            }
+        });
+
+        ProductionProcessPanel.add(cmdOpenProductionProcess);
+        cmdOpenProductionProcess.setBounds(360, 440, 162, 25);
+
+        jLabel3.setText("Sort by :");
+        ProductionProcessPanel.add(jLabel3);
+        jLabel3.setBounds(650, 10, 60, 20);
+
+        ProductionProcessPanel.add(cmbOrder);
+        cmbOrder.setBounds(720, 10, 140, 20);
+
+        ProductionProcessPanel.add(txtRIA);
+        txtRIA.setBounds(30, 440, 70, 19);
+
+        txtkgtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtkgtotal.setEnabled(false);
+        ProductionProcessPanel.add(txtkgtotal);
+        txtkgtotal.setBounds(680, 440, 100, 19);
+
+        txtinvtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtinvtotal.setEnabled(false);
+        ProductionProcessPanel.add(txtinvtotal);
+        txtinvtotal.setBounds(880, 440, 110, 19);
+
+        txtrecordtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtrecordtotal.setEnabled(false);
+        ProductionProcessPanel.add(txtrecordtotal);
+        txtrecordtotal.setBounds(100, 10, 69, 19);
+
+        jLabel28.setText("Total Records");
+        ProductionProcessPanel.add(jLabel28);
+        jLabel28.setBounds(10, 10, 90, 20);
+
+        jLabel29.setText("Total KG");
+        ProductionProcessPanel.add(jLabel29);
+        jLabel29.setBounds(610, 440, 60, 20);
+
+        jLabel32.setText("Total Amt");
+        ProductionProcessPanel.add(jLabel32);
+        jLabel32.setBounds(800, 440, 70, 20);
+
+        cmdProductionProcessExporttoExcel.setText("Export to Excel");
+        cmdProductionProcessExporttoExcel.setMargin(new java.awt.Insets(1, 7, 1, 7));
+        cmdProductionProcessExporttoExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdProductionProcessExporttoExcelActionPerformed(evt);
+            }
+        });
+
+        ProductionProcessPanel.add(cmdProductionProcessExporttoExcel);
+        cmdProductionProcessExporttoExcel.setBounds(134, 440, 112, 23);
+
+        jTabbedPane1.addTab("Production Process", ProductionProcessPanel);
+
+        StockAvailablePanel.setLayout(null);
+
+        StockAvailablePanel.setBorder(new javax.swing.border.EtchedBorder());
+        StockAvailablePanel.setToolTipText("Stock Available");
+        StockAvailablePanel.setFont(new java.awt.Font("Dialog", 0, 10));
+        StockAvailablePanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                StockAvailablePanelMouseEntered(evt);
+            }
+        });
+
+        cmdShowStock.setText("Show List");
+        cmdShowStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdShowStockActionPerformed(evt);
+            }
+        });
+
+        StockAvailablePanel.add(cmdShowStock);
+        cmdShowStock.setBounds(830, 10, 118, 25);
+
+        TableStock.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        TableStock.getTableHeader().setFont(new Font("Plain", Font.BOLD, 12));
+        TableStock.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableStockMouseClicked(evt);
+            }
+        });
+
+        jScrollPane2.setViewportView(TableStock);
+
+        StockAvailablePanel.add(jScrollPane2);
+        jScrollPane2.setBounds(10, 40, 940, 330);
+
+        StockAvailablePanel.add(cmbStock);
+        cmbStock.setBounds(700, 10, 120, 24);
+
+        jLabel8.setText("Sort By :");
+        StockAvailablePanel.add(jLabel8);
+        jLabel8.setBounds(630, 10, 60, 20);
+
+        txtstockkgtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtstockkgtotal.setEnabled(false);
+        StockAvailablePanel.add(txtstockkgtotal);
+        txtstockkgtotal.setBounds(650, 390, 110, 19);
+
+        jLabel15.setText("Total KG Rcvd");
+        StockAvailablePanel.add(jLabel15);
+        jLabel15.setBounds(560, 390, 90, 20);
+
+        txtrecord.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtrecord.setEnabled(false);
+        StockAvailablePanel.add(txtrecord);
+        txtrecord.setBounds(100, 10, 70, 20);
+
+        jLabel25.setText("Total Records");
+        StockAvailablePanel.add(jLabel25);
+        jLabel25.setBounds(10, 10, 90, 20);
+
+        jLabel33.setText("Total Amt");
+        StockAvailablePanel.add(jLabel33);
+        jLabel33.setBounds(770, 390, 70, 20);
+
+        txtstockamttotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtstockamttotal.setEnabled(false);
+        StockAvailablePanel.add(txtstockamttotal);
+        txtstockamttotal.setBounds(840, 390, 110, 19);
+
+        cmdStockExporttoExcel.setText("Export to Excel");
+        cmdStockExporttoExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdStockExporttoExcelActionPerformed(evt);
+            }
+        });
+
+        StockAvailablePanel.add(cmdStockExporttoExcel);
+        cmdStockExporttoExcel.setBounds(10, 390, 130, 25);
+
+        cmdStockLockpiece.setText("Locking Piece");
+        cmdStockLockpiece.setMargin(new java.awt.Insets(2, 5, 2, 5));
+        cmdStockLockpiece.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdStockLockpieceActionPerformed(evt);
+            }
+        });
+
+        StockAvailablePanel.add(cmdStockLockpiece);
+        cmdStockLockpiece.setBounds(150, 390, 110, 25);
+
+        jTextField1.setBackground(new java.awt.Color(255, 0, 0));
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
+        StockAvailablePanel.add(jTextField1);
+        jTextField1.setBounds(10, 430, 40, 19);
+
+        jLabel5.setText("Block Piece");
+        StockAvailablePanel.add(jLabel5);
+        jLabel5.setBounds(60, 430, 70, 20);
+
+        jTextField2.setBackground(new java.awt.Color(255, 255, 0));
+        StockAvailablePanel.add(jTextField2);
+        jTextField2.setBounds(10, 460, 40, 19);
+
+        jLabel21.setText("PI Done Piece");
+        StockAvailablePanel.add(jLabel21);
+        jLabel21.setBounds(60, 460, 130, 20);
+
+        jTabbedPane1.addTab("Stock Available", StockAvailablePanel);
+
+        PackednotDespatchedPanel.setLayout(null);
+
+        PackednotDespatchedPanel.setToolTipText("Packed Not Despatched");
+        PackednotDespatchedPanel.setFont(new java.awt.Font("Dialog", 0, 10));
+        PackednotDespatchedPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                PackednotDespatchedPanelMouseEntered(evt);
+            }
+        });
+
+        cmdShowPacknotDesp.setText("Show List");
+        cmdShowPacknotDesp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdShowPacknotDespActionPerformed(evt);
+            }
+        });
+
+        PackednotDespatchedPanel.add(cmdShowPacknotDesp);
+        cmdShowPacknotDesp.setBounds(868, 20, 100, 25);
+
+        TablePackedNotDespatched.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        TablePackedNotDespatched.getTableHeader().setFont(new Font("Plain", Font.BOLD, 12));
+        jScrollPane13.setViewportView(TablePackedNotDespatched);
+
+        PackednotDespatchedPanel.add(jScrollPane13);
+        jScrollPane13.setBounds(30, 60, 940, 350);
+
+        jLabel63.setText("Total records");
+        PackednotDespatchedPanel.add(jLabel63);
+        jLabel63.setBounds(30, 20, 90, 20);
+
+        txtpackednotdespatchedtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtpackednotdespatchedtotal.setEnabled(false);
+        PackednotDespatchedPanel.add(txtpackednotdespatchedtotal);
+        txtpackednotdespatchedtotal.setBounds(130, 20, 60, 19);
+
+        jLabel64.setText("Total KG Received");
+        PackednotDespatchedPanel.add(jLabel64);
+        jLabel64.setBounds(550, 430, 120, 20);
+
+        txtpackednotdespatchedkgtotal.setEnabled(false);
+        PackednotDespatchedPanel.add(txtpackednotdespatchedkgtotal);
+        txtpackednotdespatchedkgtotal.setBounds(670, 430, 100, 19);
+
+        txtpackednotdespatchedamttotal.setEnabled(false);
+        PackednotDespatchedPanel.add(txtpackednotdespatchedamttotal);
+        txtpackednotdespatchedamttotal.setBounds(850, 430, 120, 19);
+
+        jLabel65.setText("Total Amt");
+        PackednotDespatchedPanel.add(jLabel65);
+        jLabel65.setBounds(780, 430, 70, 20);
+
+        cmdPackntDespExporttoExcel.setText("Export to Excel");
+        cmdPackntDespExporttoExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdPackntDespExporttoExcelActionPerformed(evt);
+            }
+        });
+
+        PackednotDespatchedPanel.add(cmdPackntDespExporttoExcel);
+        cmdPackntDespExporttoExcel.setBounds(30, 430, 130, 25);
+
+        jTabbedPane1.addTab("Packed Not Despached", PackednotDespatchedPanel);
+
+        DespatchPanel.setLayout(null);
+
+        DespatchPanel.setToolTipText("Despatched");
+        DespatchPanel.setFont(new java.awt.Font("Dialog", 0, 10));
+        DespatchPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                DespatchPanelMouseEntered(evt);
+            }
+        });
+
+        TableDespatched.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        TableDespatched.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableDespatchedMouseClicked(evt);
+            }
+        });
+
+        jScrollPane4.setViewportView(TableDespatched);
+
+        DespatchPanel.add(jScrollPane4);
+        jScrollPane4.setBounds(20, 40, 960, 340);
+
+        cmdshowDespatched.setText("Show List");
+        cmdshowDespatched.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdshowDespatchedActionPerformed(evt);
+            }
+        });
+
+        DespatchPanel.add(cmdshowDespatched);
+        cmdshowDespatched.setBounds(870, 10, 110, 25);
+
+        DespatchPanel.add(cmbDespatch);
+        cmbDespatch.setBounds(730, 10, 130, 24);
+
+        jLabel7.setText("Sort By :");
+        DespatchPanel.add(jLabel7);
+        jLabel7.setBounds(660, 10, 60, 20);
+
+        jLabel37.setText("Total Records");
+        DespatchPanel.add(jLabel37);
+        jLabel37.setBounds(20, 10, 90, 20);
+
+        txtdespatchedtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtdespatchedtotal.setEnabled(false);
+        DespatchPanel.add(txtdespatchedtotal);
+        txtdespatchedtotal.setBounds(120, 10, 80, 19);
+
+        jLabel40.setText("Total Kg");
+        DespatchPanel.add(jLabel40);
+        jLabel40.setBounds(560, 400, 60, 20);
+
+        txtdespatchedkgtotal.setEnabled(false);
+        DespatchPanel.add(txtdespatchedkgtotal);
+        txtdespatchedkgtotal.setBounds(630, 400, 80, 19);
+
+        jLabel41.setText("Total Amt");
+        DespatchPanel.add(jLabel41);
+        jLabel41.setBounds(733, 400, 70, 20);
+
+        txtdespatchedamttotal.setEnabled(false);
+        DespatchPanel.add(txtdespatchedamttotal);
+        txtdespatchedamttotal.setBounds(810, 400, 110, 19);
+
+        cmddespatchedExporttoExcel.setText("Export to Excel");
+        cmddespatchedExporttoExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmddespatchedExporttoExcelActionPerformed(evt);
+            }
+        });
+
+        DespatchPanel.add(cmddespatchedExporttoExcel);
+        cmddespatchedExporttoExcel.setBounds(20, 390, 130, 25);
+
+        jTabbedPane1.addTab("Despatched", DespatchPanel);
+
+        DivertedPanel.setLayout(null);
+
+        DivertedPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0)));
+        DivertedPanel.setToolTipText("Diverted");
+        DivertedPanel.setFont(new java.awt.Font("Dialog", 0, 10));
+        DivertedPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                DivertedPanelMouseEntered(evt);
+            }
+        });
+
+        TableDiverted.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(TableDiverted);
+
+        DivertedPanel.add(jScrollPane3);
+        jScrollPane3.setBounds(20, 40, 960, 340);
+
+        cmdshowDiverted.setText("Show List");
+        cmdshowDiverted.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdshowDivertedActionPerformed(evt);
+            }
+        });
+
+        DivertedPanel.add(cmdshowDiverted);
+        cmdshowDiverted.setBounds(870, 10, 110, 25);
+
+        jLabel36.setText("Total Records");
+        DivertedPanel.add(jLabel36);
+        jLabel36.setBounds(20, 10, 90, 20);
+
+        txtdivertedtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtdivertedtotal.setEnabled(false);
+        DivertedPanel.add(txtdivertedtotal);
+        txtdivertedtotal.setBounds(110, 10, 69, 19);
+
+        jLabel38.setText("Total Kg ");
+        DivertedPanel.add(jLabel38);
+        jLabel38.setBounds(590, 400, 60, 20);
+
+        txtdivertedkgtotal.setEnabled(false);
+        DivertedPanel.add(txtdivertedkgtotal);
+        txtdivertedkgtotal.setBounds(660, 400, 80, 19);
+
+        txtdivertedamttotal.setEnabled(false);
+        DivertedPanel.add(txtdivertedamttotal);
+        txtdivertedamttotal.setBounds(829, 400, 110, 19);
+
+        jLabel39.setText("Total Amt");
+        DivertedPanel.add(jLabel39);
+        jLabel39.setBounds(750, 400, 70, 20);
+
+        cmddivertedExportToExcel.setText("Export to Excel");
+        cmddivertedExportToExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmddivertedExportToExcelActionPerformed(evt);
+            }
+        });
+
+        DivertedPanel.add(cmddivertedExportToExcel);
+        cmddivertedExportToExcel.setBounds(20, 390, 130, 25);
+
+        jTabbedPane1.addTab("Diverted", DivertedPanel);
+
+        SalesPanel.setLayout(null);
+
+        SalesPanel.setToolTipText("Sales");
+        SalesPanel.setFont(new java.awt.Font("Dialog", 0, 10));
+        SalesPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                SalesPanelMouseEntered(evt);
+            }
+        });
+
+        cmdshowSalesY.setText("Show List");
+        cmdshowSalesY.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdshowSalesYActionPerformed(evt);
+            }
+        });
+
+        SalesPanel.add(cmdshowSalesY);
+        cmdshowSalesY.setBounds(860, 10, 120, 25);
+
+        TableSalesY.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane9.setViewportView(TableSalesY);
+
+        SalesPanel.add(jScrollPane9);
+        jScrollPane9.setBounds(20, 70, 960, 140);
+
+        TableSalesM.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane10.setViewportView(TableSalesM);
+
+        SalesPanel.add(jScrollPane10);
+        jScrollPane10.setBounds(20, 280, 960, 160);
+
+        jLabel11.setFont(new java.awt.Font("Dialog", 1, 14));
+        jLabel11.setText("YEARLY SALES");
+        SalesPanel.add(jLabel11);
+        jLabel11.setBounds(20, 40, 320, 20);
+
+        jLabel12.setFont(new java.awt.Font("Dialog", 1, 14));
+        jLabel12.setText("MONTHWISE YEARLY SALES");
+        SalesPanel.add(jLabel12);
+        jLabel12.setBounds(20, 250, 380, 20);
+
+        jLabel42.setText("Total Records");
+        SalesPanel.add(jLabel42);
+        jLabel42.setBounds(20, 10, 90, 20);
+
+        txtsalestotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtsalestotal.setEnabled(false);
+        SalesPanel.add(txtsalestotal);
+        txtsalestotal.setBounds(110, 10, 100, 19);
+
+        jLabel43.setText("Total Records");
+        SalesPanel.add(jLabel43);
+        jLabel43.setBounds(20, 230, 90, 15);
+
+        txtsalestotal1.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtsalestotal1.setEnabled(false);
+        SalesPanel.add(txtsalestotal1);
+        txtsalestotal1.setBounds(110, 230, 100, 19);
+
+        cmdsalesyrExporttoExcel.setText("Export to Excel");
+        cmdsalesyrExporttoExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdsalesyrExporttoExcelActionPerformed(evt);
+            }
+        });
+
+        SalesPanel.add(cmdsalesyrExporttoExcel);
+        cmdsalesyrExporttoExcel.setBounds(230, 10, 130, 25);
+
+        cmdsalesmonthExportToExcel.setText("Export to Excel");
+        cmdsalesmonthExportToExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdsalesmonthExportToExcelActionPerformed(evt);
+            }
+        });
+
+        SalesPanel.add(cmdsalesmonthExportToExcel);
+        cmdsalesmonthExportToExcel.setBounds(230, 230, 130, 25);
+
+        jTabbedPane1.addTab("Sales", SalesPanel);
+
+        DiscountPanel.setLayout(null);
+
+        DiscountPanel.setToolTipText("Discount");
+        DiscountPanel.setFont(new java.awt.Font("Dialog", 0, 10));
+        DiscountPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                DiscountPanelMouseEntered(evt);
+            }
+        });
+
+        TableDiscount.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        TableDiscount.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableDiscountMouseClicked(evt);
+            }
+        });
+
+        jScrollPane5.setViewportView(TableDiscount);
+
+        DiscountPanel.add(jScrollPane5);
+        jScrollPane5.setBounds(10, 40, 970, 390);
+
+        cmdshowDiscount.setText("Show List");
+        cmdshowDiscount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdshowDiscountActionPerformed(evt);
+            }
+        });
+
+        DiscountPanel.add(cmdshowDiscount);
+        cmdshowDiscount.setBounds(870, 10, 110, 25);
+
+        DiscountPanel.add(cmbDiscount);
+        cmbDiscount.setBounds(700, 10, 160, 24);
+
+        jLabel9.setText("Sort By");
+        DiscountPanel.add(jLabel9);
+        jLabel9.setBounds(630, 10, 60, 20);
+
+        DiscountPanel.add(txtdiscountperfrom);
+        txtdiscountperfrom.setBounds(360, 10, 60, 19);
+
+        DiscountPanel.add(txtdiscountperto);
+        txtdiscountperto.setBounds(460, 10, 60, 19);
+
+        jLabel22.setText("Search By :");
+        DiscountPanel.add(jLabel22);
+        jLabel22.setBounds(200, 10, 70, 20);
+
+        jLabel23.setText("Discount %");
+        DiscountPanel.add(jLabel23);
+        jLabel23.setBounds(280, 10, 70, 20);
+
+        jLabel24.setText("To");
+        DiscountPanel.add(jLabel24);
+        jLabel24.setBounds(430, 10, 30, 20);
+
+        jLabel44.setText("Total Records");
+        DiscountPanel.add(jLabel44);
+        jLabel44.setBounds(20, 10, 90, 20);
+
+        txtdiscounttotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtdiscounttotal.setEnabled(false);
+        DiscountPanel.add(txtdiscounttotal);
+        txtdiscounttotal.setBounds(120, 10, 69, 19);
+
+        cmdDiscountExportToExcel.setText("Export to Excel");
+        cmdDiscountExportToExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdDiscountExportToExcelActionPerformed(evt);
+            }
+        });
+
+        DiscountPanel.add(cmdDiscountExportToExcel);
+        cmdDiscountExportToExcel.setBounds(10, 440, 130, 25);
+
+        jTabbedPane1.addTab("Discount", DiscountPanel);
+
+        TargetdataPanel.setLayout(null);
+
+        TargetdataPanel.setToolTipText("Target Data");
+        TargetdataPanel.setFont(new java.awt.Font("Dialog", 0, 10));
+        TargetdataPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                TargetdataPanelMouseEntered(evt);
+            }
+        });
+
+        cmdShowTargetData.setText("Show List");
+        cmdShowTargetData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdShowTargetDataActionPerformed(evt);
+            }
+        });
+
+        TargetdataPanel.add(cmdShowTargetData);
+        cmdShowTargetData.setBounds(870, 10, 110, 25);
+
+        TableTarget.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        TableTarget.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableTargetMouseClicked(evt);
+            }
+        });
+
+        jScrollPane6.setViewportView(TableTarget);
+
+        TargetdataPanel.add(jScrollPane6);
+        jScrollPane6.setBounds(20, 70, 960, 330);
+
+        jLabel16.setFont(new java.awt.Font("Dialog", 1, 14));
+        jLabel16.setText("SALES TARGET (Rs. in lacs)");
+        TargetdataPanel.add(jLabel16);
+        jLabel16.setBounds(20, 10, 280, 20);
+
+        cmbTarget.setEnabled(false);
+        TargetdataPanel.add(cmbTarget);
+        cmbTarget.setBounds(650, 10, 210, 24);
+
+        jLabel4.setText("Sort By :");
+        jLabel4.setEnabled(false);
+        TargetdataPanel.add(jLabel4);
+        jLabel4.setBounds(580, 10, 60, 20);
+
+        jLabel45.setText("Total Records");
+        TargetdataPanel.add(jLabel45);
+        jLabel45.setBounds(20, 40, 100, 20);
+
+        txttargettotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txttargettotal.setEnabled(false);
+        TargetdataPanel.add(txttargettotal);
+        txttargettotal.setBounds(130, 40, 80, 19);
+
+        cmdSalestargetExportToExcel.setText("Export to Excel");
+        cmdSalestargetExportToExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdSalestargetExportToExcelActionPerformed(evt);
+            }
+        });
+
+        TargetdataPanel.add(cmdSalestargetExportToExcel);
+        cmdSalestargetExportToExcel.setBounds(240, 40, 130, 25);
+
+        jTabbedPane1.addTab("Target Data", TargetdataPanel);
+
+        AgeingPanel.setLayout(null);
+
+        AgeingPanel.setToolTipText("Ageing");
+        AgeingPanel.setFont(new java.awt.Font("Dialog", 0, 10));
+        AgeingPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                AgeingPanelMouseEntered(evt);
+            }
+        });
+
+        TableAgeing.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane8.setViewportView(TableAgeing);
+
+        AgeingPanel.add(jScrollPane8);
+        jScrollPane8.setBounds(20, 50, 960, 230);
+
+        cmdShowAgeing.setText("Show List");
+        cmdShowAgeing.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdShowAgeingActionPerformed(evt);
+            }
+        });
+
+        AgeingPanel.add(cmdShowAgeing);
+        cmdShowAgeing.setBounds(880, 10, 100, 25);
+
+        jLabel47.setText("Total Records");
+        AgeingPanel.add(jLabel47);
+        jLabel47.setBounds(20, 20, 90, 20);
+
+        txtageingtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtageingtotal.setEnabled(false);
+        AgeingPanel.add(txtageingtotal);
+        txtageingtotal.setBounds(110, 20, 70, 19);
+
+        AgeingPanel.add(txtless45counttotal);
+        txtless45counttotal.setBounds(80, 360, 110, 19);
+
+        AgeingPanel.add(txtless90counttotal);
+        txtless90counttotal.setBounds(200, 360, 110, 19);
+
+        AgeingPanel.add(txtless180counttotal);
+        txtless180counttotal.setBounds(320, 360, 120, 19);
+
+        AgeingPanel.add(txtless365counttotal);
+        txtless365counttotal.setBounds(450, 360, 120, 19);
+
+        AgeingPanel.add(txtless730counttotal);
+        txtless730counttotal.setBounds(580, 360, 120, 19);
+
+        AgeingPanel.add(txtmore730counttotal);
+        txtmore730counttotal.setBounds(710, 360, 130, 19);
+
+        AgeingPanel.add(txtlesscounttotal);
+        txtlesscounttotal.setBounds(850, 360, 130, 19);
+
+        AgeingPanel.add(txtless45qtytotal);
+        txtless45qtytotal.setBounds(80, 390, 110, 19);
+
+        AgeingPanel.add(txtless90qtytotal);
+        txtless90qtytotal.setBounds(200, 390, 110, 19);
+
+        AgeingPanel.add(txtless180qtytotal);
+        txtless180qtytotal.setBounds(320, 390, 120, 19);
+
+        AgeingPanel.add(txtless365qtytotal);
+        txtless365qtytotal.setBounds(450, 390, 120, 19);
+
+        AgeingPanel.add(txtless730qtytotal);
+        txtless730qtytotal.setBounds(580, 390, 120, 19);
+
+        AgeingPanel.add(txtmore730qtytotal);
+        txtmore730qtytotal.setBounds(710, 390, 130, 19);
+
+        AgeingPanel.add(txtlessqtytotal);
+        txtlessqtytotal.setBounds(850, 390, 130, 19);
+
+        AgeingPanel.add(txtless45amttotal);
+        txtless45amttotal.setBounds(80, 420, 110, 19);
+
+        AgeingPanel.add(txtless90amttotal);
+        txtless90amttotal.setBounds(200, 420, 110, 19);
+
+        AgeingPanel.add(txtless180amttotal);
+        txtless180amttotal.setBounds(320, 420, 120, 19);
+
+        AgeingPanel.add(txtless365amttotal);
+        txtless365amttotal.setBounds(450, 420, 120, 19);
+
+        AgeingPanel.add(txtless730amttotal);
+        txtless730amttotal.setBounds(580, 420, 120, 19);
+
+        AgeingPanel.add(txtmore730amttotal);
+        txtmore730amttotal.setBounds(710, 420, 130, 19);
+
+        AgeingPanel.add(txtlessamttotal);
+        txtlessamttotal.setBounds(850, 420, 130, 19);
+
+        jLabel48.setText("Count");
+        AgeingPanel.add(jLabel48);
+        jLabel48.setBounds(30, 360, 40, 15);
+
+        jLabel49.setText("Qty");
+        AgeingPanel.add(jLabel49);
+        jLabel49.setBounds(30, 390, 40, 15);
+
+        jLabel50.setText("Amt");
+        AgeingPanel.add(jLabel50);
+        jLabel50.setBounds(30, 420, 40, 15);
+
+        jLabel51.setText("<=45");
+        AgeingPanel.add(jLabel51);
+        jLabel51.setBounds(100, 330, 50, 15);
+
+        jLabel52.setText(">45<=90");
+        AgeingPanel.add(jLabel52);
+        jLabel52.setBounds(220, 330, 80, 15);
+
+        jLabel53.setText(">90<=180");
+        AgeingPanel.add(jLabel53);
+        jLabel53.setBounds(340, 330, 80, 15);
+
+        jLabel54.setText(">180<=365");
+        AgeingPanel.add(jLabel54);
+        jLabel54.setBounds(470, 330, 90, 15);
+
+        jLabel55.setText(">365<=730");
+        AgeingPanel.add(jLabel55);
+        jLabel55.setBounds(590, 330, 90, 15);
+
+        jLabel56.setText(">730");
+        AgeingPanel.add(jLabel56);
+        jLabel56.setBounds(740, 330, 50, 15);
+
+        jLabel57.setText("Total");
+        AgeingPanel.add(jLabel57);
+        jLabel57.setBounds(880, 330, 70, 15);
+
+        cmdAgeingExportToExcel.setText("Export to Excel");
+        cmdAgeingExportToExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdAgeingExportToExcelActionPerformed(evt);
+            }
+        });
+
+        AgeingPanel.add(cmdAgeingExportToExcel);
+        cmdAgeingExportToExcel.setBounds(210, 20, 130, 25);
+
+        jTabbedPane1.addTab("Ageing", AgeingPanel);
+
+        MisageingPanel.setLayout(null);
+
+        MisageingPanel.setToolTipText("MIS Ageing");
+        MisageingPanel.setFont(new java.awt.Font("Dialog", 0, 10));
+        MisageingPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                MisageingPanelMouseEntered(evt);
+            }
+        });
+
+        TableMISAgeing.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane11.setViewportView(TableMISAgeing);
+
+        MisageingPanel.add(jScrollPane11);
+        jScrollPane11.setBounds(10, 50, 550, 370);
+
+        cmdShowMISAgeing.setText("Show List");
+        cmdShowMISAgeing.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdShowMISAgeingActionPerformed(evt);
+            }
+        });
+
+        MisageingPanel.add(cmdShowMISAgeing);
+        cmdShowMISAgeing.setBounds(870, 10, 110, 25);
+
+        TableMISAgeing1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane12.setViewportView(TableMISAgeing1);
+
+        MisageingPanel.add(jScrollPane12);
+        jScrollPane12.setBounds(570, 50, 410, 370);
+
+        jLabel58.setText("Total Records");
+        MisageingPanel.add(jLabel58);
+        jLabel58.setBounds(10, 20, 90, 15);
+
+        txtmisageingtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtmisageingtotal.setEnabled(false);
+        MisageingPanel.add(txtmisageingtotal);
+        txtmisageingtotal.setBounds(110, 20, 50, 19);
+
+        jLabel59.setText("Total Records");
+        MisageingPanel.add(jLabel59);
+        jLabel59.setBounds(570, 20, 90, 15);
+
+        txtmisageingtotal1.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtmisageingtotal1.setEnabled(false);
+        MisageingPanel.add(txtmisageingtotal1);
+        txtmisageingtotal1.setBounds(670, 20, 50, 19);
+
+        txtamttotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        MisageingPanel.add(txtamttotal);
+        txtamttotal.setBounds(430, 450, 120, 19);
+
+        jLabel60.setText("Amt Total");
+        MisageingPanel.add(jLabel60);
+        jLabel60.setBounds(450, 430, 70, 20);
+
+        txtqtytotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        MisageingPanel.add(txtqtytotal);
+        txtqtytotal.setBounds(290, 450, 120, 19);
+
+        jLabel61.setText("QTY Total");
+        MisageingPanel.add(jLabel61);
+        jLabel61.setBounds(310, 430, 70, 20);
+
+        txtcounttotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        MisageingPanel.add(txtcounttotal);
+        txtcounttotal.setBounds(150, 450, 120, 19);
+
+        jLabel62.setText("Count Total");
+        MisageingPanel.add(jLabel62);
+        jLabel62.setBounds(160, 430, 90, 20);
+
+        cmdMISAgeingExportToExcel.setText("Export to Excel");
+        cmdMISAgeingExportToExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdMISAgeingExportToExcelActionPerformed(evt);
+            }
+        });
+
+        MisageingPanel.add(cmdMISAgeingExportToExcel);
+        cmdMISAgeingExportToExcel.setBounds(10, 440, 130, 25);
+
+        cmdmisagingaExportToExcel.setText("Export to Excel");
+        cmdmisagingaExportToExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdmisagingaExportToExcelActionPerformed(evt);
+            }
+        });
+
+        MisageingPanel.add(cmdmisagingaExportToExcel);
+        cmdmisagingaExportToExcel.setBounds(570, 440, 126, 25);
+
+        jTabbedPane1.addTab("MIS Ageing", MisageingPanel);
+
+        ContactsPanel.setLayout(null);
+
+        ContactsPanel.setToolTipText("Contacts");
+        ContactsPanel.setFont(new java.awt.Font("Dialog", 0, 10));
+        ContactsPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                ContactsPanelMouseEntered(evt);
+            }
+        });
+
+        cmdShowContacts.setText("Show List");
+        cmdShowContacts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdShowContactsActionPerformed(evt);
+            }
+        });
+
+        ContactsPanel.add(cmdShowContacts);
+        cmdShowContacts.setBounds(880, 10, 100, 25);
+
+        TableContacts.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane14.setViewportView(TableContacts);
+
+        ContactsPanel.add(jScrollPane14);
+        jScrollPane14.setBounds(20, 60, 970, 320);
+
+        jLabel66.setText("Total Records");
+        ContactsPanel.add(jLabel66);
+        jLabel66.setBounds(20, 20, 90, 20);
+
+        txtcontactstotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtcontactstotal.setEnabled(false);
+        ContactsPanel.add(txtcontactstotal);
+        txtcontactstotal.setBounds(120, 20, 80, 19);
+
+        cmdcontactsExporttoExcel.setText("Export to Excel");
+        cmdcontactsExporttoExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdcontactsExporttoExcelActionPerformed(evt);
+            }
+        });
+
+        ContactsPanel.add(cmdcontactsExporttoExcel);
+        cmdcontactsExporttoExcel.setBounds(20, 390, 130, 25);
+
+        jTabbedPane1.addTab("Contacts", ContactsPanel);
+
+        CancelledPanel.setLayout(null);
+
+        CancelledPanel.setToolTipText("Cancelled");
+        CancelledPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                CancelledPanelMouseEntered(evt);
+            }
+        });
+
+        TableCancelled.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane16.setViewportView(TableCancelled);
+
+        CancelledPanel.add(jScrollPane16);
+        jScrollPane16.setBounds(10, 40, 970, 400);
+
+        cmdShowCancelled.setText("Show List");
+        cmdShowCancelled.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdShowCancelledActionPerformed(evt);
+            }
+        });
+
+        CancelledPanel.add(cmdShowCancelled);
+        cmdShowCancelled.setBounds(880, 10, 100, 25);
+
+        txtCancelledtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtCancelledtotal.setEnabled(false);
+        CancelledPanel.add(txtCancelledtotal);
+        txtCancelledtotal.setBounds(120, 10, 69, 19);
+
+        txtCancelledinvtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtCancelledinvtotal.setEnabled(false);
+        CancelledPanel.add(txtCancelledinvtotal);
+        txtCancelledinvtotal.setBounds(860, 450, 120, 19);
+
+        txtCancelledkgtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtCancelledkgtotal.setEnabled(false);
+        CancelledPanel.add(txtCancelledkgtotal);
+        txtCancelledkgtotal.setBounds(660, 450, 110, 19);
+
+        jLabel67.setText("Total Records");
+        CancelledPanel.add(jLabel67);
+        jLabel67.setBounds(10, 10, 90, 20);
+
+        jLabel68.setText("Total KG");
+        CancelledPanel.add(jLabel68);
+        jLabel68.setBounds(580, 450, 70, 20);
+
+        jLabel69.setText("Total Amt");
+        CancelledPanel.add(jLabel69);
+        jLabel69.setBounds(780, 450, 70, 20);
+
+        cmdCancelledopenDocument.setText("Open Document");
+        cmdCancelledopenDocument.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdCancelledopenDocumentActionPerformed(evt);
+            }
+        });
+
+        CancelledPanel.add(cmdCancelledopenDocument);
+        cmdCancelledopenDocument.setBounds(400, 450, 140, 25);
+
+        cmdCancelledExportToExcel.setText("Export to Excel");
+        cmdCancelledExportToExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdCancelledExportToExcelActionPerformed(evt);
+            }
+        });
+
+        CancelledPanel.add(cmdCancelledExportToExcel);
+        cmdCancelledExportToExcel.setBounds(10, 450, 130, 25);
+
+        CancelledPanel.add(cmbCancelled);
+        cmbCancelled.setBounds(720, 10, 130, 24);
+
+        jLabel74.setText("Sort By");
+        CancelledPanel.add(jLabel74);
+        jLabel74.setBounds(650, 10, 60, 20);
+
+        jTabbedPane1.addTab("Cancelled", CancelledPanel);
+
+        HoldPanel.setLayout(null);
+
+        HoldPanel.setToolTipText("Hold");
+        HoldPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                HoldPanelMouseEntered(evt);
+            }
+        });
+
+        TableHold.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane15.setViewportView(TableHold);
+
+        HoldPanel.add(jScrollPane15);
+        jScrollPane15.setBounds(20, 40, 970, 350);
+
+        cmdShowHold.setText("Show List");
+        cmdShowHold.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdShowHoldActionPerformed(evt);
+            }
+        });
+
+        HoldPanel.add(cmdShowHold);
+        cmdShowHold.setBounds(890, 10, 100, 25);
+
+        txtHoldtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtHoldtotal.setEnabled(false);
+        HoldPanel.add(txtHoldtotal);
+        txtHoldtotal.setBounds(120, 10, 69, 19);
+
+        txtHoldkgtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtHoldkgtotal.setEnabled(false);
+        HoldPanel.add(txtHoldkgtotal);
+        txtHoldkgtotal.setBounds(680, 400, 100, 19);
+
+        txtHoldinvtotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtHoldinvtotal.setEnabled(false);
+        HoldPanel.add(txtHoldinvtotal);
+        txtHoldinvtotal.setBounds(880, 400, 110, 19);
+
+        jLabel70.setText("Total Records");
+        HoldPanel.add(jLabel70);
+        jLabel70.setBounds(20, 10, 90, 20);
+
+        jPanel15.setLayout(null);
+
+        TableHold1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane17.setViewportView(TableHold1);
+
+        jPanel15.add(jScrollPane17);
+        jScrollPane17.setBounds(20, 50, 970, 380);
+
+        cmdShowHold1.setText("Show List");
+        jPanel15.add(cmdShowHold1);
+        cmdShowHold1.setBounds(888, 10, 100, 25);
+
+        jPanel15.add(txtHoldtotal1);
+        txtHoldtotal1.setBounds(120, 20, 69, 19);
+
+        jPanel15.add(txtHoldkgtotal1);
+        txtHoldkgtotal1.setBounds(700, 450, 100, 19);
+
+        jPanel15.add(txtHoldinvtotal1);
+        txtHoldinvtotal1.setBounds(880, 450, 110, 19);
+
+        jLabel71.setText("Total Records");
+        jPanel15.add(jLabel71);
+        jLabel71.setBounds(20, 20, 90, 20);
+
+        HoldPanel.add(jPanel15);
+        jPanel15.setBounds(0, 0, 0, 0);
+
+        jLabel72.setText("Total KG");
+        HoldPanel.add(jLabel72);
+        jLabel72.setBounds(610, 400, 60, 20);
+
+        jLabel73.setText("Total Amt");
+        HoldPanel.add(jLabel73);
+        jLabel73.setBounds(800, 400, 70, 20);
+
+        cmdHoldExportToExcel.setText("Export to Excel");
+        cmdHoldExportToExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdHoldExportToExcelActionPerformed(evt);
+            }
+        });
+
+        HoldPanel.add(cmdHoldExportToExcel);
+        cmdHoldExportToExcel.setBounds(20, 400, 130, 25);
+
+        cmdHoldopendoc.setText("Open Document");
+        cmdHoldopendoc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdHoldopendocActionPerformed(evt);
+            }
+        });
+
+        HoldPanel.add(cmdHoldopendoc);
+        cmdHoldopendoc.setBounds(420, 400, 140, 25);
+
+        HoldPanel.add(cmbHold);
+        cmbHold.setBounds(750, 10, 120, 24);
+
+        jLabel75.setText("Sort By");
+        HoldPanel.add(jLabel75);
+        jLabel75.setBounds(690, 10, 50, 20);
+
+        jTabbedPane1.addTab("Hold", HoldPanel);
+
+        MachinePanel.setLayout(null);
+
+        MachinePanel.setToolTipText("Machine");
+        MachinePanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                MachinePanelMouseEntered(evt);
+            }
+        });
+
+        TableMachine.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane18.setViewportView(TableMachine);
+
+        MachinePanel.add(jScrollPane18);
+        jScrollPane18.setBounds(10, 50, 980, 370);
+
+        cmdShowMachine.setText("Show List");
+        cmdShowMachine.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdShowMachineActionPerformed(evt);
+            }
+        });
+
+        MachinePanel.add(cmdShowMachine);
+        cmdShowMachine.setBounds(890, 10, 100, 25);
+
+        txtMachineTotal.setFont(new java.awt.Font("Dialog", 1, 12));
+        txtMachineTotal.setEnabled(false);
+        MachinePanel.add(txtMachineTotal);
+        txtMachineTotal.setBounds(110, 10, 60, 19);
+
+        jLabel6.setText("Total Records");
+        MachinePanel.add(jLabel6);
+        jLabel6.setBounds(10, 10, 90, 20);
+
+        MachinePanel.add(cmbMachine);
+        cmbMachine.setBounds(742, 10, 130, 24);
+
+        jLabel27.setText("Order By");
+        MachinePanel.add(jLabel27);
+        jLabel27.setBounds(673, 10, 60, 20);
+
+        CmdmachineExportExcel.setLabel("Export to Excel");
+        CmdmachineExportExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CmdmachineExportExcelActionPerformed(evt);
+            }
+        });
+
+        MachinePanel.add(CmdmachineExportExcel);
+        CmdmachineExportExcel.setBounds(20, 440, 150, 25);
+
+        jTabbedPane1.addTab("Machine", MachinePanel);
+
+        jPanel2.setLayout(null);
+
+        TableComplaint.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane19.setViewportView(TableComplaint);
+
+        jPanel2.add(jScrollPane19);
+        jScrollPane19.setBounds(30, 70, 950, 210);
+
+        cmdShowComplaint.setText("Show List");
+        cmdShowComplaint.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        cmdShowComplaint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdShowComplaintActionPerformed(evt);
+            }
+        });
+
+        jPanel2.add(cmdShowComplaint);
+        cmdShowComplaint.setBounds(880, 20, 90, 25);
+
+        jButton13.setText("New Complaint");
+        jButton13.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+
+        jPanel2.add(jButton13);
+        jButton13.setBounds(30, 20, 106, 25);
+
+        cmdComplaintOpenDoc.setText("Open Complaint");
+        cmdComplaintOpenDoc.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        cmdComplaintOpenDoc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdComplaintOpenDocActionPerformed(evt);
+            }
+        });
+
+        jPanel2.add(cmdComplaintOpenDoc);
+        cmdComplaintOpenDoc.setBounds(30, 310, 120, 25);
+
+        jPanel2.add(cmbComplaint);
+        cmbComplaint.setBounds(630, 20, 210, 24);
+
+        jLabel30.setText("Order By");
+        jPanel2.add(jLabel30);
+        jLabel30.setBounds(560, 20, 60, 20);
+
+        cmdComplaintExportToExcel.setText("Export to Excel");
+        cmdComplaintExportToExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdComplaintExportToExcelActionPerformed(evt);
+            }
+        });
+
+        jPanel2.add(cmdComplaintExportToExcel);
+        cmdComplaintExportToExcel.setBounds(190, 310, 140, 25);
+
+        jTabbedPane1.addTab("Complaints", jPanel2);
+
+        AgreedDatePanel.setLayout(null);
+
+        AgreedDatePanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                AgreedDatePanelMouseEntered(evt);
+            }
+        });
+
+        TableAgreedDate.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane20.setViewportView(TableAgreedDate);
+
+        AgreedDatePanel.add(jScrollPane20);
+        jScrollPane20.setBounds(20, 50, 960, 360);
+
+        cmbAgreedDate.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbAgreedDateItemStateChanged(evt);
+            }
+        });
+
+        AgreedDatePanel.add(cmbAgreedDate);
+        cmbAgreedDate.setBounds(250, 10, 170, 24);
+
+        cmdAgreedDate.setText("Show List");
+        cmdAgreedDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdAgreedDateActionPerformed(evt);
+            }
+        });
+
+        AgreedDatePanel.add(cmdAgreedDate);
+        cmdAgreedDate.setBounds(870, 10, 95, 25);
+
+        cmbAgreedExportExcel.setText("Export to Excel");
+        cmbAgreedExportExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbAgreedExportExcelActionPerformed(evt);
+            }
+        });
+
+        AgreedDatePanel.add(cmbAgreedExportExcel);
+        cmbAgreedExportExcel.setBounds(230, 420, 170, 30);
+
+        txtAgreedNature.setFocusable(false);
+        txtAgreedNature.setEnabled(false);
+        txtAgreedNature.setOpaque(false);
+        AgreedDatePanel.add(txtAgreedNature);
+        txtAgreedNature.setBounds(550, 40, 0, 19);
+
+        jLabel31.setText("Weaving Agreed Date Filter Criteria");
+        AgreedDatePanel.add(jLabel31);
+        jLabel31.setBounds(20, 20, 219, 15);
+
+        AgreedDatePanel.add(txtAgreedrecordtotal);
+        txtAgreedrecordtotal.setBounds(150, 420, 50, 19);
+
+        jLabel77.setText("Total Records");
+        AgreedDatePanel.add(jLabel77);
+        jLabel77.setBounds(40, 420, 90, 20);
+
+        jLabel78.setText("Sort By :");
+        AgreedDatePanel.add(jLabel78);
+        jLabel78.setBounds(550, 20, 70, 15);
+
+        AgreedDatePanel.add(cmbAgreedOrder);
+        cmbAgreedOrder.setBounds(610, 10, 250, 24);
+
+        jTabbedPane1.addTab("Weaving Agreed Date", AgreedDatePanel);
+
+        getContentPane().add(jTabbedPane1);
+        jTabbedPane1.setBounds(6, 129, 1010, 590);
+        jTabbedPane1.getAccessibleContext().setAccessibleName("Pending Order Form");
+
+        txtpartycode.setToolTipText("Press F1 key for search Party Code");
+        txtpartycode = new JTextFieldHint(new JTextField(),"Search by F1");
+        txtpartycode.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtpartycodeFocusLost(evt);
+            }
+        });
+        txtpartycode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtpartycodeKeyPressed(evt);
+            }
+        });
+
+        getContentPane().add(txtpartycode);
+        txtpartycode.setBounds(120, 40, 90, 19);
+
+        txtpartyname.setBackground(new java.awt.Color(204, 204, 204));
+        txtpartyname = new JTextFieldHint(new JTextField(),"Party Name");
+        txtpartyname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtpartynameActionPerformed(evt);
+            }
+        });
+
+        getContentPane().add(txtpartyname);
+        txtpartyname.setBounds(210, 40, 400, 19);
+
+        txtlengthto = new JTextFieldHint(new JTextField(),"To");
+        getContentPane().add(txtlengthto);
+        txtlengthto.setBounds(180, 60, 50, 19);
+
+        txtlengthfrom = new JTextFieldHint(new JTextField(),"From");
+        getContentPane().add(txtlengthfrom);
+        txtlengthfrom.setBounds(120, 60, 50, 19);
+
+        txtwidthfrom = new JTextFieldHint(new JTextField(),"From");
+        getContentPane().add(txtwidthfrom);
+        txtwidthfrom.setBounds(120, 80, 50, 19);
+
+        txtwidthto = new JTextFieldHint(new JTextField(),"To");
+        getContentPane().add(txtwidthto);
+        txtwidthto.setBounds(180, 80, 50, 19);
+
+        jLabel18.setText("Length (M)");
+        getContentPane().add(jLabel18);
+        jLabel18.setBounds(30, 60, 70, 20);
+
+        jLabel19.setText("Width (M)");
+        getContentPane().add(jLabel19);
+        jLabel19.setBounds(30, 80, 70, 20);
+
+        jLabel20.setText("GSM");
+        getContentPane().add(jLabel20);
+        jLabel20.setBounds(30, 100, 70, 20);
+
+        txtgsqfrom = new JTextFieldHint(new JTextField(),"From");
+        getContentPane().add(txtgsqfrom);
+        txtgsqfrom.setBounds(120, 100, 50, 20);
+
+        txtgsqto = new JTextFieldHint(new JTextField(),"To");
+        getContentPane().add(txtgsqto);
+        txtgsqto.setBounds(180, 100, 50, 19);
+
+        jLabel34.setText("Piece No");
+        getContentPane().add(jLabel34);
+        jLabel34.setBounds(260, 80, 52, 20);
+
+        txtpieceno.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtpiecenoFocusLost(evt);
+            }
+        });
+
+        getContentPane().add(txtpieceno);
+        txtpieceno.setBounds(350, 80, 180, 19);
+
+        jLabel35.setText("Product Code");
+        getContentPane().add(jLabel35);
+        jLabel35.setBounds(260, 100, 90, 20);
+
+        txtproductcode.setToolTipText("Press F! key to search Product Code");
+        txtproductcode = new JTextFieldHint(new JTextField(),"Search By Press F1");
+        txtproductcode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtproductcodeKeyPressed(evt);
+            }
+        });
+
+        getContentPane().add(txtproductcode);
+        txtproductcode.setBounds(350, 100, 180, 19);
+
+        jLabel10.setFont(new java.awt.Font("Dialog", 1, 10));
+        jLabel10.setText("Multiple selection seperated by comma( e.g  001250,22154,25874)");
+        getContentPane().add(jLabel10);
+        jLabel10.setBounds(260, 60, 360, 20);
+
+        jLabel13.setText("Date from");
+        getContentPane().add(jLabel13);
+        jLabel13.setBounds(630, 40, 70, 20);
+
+        txtdatefrom = new JTextFieldHint(new JTextField(),"DD/MM/YYYY");
+        getContentPane().add(txtdatefrom);
+        txtdatefrom.setBounds(700, 40, 100, 19);
+
+        txtdateto = new JTextFieldHint(new JTextField(),"DD/MM/YYYY");
+        getContentPane().add(txtdateto);
+        txtdateto.setBounds(820, 40, 100, 19);
+
+        jLabel14.setText("To");
+        getContentPane().add(jLabel14);
+        jLabel14.setBounds(800, 40, 20, 20);
+
+        cmdClearAll.setText("Clear All");
+        cmdClearAll.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        cmdClearAll.setMargin(new java.awt.Insets(2, 7, 2, 7));
+        cmdClearAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdClearAllActionPerformed(evt);
+            }
+        });
+
+        getContentPane().add(cmdClearAll);
+        cmdClearAll.setBounds(930, 80, 80, 25);
+
+        txtzone.setToolTipText("Press F1 key to Search Zone");
+        txtzone = new JTextFieldHint(new JTextField(),"Search by F1");
+        txtzone.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtzoneKeyPressed(evt);
+            }
+        });
+
+        getContentPane().add(txtzone);
+        txtzone.setBounds(590, 80, 100, 19);
+
+        jLabel26.setText("Zone");
+        getContentPane().add(jLabel26);
+        jLabel26.setBounds(550, 80, 40, 20);
+
+        getContentPane().add(cmbIncharge);
+        cmbIncharge.setBounds(760, 80, 160, 24);
+
+        jLabel76.setText("Incharge");
+        getContentPane().add(jLabel76);
+        jLabel76.setBounds(700, 80, 60, 20);
+
+    }//GEN-END:initComponents
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void CmdmachineExportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmdmachineExportExcelActionPerformed
+     try{
+                    exp.fillData(TableMachine,new File("D://machinedetail.xls"));      
+                    exp.fillData(TableMachine,new File("/root/Desktop/machinedetail.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/machinedetail.xls' successfully in Linux PC or 'D://machinedetail.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_CmdmachineExportExcelActionPerformed
+
+    private void AgreedDatePanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AgreedDatePanelMouseEntered
+         txtpartycode.setEnabled(true);
+        txtpartyname.setEnabled(true);
+        txtlengthfrom.setEnabled(true);
+        txtlengthto.setEnabled(true);   
+        txtwidthfrom.setEnabled(true);
+        txtwidthto.setEnabled(true);   
+        txtgsqfrom.setEnabled(true);
+        txtgsqto.setEnabled(true);
+        txtpieceno.setEnabled(true);
+        txtproductcode.setEnabled(true);
+        txtdatefrom.setEnabled(true);
+        txtdateto.setEnabled(true);
+        txtzone.setEnabled(false);
+        cmbIncharge.setEnabled(true);
+        
+    }//GEN-LAST:event_AgreedDatePanelMouseEntered
+
+    private void jTabbedPane1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseEntered
+
+    }//GEN-LAST:event_jTabbedPane1MouseEntered
+
+    private void cmbAgreedDateItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbAgreedDateItemStateChanged
+          
+     
+       //        txtamendreasoncode.setText( Integer.toString(cmbAmendReason.getSelectedIndex()));
+              // txtAgreedNature.setText((String)cmbAgreedDate.getSelectedItem());
+          txtAgreedNature.setText( Integer.toString(cmbAgreedDate.getSelectedIndex()));
+      
+    }//GEN-LAST:event_cmbAgreedDateItemStateChanged
+
+    private void cmbAgreedExportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAgreedExportExcelActionPerformed
+         try{
+             
+                    exp.fillData(TableAgreedDate,new File("/root/Desktop/AgreedDate.xls"));
+                    exp.fillData(TableAgreedDate,new File("D://AgreedDate.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/AgreedDate.xls' successfully in Linux PC or 'D://AgreedDate.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+          
+            
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        } 
+    }//GEN-LAST:event_cmbAgreedExportExcelActionPerformed
+
+    private void cmdAgreedDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAgreedDateActionPerformed
+       GenerateAgreedDate();
+    }//GEN-LAST:event_cmdAgreedDateActionPerformed
+
+    private void cmdComplaintExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdComplaintExportToExcelActionPerformed
+       try{
+             
+                    exp.fillData(TableComplaint,new File("/root/Desktop/ComplaintProcess.xls"));
+                    exp.fillData(TableHold,new File("D://CompalintProcess.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/ComplaintProcess.xls' successfully in Linux PC or 'D://ComplaintProcess.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        } 
+    }//GEN-LAST:event_cmdComplaintExportToExcelActionPerformed
+
+    private void cmdComplaintOpenDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdComplaintOpenDocActionPerformed
+       try{
+         String ComplaintNo =(String)TableComplaint.getValueAt(TableComplaint.getSelectedRow(), 1);
+         System.out.println(ComplaintNo);
+         AppletFrame aFrame = new AppletFrame("COMPLAINT");
+         aFrame.startAppletEx("EITLERP.Production.ReportUI.frmfeltComplaint","Complaint");
+         frmfeltComplaint ObjDoc=(frmfeltComplaint) aFrame.ObjApplet;         
+         ObjDoc.FindEx((int)EITLERPGLOBAL.gCompanyID,ComplaintNo); 
+      }
+        catch(Exception e) {
+        } 
+    }//GEN-LAST:event_cmdComplaintOpenDocActionPerformed
+
+    private void cmdShowComplaintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowComplaintActionPerformed
+       GenerateComplaint();
+    }//GEN-LAST:event_cmdShowComplaintActionPerformed
+
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+       try{
+         
+         AppletFrame aFrame = new AppletFrame("COMPLAINT");
+         aFrame.startAppletEx("EITLERP.Production.ReportUI.frmfeltComplaint","Complaint");
+         frmfeltComplaint ObjDoc=(frmfeltComplaint) aFrame.ObjApplet;         
+         ObjDoc.Add();
+      } 
+       catch(Exception e) {
+        } 
+    }//GEN-LAST:event_jButton13ActionPerformed
+
+    private void cmdStockLockpieceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdStockLockpieceActionPerformed
+       try {
+         String PieceNo =(String)TableStock.getValueAt(TableStock.getSelectedRow(), 10);
+         String PartyCode = (String)TableStock.getValueAt(TableStock.getSelectedRow(),11);
+         System.out.println("PartyCode : "+PartyCode);
+         System.out.println("PIECE NO : "+PieceNo);
+         AppletFrame aFrame = new AppletFrame("LOCK PIECE");
+         aFrame.startAppletEx("EITLERP.Production.ReportUI.frmLockPiece","Lock Piece");
+         //frmLockPiece ObjDoc1=(frmLockPiece) aFrame.ObjApplet;
+        // ObjDoc1.FindEx((int)EITLERPGLOBAL.gCompanyID,PartyCode,PieceNo);
+       System.out.println("function close");  
+         
+        }
+        catch(Exception e) {
+        }  
+    }//GEN-LAST:event_cmdStockLockpieceActionPerformed
+
+    private void MachinePanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MachinePanelMouseEntered
+        txtpartycode.setEnabled(true);
+        txtpartyname.setEnabled(true);
+        txtlengthfrom.setEnabled(false);
+        txtlengthto.setEnabled(false);   
+        txtwidthfrom.setEnabled(false);
+        txtwidthto.setEnabled(false);   
+        txtgsqfrom.setEnabled(false);
+        txtgsqto.setEnabled(false);
+        txtpieceno.setEnabled(false);
+        txtproductcode.setEnabled(true);
+        txtdatefrom.setEnabled(false);
+        txtdateto.setEnabled(false);
+        txtzone.setEnabled(false);
+        cmbIncharge.setEnabled(false);
+    }//GEN-LAST:event_MachinePanelMouseEntered
+
+    private void cmdShowMachineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowMachineActionPerformed
+        txtMachineTotal.setText("0");
+        GenerateMachine();
+    }//GEN-LAST:event_cmdShowMachineActionPerformed
+
+    private void TableProductionProcessMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableProductionProcessMouseClicked
+
+    }//GEN-LAST:event_TableProductionProcessMouseClicked
+
+    private void HoldPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HoldPanelMouseEntered
+      txtpartycode.setEnabled(true);
+        txtpartyname.setEnabled(true);
+        txtlengthfrom.setEnabled(true);
+        txtlengthto.setEnabled(true);   
+        txtwidthfrom.setEnabled(true);
+        txtwidthto.setEnabled(true);   
+        txtgsqfrom.setEnabled(true);
+        txtgsqto.setEnabled(true);
+        txtpieceno.setEnabled(true);
+        txtproductcode.setEnabled(true);
+        txtdatefrom.setEnabled(true);
+        txtdateto.setEnabled(true);
+        txtzone.setEnabled(true);
+        cmbIncharge.setEnabled(true);
+    }//GEN-LAST:event_HoldPanelMouseEntered
+
+    private void CancelledPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CancelledPanelMouseEntered
+        txtpartycode.setEnabled(true);
+        txtpartyname.setEnabled(true);
+        txtlengthfrom.setEnabled(true);
+        txtlengthto.setEnabled(true);   
+        txtwidthfrom.setEnabled(true);
+        txtwidthto.setEnabled(true);   
+        txtgsqfrom.setEnabled(true);
+        txtgsqto.setEnabled(true);
+        txtpieceno.setEnabled(true);
+        txtproductcode.setEnabled(true);
+        txtdatefrom.setEnabled(true);
+        txtdateto.setEnabled(true);
+        txtzone.setEnabled(true);
+        cmbIncharge.setEnabled(true);        
+    }//GEN-LAST:event_CancelledPanelMouseEntered
+
+    private void PackednotDespatchedPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PackednotDespatchedPanelMouseEntered
+       
+        cmbIncharge.setEnabled(true);
+    }//GEN-LAST:event_PackednotDespatchedPanelMouseEntered
+
+    private void cmdHoldExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdHoldExportToExcelActionPerformed
+try{
+             
+                    exp.fillData(TableHold,new File("/root/Desktop/HoldProcess.xls"));
+                    exp.fillData(TableHold,new File("D://HoldProcess.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/HoldProcess.xls' successfully in Linux PC or 'D://HoldProcess.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmdHoldExportToExcelActionPerformed
+
+    private void cmdCancelledExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelledExportToExcelActionPerformed
+        try{
+             
+                    exp.fillData(TableCancelled,new File("/root/Desktop/CancelledProcess.xls"));
+                     exp.fillData(TableCancelled,new File("D://CancelledProcess.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/CancelledProcess.xls' successfully in Linux PC or 'D://CancelledProcess.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmdCancelledExportToExcelActionPerformed
+
+    private void cmdHoldopendocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdHoldopendocActionPerformed
+     try{
+         String PieceNo =(String)TableHold.getValueAt(TableHold.getSelectedRow(), 7);
+         String PartyCode =(String)TableHold.getValueAt(TableHold.getSelectedRow(),8);
+         System.out.println(PartyCode);
+         System.out.println(PieceNo);
+         AppletFrame aFrame = new AppletFrame("ORDER");
+         aFrame.startAppletEx("EITLERP.Production.ReportUI.frmfeltOrder","Order");
+         frmfeltOrder ObjDoc=(frmfeltOrder) aFrame.ObjApplet;
+         ObjDoc.FindEx((int)EITLERPGLOBAL.gCompanyID,PartyCode,PieceNo);
+      }
+        catch(Exception e) {
+        } 
+    }//GEN-LAST:event_cmdHoldopendocActionPerformed
+
+    private void cmdCancelledopenDocumentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelledopenDocumentActionPerformed
+     try{
+         String PieceNo =(String)TableCancelled.getValueAt(TableCancelled.getSelectedRow(),7);
+         String PartyCode = (String)TableCancelled.getValueAt(TableCancelled.getSelectedRow(),8);
+         System.out.println(PartyCode);
+         System.out.println(PieceNo);
+         AppletFrame aFrame = new AppletFrame("ORDER");
+         aFrame.startAppletEx("EITLERP.Production.ReportUI.frmfeltOrder","Order");
+         frmfeltOrder ObjDoc=(frmfeltOrder) aFrame.ObjApplet;
+         ObjDoc.FindEx((int)EITLERPGLOBAL.gCompanyID,PartyCode,PieceNo);
+      }
+        catch(Exception e) {
+        } 
+    }//GEN-LAST:event_cmdCancelledopenDocumentActionPerformed
+
+    private void cmdShowCancelledActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowCancelledActionPerformed
+        txtCancelledtotal.setText("0");
+        txtCancelledkgtotal.setText("0.00");
+        txtCancelledinvtotal.setText("0.00");
+        GenerateCancelled();
+    }//GEN-LAST:event_cmdShowCancelledActionPerformed
+
+    private void cmdShowHoldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowHoldActionPerformed
+       txtHoldtotal.setText("0");
+       txtHoldkgtotal.setText("0.00");
+       txtHoldinvtotal.setText("0.00");
+       GenerateHold();        
+    }//GEN-LAST:event_cmdShowHoldActionPerformed
+
+    private void cmdcontactsExporttoExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdcontactsExporttoExcelActionPerformed
+         try{
+                    exp.fillData(TableContacts,new File("D://Contacts.xls"));      
+                    exp.fillData(TableContacts,new File("/root/Desktop/Contacts.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/Contacts.xls' successfully in Linux PC or 'D://Contacts.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmdcontactsExporttoExcelActionPerformed
+
+    private void cmdmisagingaExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdmisagingaExportToExcelActionPerformed
+         try{
+                    exp.fillData(TableMISAgeing1,new File("D://MisAgeingA.xls"));      
+                    exp.fillData(TableMISAgeing1,new File("/root/Desktop/MisAgeingA.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/MisAgeingA.xls' successfully in Linux PC or 'D://MisAgeingA.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+            
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmdmisagingaExportToExcelActionPerformed
+
+    private void cmdMISAgeingExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdMISAgeingExportToExcelActionPerformed
+        try{
+                    exp.fillData(TableMISAgeing,new File("D://MisAgeing.xls"));      
+                    exp.fillData(TableMISAgeing,new File("/root/Desktop/MisAgeing.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                           "'/root/Desktop/MisAgeing.xls' successfully in Linux PC or 'D://MisAgeing.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmdMISAgeingExportToExcelActionPerformed
+
+    private void cmdAgeingExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAgeingExportToExcelActionPerformed
+        try{
+                     exp.fillData(TableAgeing,new File("D://Ageing.xls"));      
+                     exp.fillData(TableAgeing,new File("/root/Desktop/Ageing.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                   "'/root/Desktop/Ageing.xls' successfully in Linux PC or 'D://Ageing.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+            
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmdAgeingExportToExcelActionPerformed
+
+    private void cmdSalestargetExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdSalestargetExportToExcelActionPerformed
+         try{
+                    exp.fillData(TableTarget,new File("D://salestarget.xls"));      
+                    exp.fillData(TableTarget,new File("/root/Desktop/salestarget.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/salestarget.xls' successfully in Linux PC or 'D://salestarget.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmdSalestargetExportToExcelActionPerformed
+
+    private void cmdDiscountExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdDiscountExportToExcelActionPerformed
+        try{
+                    exp.fillData(TableDiscount,new File("D://Discount.xls"));      
+                    exp.fillData(TableDiscount,new File("/root/Desktop/Discount.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/Discount.xls' successfully in Linux PC or 'D://Discount.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmdDiscountExportToExcelActionPerformed
+
+    private void cmdsalesmonthExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdsalesmonthExportToExcelActionPerformed
+        try{
+                    exp.fillData(TableSalesM,new File("D://Salesmonthly.xls"));      
+                    exp.fillData(TableSalesM,new File("/root/Desktop/Salesmonthly.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/Salesmonthly.xls' successfully in Linux PC or 'D://Salesmonthly.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmdsalesmonthExportToExcelActionPerformed
+
+    private void cmdsalesyrExporttoExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdsalesyrExporttoExcelActionPerformed
+       try{
+                    exp.fillData(TableSalesY,new File("D://Salesyearly.xls"));      
+                    exp.fillData(TableSalesY,new File("/root/Desktop/Salesyearly.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/Salesyearly.xls' successfully in Linux PC or 'D://Salesyearly.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+              
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmdsalesyrExporttoExcelActionPerformed
+
+    private void cmddivertedExportToExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmddivertedExportToExcelActionPerformed
+         try{
+                    exp.fillData(TableDiverted,new File("D://Diverted.xls"));      
+                    exp.fillData(TableDiverted,new File("/root/Desktop/Diverted.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/Diverted.xls' successfully in Linux PC or 'D://Diverted.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmddivertedExportToExcelActionPerformed
+
+    private void cmddespatchedExporttoExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmddespatchedExporttoExcelActionPerformed
+          try{
+                    exp.fillData(TableDespatched,new File("D://Despatched.xls"));      
+                    exp.fillData(TableDespatched,new File("/root/Desktop/Despatched.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/Despatched.xls' successfully in Linux PC or 'D://Despatched.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmddespatchedExporttoExcelActionPerformed
+
+    private void cmdPackntDespExporttoExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdPackntDespExporttoExcelActionPerformed
+       try{
+                    exp.fillData(TablePackedNotDespatched,new File("D://PackedntDespatched.xls"));      
+                    exp.fillData(TablePackedNotDespatched,new File("/root/Desktop/PackedntDespatched.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/PackedntDespatched.xls' successfully in Linux PC or 'D://PackedntDespatched.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmdPackntDespExporttoExcelActionPerformed
+
+    private void cmdStockExporttoExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdStockExporttoExcelActionPerformed
+    try{
+                    exp.fillData(TableStock,new File("/root/Desktop/StockAvailable.xls"));      
+                    exp.fillData(TableStock,new File("D://StockAvailable.xls"));      
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/StockAvailable.xls' successfully in Linux PC or 'D://StockAvailable.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_cmdStockExporttoExcelActionPerformed
+
+    private void cmdProductionProcessExporttoExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdProductionProcessExporttoExcelActionPerformed
+        try{
+             
+                    exp.fillData(TableProductionProcess,new File("/root/Desktop/ProductionProcess.xls"));
+                    exp.fillData(TableProductionProcess,new File("D://ProductionProcess.xls"));
+                    JOptionPane.showMessageDialog(null, "Data saved at " +
+                            "'/root/Desktop/ProductionProcess.xls' successfully in Linux PC or 'D://ProductionProcess.xls' successfully in Windows PC    ", "Message",
+                            JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }     
+    }//GEN-LAST:event_cmdProductionProcessExporttoExcelActionPerformed
+
+    private void ContactsPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ContactsPanelMouseEntered
+        txtpartycode.setEnabled(true);
+        txtpartyname.setEnabled(true);
+        txtlengthfrom.setEnabled(false);
+        txtlengthto.setEnabled(false);   
+        txtwidthfrom.setEnabled(false);
+        txtwidthto.setEnabled(false);   
+        txtgsqfrom.setEnabled(false);
+        txtgsqto.setEnabled(false);
+        txtpieceno.setEnabled(false);
+        txtproductcode.setEnabled(false);
+        txtdatefrom.setEnabled(false);
+        txtdateto.setEnabled(false);
+        txtzone.setEnabled(false);
+        cmbIncharge.setEnabled(true);
+    }//GEN-LAST:event_ContactsPanelMouseEntered
+
+    private void cmdShowContactsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowContactsActionPerformed
+       GenerateContacts();
+    }//GEN-LAST:event_cmdShowContactsActionPerformed
+
+    private void cmdShowPacknotDespActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowPacknotDespActionPerformed
+        txtpackednotdespatchedtotal.setText("0");
+        txtpackednotdespatchedkgtotal.setText("0.00");
+        txtpackednotdespatchedamttotal.setText("0.00");        
+        GeneratePackedNotDespatchedDetail();
+    }//GEN-LAST:event_cmdShowPacknotDespActionPerformed
+
+    private void txtpiecenoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtpiecenoFocusLost
+        
+    }//GEN-LAST:event_txtpiecenoFocusLost
+
+    private void AgeingPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AgeingPanelMouseEntered
+        txtpartycode.setEnabled(false);
+        txtpartyname.setEnabled(false);
+        txtlengthfrom.setEnabled(false);
+        txtlengthto.setEnabled(false);   
+        txtwidthfrom.setEnabled(false);
+        txtwidthto.setEnabled(false);   
+        txtgsqfrom.setEnabled(false);
+        txtgsqto.setEnabled(false); 
+        txtpieceno.setEnabled(false);
+        txtproductcode.setEnabled(false);
+        txtdatefrom.setEnabled(false);
+        txtdateto.setEnabled(false);
+        txtzone.setEnabled(false);
+        cmbIncharge.setEnabled(false);
+    }//GEN-LAST:event_AgeingPanelMouseEntered
+
+    private void MisageingPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MisageingPanelMouseEntered
+        txtpartycode.setEnabled(false);
+        txtpartyname.setEnabled(false);
+        txtlengthfrom.setEnabled(false);
+        txtlengthto.setEnabled(false);   
+        txtwidthfrom.setEnabled(false);
+        txtwidthto.setEnabled(false);   
+        txtgsqfrom.setEnabled(false);
+        txtgsqto.setEnabled(false); 
+        txtpieceno.setEnabled(false);
+        txtproductcode.setEnabled(false);
+        txtdatefrom.setEnabled(false);
+        txtdateto.setEnabled(false);
+        txtzone.setEnabled(false);
+        cmbIncharge.setEnabled(false);
+    }//GEN-LAST:event_MisageingPanelMouseEntered
+
+    private void cmdShowMISAgeingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowMISAgeingActionPerformed
+        GenerateMISAgeingDetail();        
+        GenerateMISAgeingDetail1();
+    }//GEN-LAST:event_cmdShowMISAgeingActionPerformed
+
+    private void cmdShowAgeingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowAgeingActionPerformed
+        txtageingtotal.setText("0");
+        GenerateAgeingDetail();
+    }//GEN-LAST:event_cmdShowAgeingActionPerformed
+
+    private void cmdClearAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdClearAllActionPerformed
+        txtpartyname.setText("");
+        txtpartycode.setText("");
+        txtlengthfrom.setText("");
+        txtlengthto.setText("");   
+        txtwidthfrom.setText("");
+        txtwidthto.setText("");   
+        txtgsqfrom.setText("");
+        txtgsqto.setText("");
+        txtpieceno.setText("");
+        txtproductcode.setText("");
+        txtdatefrom.setText("");
+        txtdateto.setText("");
+        txtzone.setText("");  
+    }//GEN-LAST:event_cmdClearAllActionPerformed
+
+    private void txtproductcodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtproductcodeKeyPressed
+        
+if(evt.getKeyCode()==112) //F1 Key pressed
+        {
+            LOV aList=new LOV();
+            aList.SQL = "SELECT SUBSTRING(ITEM_CODE,1,6) AS ITEM_CODE,ITEM_DESC,GRUP FROM PRODUCTION.FELT_RATE_MASTER ORDER BY ITEM_CODE ";
+            aList.ReturnCol=1;
+            aList.ShowReturnCol=true;
+            aList.DefaultSearchOn=2;
+            if(aList.ShowLOV()) {
+                txtproductcode.setText(aList.ReturnVal);       
+        }
+        }
+    }//GEN-LAST:event_txtproductcodeKeyPressed
+
+    private void txtzoneKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtzoneKeyPressed
+         if(evt.getKeyCode()==112) //F1 Key pressed
+        {
+            LOV aList=new LOV();
+            aList.SQL = "SELECT DISTINCT ZONE FROM DINESHMILLS.D_SAL_PARTY_MASTER UNION ALL SELECT ' ZERO' ";
+            aList.ReturnCol=1;
+            aList.ShowReturnCol=true;
+            aList.DefaultSearchOn=2;
+            if(aList.ShowLOV()) {
+                txtzone.setText(aList.ReturnVal);       
+        }
+        }
+    }//GEN-LAST:event_txtzoneKeyPressed
+
+    private void TargetdataPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TargetdataPanelMouseEntered
+        txtpartycode.setEnabled(true);
+        txtpartyname.setEnabled(true);
+        txtlengthfrom.setEnabled(false);
+        txtlengthto.setEnabled(false);   
+        txtwidthfrom.setEnabled(false);
+        txtwidthto.setEnabled(false);   
+        txtgsqfrom.setEnabled(false);
+        txtgsqto.setEnabled(false);
+        txtpieceno.setEnabled(false);
+        txtproductcode.setEnabled(true);
+        txtdatefrom.setEnabled(false);
+        txtdateto.setEnabled(false);
+        txtzone.setEnabled(false);
+        cmbIncharge.setEnabled(true);
+    }//GEN-LAST:event_TargetdataPanelMouseEntered
+
+    private void SalesPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SalesPanelMouseEntered
+        txtpartycode.setEnabled(true);
+        txtpartyname.setEnabled(true);
+        txtlengthfrom.setEnabled(false);
+        txtlengthto.setEnabled(false);   
+        txtwidthfrom.setEnabled(false);
+        txtwidthto.setEnabled(false);   
+        txtgsqfrom.setEnabled(false);
+        txtgsqto.setEnabled(false);
+        txtpieceno.setEnabled(false);
+        txtproductcode.setEnabled(true);
+        txtdatefrom.setEnabled(false);
+        txtdateto.setEnabled(false);
+        txtzone.setEnabled(false);
+        cmbIncharge.setEnabled(true);
+    }//GEN-LAST:event_SalesPanelMouseEntered
+
+    private void DespatchPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DespatchPanelMouseEntered
+        txtpartycode.setEnabled(true);
+        txtpartyname.setEnabled(true);
+        txtlengthfrom.setEnabled(true);
+        txtlengthto.setEnabled(true);   
+        txtwidthfrom.setEnabled(true);
+        txtwidthto.setEnabled(true);   
+        txtgsqfrom.setEnabled(true);
+        txtgsqto.setEnabled(true);
+        txtpieceno.setEnabled(true);
+        txtdatefrom.setEnabled(true);
+        txtdateto.setEnabled(true);
+        txtproductcode.setEnabled(true);
+        txtzone.setEnabled(true);
+        cmbIncharge.setEnabled(true);
+    }//GEN-LAST:event_DespatchPanelMouseEntered
+
+    private void DivertedPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DivertedPanelMouseEntered
+        txtpartycode.setEnabled(true);
+        txtpartyname.setEnabled(true);
+        txtlengthfrom.setEnabled(true);
+        txtlengthto.setEnabled(true);   
+        txtwidthfrom.setEnabled(true);
+        txtwidthto.setEnabled(true);   
+        txtgsqfrom.setEnabled(true);
+        txtgsqto.setEnabled(true);
+        txtpieceno.setEnabled(true);
+        txtproductcode.setEnabled(true);
+        txtdatefrom.setEnabled(true);
+        txtdateto.setEnabled(true);
+        txtzone.setEnabled(true);
+        cmbIncharge.setEnabled(true);
+    }//GEN-LAST:event_DivertedPanelMouseEntered
+
+    private void StockAvailablePanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_StockAvailablePanelMouseEntered
+       txtpartycode.setEnabled(true);
+        txtpartyname.setEnabled(true);
+        txtlengthfrom.setEnabled(true);
+        txtlengthto.setEnabled(true);   
+        txtwidthfrom.setEnabled(true);
+        txtwidthto.setEnabled(true);   
+        txtgsqfrom.setEnabled(true);
+        txtgsqto.setEnabled(true); 
+        txtpieceno.setEnabled(true);
+        txtproductcode.setEnabled(true);
+        txtdatefrom.setEnabled(true);
+        txtdateto.setEnabled(true);
+        txtzone.setEnabled(true);
+        cmbIncharge.setEnabled(true);
+    }//GEN-LAST:event_StockAvailablePanelMouseEntered
+
+    private void ProductionProcessPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ProductionProcessPanelMouseEntered
+        txtpartycode.setEnabled(true);
+        txtpartyname.setEnabled(true);
+        txtlengthfrom.setEnabled(true);
+        txtlengthto.setEnabled(true);   
+        txtwidthfrom.setEnabled(true);
+        txtwidthto.setEnabled(true);   
+        txtgsqfrom.setEnabled(true);
+        txtgsqto.setEnabled(true);
+        txtpieceno.setEnabled(true);
+        txtproductcode.setEnabled(true);
+        txtdatefrom.setEnabled(true);
+        txtdateto.setEnabled(true);
+        txtzone.setEnabled(true);
+        cmbIncharge.setEnabled(true);
+    }//GEN-LAST:event_ProductionProcessPanelMouseEntered
+
+    private void DiscountPanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DiscountPanelMouseEntered
+        txtpartycode.setEnabled(true);
+        txtpartyname.setEnabled(true);
+        txtlengthfrom.setEnabled(false);
+        txtlengthto.setEnabled(false);   
+        txtwidthfrom.setEnabled(false);
+        txtwidthto.setEnabled(false);   
+        txtgsqfrom.setEnabled(false);
+        txtgsqto.setEnabled(false);
+        txtpieceno.setEnabled(true);
+        txtproductcode.setEnabled(true);
+        txtdatefrom.setEnabled(true);
+        txtdateto.setEnabled(true);
+        txtzone.setEnabled(true);
+        cmbIncharge.setEnabled(true);
+    }//GEN-LAST:event_DiscountPanelMouseEntered
+ 
+    private void txtpartycodeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtpartycodeFocusLost
+         try{
+            if(!txtpartycode.getText().equals("")){
+                String strSQL="";
+                ResultSet rsTmp;
+                strSQL= "";
+                strSQL+="SELECT PARTY_NAME,ADDRESS1,ADDRESS2,DISPATCH_STATION,INSURANCE_CODE FROM DINESHMILLS.D_SAL_PARTY_MASTER WHERE MAIN_ACCOUNT_CODE='210010' AND PARTY_CODE = "+txtpartycode.getText().trim()+"";
+                rsTmp=data.getResult(strSQL);
+                rsTmp.first();
+                txtpartyname.setText(rsTmp.getString("PARTY_NAME"));
+            }            
+        }
+        catch(Exception e){
+        }
+    }//GEN-LAST:event_txtpartycodeFocusLost
+
+    private void cmdshowDivertedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdshowDivertedActionPerformed
+        txtdivertedtotal.setText("0");
+        txtdivertedkgtotal.setText("0.00");
+        txtdivertedamttotal.setText("0.00");        
+        GenerateDivertedDetail();
+    }//GEN-LAST:event_cmdshowDivertedActionPerformed
+
+    private void cmdshowSalesYActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdshowSalesYActionPerformed
+       txtsalestotal.setText("0");
+       txtsalestotal1.setText("0");        
+        GenerateSalesDetailY();
+        GenerateSalesDetailM();
+    }//GEN-LAST:event_cmdshowSalesYActionPerformed
+
+    private void TableDiscountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableDiscountMouseClicked
+
+    }//GEN-LAST:event_TableDiscountMouseClicked
+
+    private void TableTargetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableTargetMouseClicked
+
+    }//GEN-LAST:event_TableTargetMouseClicked
+
+    private void cmdShowTargetDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowTargetDataActionPerformed
+        txttargettotal.setText("0");
+    //    txttargettotal1.setText("0");
+        GenerateTargetDetail();
+      //  GenerateTargetDetailA();
+    }//GEN-LAST:event_cmdShowTargetDataActionPerformed
+
+    private void TableDespatchedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableDespatchedMouseClicked
+
+    }//GEN-LAST:event_TableDespatchedMouseClicked
+
+    private void cmdshowDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdshowDiscountActionPerformed
+        txtdiscounttotal.setText("0");
+        //show Discount Detail
+        GenerateDiscountDetail();
+    }//GEN-LAST:event_cmdshowDiscountActionPerformed
+
+    private void TableStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableStockMouseClicked
+
+    }//GEN-LAST:event_TableStockMouseClicked
+
+    private void cmdshowDespatchedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdshowDespatchedActionPerformed
+        txtdespatchedtotal.setText("0");
+        txtdespatchedkgtotal.setText("0.00");
+        txtdespatchedamttotal.setText("0.00");
+        //Generate despatch table from invoice table
+        GenerateDespatched();
+    }//GEN-LAST:event_cmdshowDespatchedActionPerformed
+
+    private void txtpartynameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtpartynameActionPerformed
+        
+    }//GEN-LAST:event_txtpartynameActionPerformed
+
+    private void txtpartycodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpartycodeKeyPressed
+      if(evt.getKeyCode()==112) //F1 Key pressed
+        {
+            LOV aList=new LOV();
+            
+            aList.SQL="SELECT PARTY_CODE,PARTY_NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER WHERE MAIN_ACCOUNT_CODE='210010' ORDER BY PARTY_NAME";
+            aList.ReturnCol=1;
+            aList.ShowReturnCol=true;
+            aList.DefaultSearchOn=2;
+            if(aList.ShowLOV()) {
+                txtpartycode.setText(aList.ReturnVal);
+                txtpartyname.setText(clsSales_Party.getPartyName(EITLERPGLOBAL.gCompanyID,aList.ReturnVal));
+        }
+        }
+    }//GEN-LAST:event_txtpartycodeKeyPressed
+                                
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        
+    }//GEN-LAST:event_formMouseClicked
+    
+    private void cmdShowStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowStockActionPerformed
+        //STOCK AVAILABLE SHOW LIST
+        txtrecord.setText("0");
+        txtstockkgtotal.setText("0.00");
+        txtstockamttotal.setText("0.00");        
+        GenerateStockProcess();
+        CheckPIPiece();
+    }//GEN-LAST:event_cmdShowStockActionPerformed
+    
+    private void cmdOpenProductionProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOpenProductionProcessActionPerformed
+     try{
+         String PieceNo =(String)TableProductionProcess.getValueAt(TableProductionProcess.getSelectedRow(), 9);
+         String PartyCode = (String)TableProductionProcess.getValueAt(TableProductionProcess.getSelectedRow(),10);
+         System.out.println(PartyCode);
+         System.out.println(PieceNo);
+         AppletFrame aFrame = new AppletFrame("ORDER");
+         aFrame.startAppletEx("EITLERP.Production.ReportUI.frmfeltOrder","Order");
+         frmfeltOrder ObjDoc=(frmfeltOrder) aFrame.ObjApplet;
+         ObjDoc.FindEx((int)EITLERPGLOBAL.gCompanyID,PartyCode,PieceNo);
+      }
+        catch(Exception e) {
+        } 
+    }//GEN-LAST:event_cmdOpenProductionProcessActionPerformed
+    
+    private void cmdShowProductionProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowProductionProcessActionPerformed
+        txtrecordtotal.setText("0");
+        txtkgtotal.setText("0.00");
+        txtinvtotal.setText("0.00");
+        //PRODUCTION PROCESS SHOW LIST
+        GenerateProductionProcess();         
+        //doProcessing(); 
+    }//GEN-LAST:event_cmdShowProductionProcessActionPerformed
+    
+    
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel AgeingPanel;
+    private javax.swing.JPanel AgreedDatePanel;
+    private javax.swing.JPanel CancelledPanel;
+    private javax.swing.JButton CmdmachineExportExcel;
+    private javax.swing.JPanel ContactsPanel;
+    private javax.swing.JPanel DespatchPanel;
+    private javax.swing.JPanel DiscountPanel;
+    private javax.swing.JPanel DivertedPanel;
+    private javax.swing.JPanel HoldPanel;
+    private javax.swing.JPanel MachinePanel;
+    private javax.swing.JPanel MisageingPanel;
+    private javax.swing.JPanel PackednotDespatchedPanel;
+    private javax.swing.JPanel ProductionProcessPanel;
+    private javax.swing.JPanel SalesPanel;
+    private javax.swing.JPanel StockAvailablePanel;
+    private javax.swing.JTable TableAgeing;
+    private javax.swing.JTable TableAgreedDate;
+    private javax.swing.JTable TableCancelled;
+    private javax.swing.JTable TableComplaint;
+    private javax.swing.JTable TableContacts;
+    private javax.swing.JTable TableDespatched;
+    private javax.swing.JTable TableDiscount;
+    private javax.swing.JTable TableDiverted;
+    private javax.swing.JTable TableHold;
+    private javax.swing.JTable TableHold1;
+    private javax.swing.JTable TableMISAgeing;
+    private javax.swing.JTable TableMISAgeing1;
+    private javax.swing.JTable TableMachine;
+    private javax.swing.JTable TablePackedNotDespatched;
+    private javax.swing.JTable TableProductionProcess;
+    private javax.swing.JTable TableSalesM;
+    private javax.swing.JTable TableSalesY;
+    private javax.swing.JTable TableStock;
+    private javax.swing.JTable TableTarget;
+    private javax.swing.JPanel TargetdataPanel;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox cmbAgreedDate;
+    private javax.swing.JButton cmbAgreedExportExcel;
+    private javax.swing.JComboBox cmbAgreedOrder;
+    private javax.swing.JComboBox cmbCancelled;
+    private javax.swing.JComboBox cmbComplaint;
+    private javax.swing.JComboBox cmbDespatch;
+    private javax.swing.JComboBox cmbDiscount;
+    private javax.swing.JComboBox cmbHold;
+    private javax.swing.JComboBox cmbIncharge;
+    private javax.swing.JComboBox cmbMachine;
+    private javax.swing.JComboBox cmbOrder;
+    private javax.swing.JComboBox cmbStock;
+    private javax.swing.JComboBox cmbTarget;
+    private javax.swing.JButton cmdAgeingExportToExcel;
+    private javax.swing.JButton cmdAgreedDate;
+    private javax.swing.JButton cmdCancelledExportToExcel;
+    private javax.swing.JButton cmdCancelledopenDocument;
+    private javax.swing.JButton cmdClearAll;
+    private javax.swing.JButton cmdComplaintExportToExcel;
+    private javax.swing.JButton cmdComplaintOpenDoc;
+    private javax.swing.JButton cmdDiscountExportToExcel;
+    private javax.swing.JButton cmdHoldExportToExcel;
+    private javax.swing.JButton cmdHoldopendoc;
+    private javax.swing.JButton cmdMISAgeingExportToExcel;
+    private javax.swing.JButton cmdOpenProductionProcess;
+    private javax.swing.JButton cmdPackntDespExporttoExcel;
+    private javax.swing.JButton cmdProductionProcessExporttoExcel;
+    private javax.swing.JButton cmdSalestargetExportToExcel;
+    private javax.swing.JButton cmdShowAgeing;
+    private javax.swing.JButton cmdShowCancelled;
+    private javax.swing.JButton cmdShowComplaint;
+    private javax.swing.JButton cmdShowContacts;
+    private javax.swing.JButton cmdShowHold;
+    private javax.swing.JButton cmdShowHold1;
+    private javax.swing.JButton cmdShowMISAgeing;
+    private javax.swing.JButton cmdShowMachine;
+    private javax.swing.JButton cmdShowPacknotDesp;
+    private javax.swing.JButton cmdShowProductionProcess;
+    private javax.swing.JButton cmdShowStock;
+    private javax.swing.JButton cmdShowTargetData;
+    private javax.swing.JButton cmdStockExporttoExcel;
+    private javax.swing.JButton cmdStockLockpiece;
+    private javax.swing.JButton cmdcontactsExporttoExcel;
+    private javax.swing.JButton cmddespatchedExporttoExcel;
+    private javax.swing.JButton cmddivertedExportToExcel;
+    private javax.swing.JButton cmdmisagingaExportToExcel;
+    private javax.swing.JButton cmdsalesmonthExportToExcel;
+    private javax.swing.JButton cmdsalesyrExporttoExcel;
+    private javax.swing.JButton cmdshowDespatched;
+    private javax.swing.JButton cmdshowDiscount;
+    private javax.swing.JButton cmdshowDiverted;
+    private javax.swing.JButton cmdshowSalesY;
+    private javax.swing.JButton jButton13;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
+    private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel56;
+    private javax.swing.JLabel jLabel57;
+    private javax.swing.JLabel jLabel58;
+    private javax.swing.JLabel jLabel59;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel60;
+    private javax.swing.JLabel jLabel61;
+    private javax.swing.JLabel jLabel62;
+    private javax.swing.JLabel jLabel63;
+    private javax.swing.JLabel jLabel64;
+    private javax.swing.JLabel jLabel65;
+    private javax.swing.JLabel jLabel66;
+    private javax.swing.JLabel jLabel67;
+    private javax.swing.JLabel jLabel68;
+    private javax.swing.JLabel jLabel69;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel70;
+    private javax.swing.JLabel jLabel71;
+    private javax.swing.JLabel jLabel72;
+    private javax.swing.JLabel jLabel73;
+    private javax.swing.JLabel jLabel74;
+    private javax.swing.JLabel jLabel75;
+    private javax.swing.JLabel jLabel76;
+    private javax.swing.JLabel jLabel77;
+    private javax.swing.JLabel jLabel78;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
+    private javax.swing.JScrollPane jScrollPane12;
+    private javax.swing.JScrollPane jScrollPane13;
+    private javax.swing.JScrollPane jScrollPane14;
+    private javax.swing.JScrollPane jScrollPane15;
+    private javax.swing.JScrollPane jScrollPane16;
+    private javax.swing.JScrollPane jScrollPane17;
+    private javax.swing.JScrollPane jScrollPane18;
+    private javax.swing.JScrollPane jScrollPane19;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane20;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel lblStatus;
+    private javax.swing.JTextField txtAgreedNature;
+    private javax.swing.JTextField txtAgreedrecordtotal;
+    private javax.swing.JTextField txtCancelledinvtotal;
+    private javax.swing.JTextField txtCancelledkgtotal;
+    private javax.swing.JTextField txtCancelledtotal;
+    private javax.swing.JTextField txtHoldinvtotal;
+    private javax.swing.JTextField txtHoldinvtotal1;
+    private javax.swing.JTextField txtHoldkgtotal;
+    private javax.swing.JTextField txtHoldkgtotal1;
+    private javax.swing.JTextField txtHoldtotal;
+    private javax.swing.JTextField txtHoldtotal1;
+    private javax.swing.JTextField txtMachineTotal;
+    private javax.swing.JTextField txtRIA;
+    private javax.swing.JTextField txtageingtotal;
+    private javax.swing.JTextField txtamttotal;
+    private javax.swing.JTextField txtcontactstotal;
+    private javax.swing.JTextField txtcounttotal;
+    private javax.swing.JTextField txtdatefrom;
+    private javax.swing.JTextField txtdateto;
+    private javax.swing.JTextField txtdespatchedamttotal;
+    private javax.swing.JTextField txtdespatchedkgtotal;
+    private javax.swing.JTextField txtdespatchedtotal;
+    private javax.swing.JTextField txtdiscountperfrom;
+    private javax.swing.JTextField txtdiscountperto;
+    private javax.swing.JTextField txtdiscounttotal;
+    private javax.swing.JTextField txtdivertedamttotal;
+    private javax.swing.JTextField txtdivertedkgtotal;
+    private javax.swing.JTextField txtdivertedtotal;
+    private javax.swing.JTextField txtgsqfrom;
+    private javax.swing.JTextField txtgsqto;
+    private javax.swing.JTextField txtinvtotal;
+    private javax.swing.JTextField txtkgtotal;
+    private javax.swing.JTextField txtlengthfrom;
+    private javax.swing.JTextField txtlengthto;
+    private javax.swing.JTextField txtless180amttotal;
+    private javax.swing.JTextField txtless180counttotal;
+    private javax.swing.JTextField txtless180qtytotal;
+    private javax.swing.JTextField txtless365amttotal;
+    private javax.swing.JTextField txtless365counttotal;
+    private javax.swing.JTextField txtless365qtytotal;
+    private javax.swing.JTextField txtless45amttotal;
+    private javax.swing.JTextField txtless45counttotal;
+    private javax.swing.JTextField txtless45qtytotal;
+    private javax.swing.JTextField txtless730amttotal;
+    private javax.swing.JTextField txtless730counttotal;
+    private javax.swing.JTextField txtless730qtytotal;
+    private javax.swing.JTextField txtless90amttotal;
+    private javax.swing.JTextField txtless90counttotal;
+    private javax.swing.JTextField txtless90qtytotal;
+    private javax.swing.JTextField txtlessamttotal;
+    private javax.swing.JTextField txtlesscounttotal;
+    private javax.swing.JTextField txtlessqtytotal;
+    private javax.swing.JTextField txtmisageingtotal;
+    private javax.swing.JTextField txtmisageingtotal1;
+    private javax.swing.JTextField txtmore730amttotal;
+    private javax.swing.JTextField txtmore730counttotal;
+    private javax.swing.JTextField txtmore730qtytotal;
+    private javax.swing.JTextField txtpackednotdespatchedamttotal;
+    private javax.swing.JTextField txtpackednotdespatchedkgtotal;
+    private javax.swing.JTextField txtpackednotdespatchedtotal;
+    private javax.swing.JTextField txtpartycode;
+    private javax.swing.JTextField txtpartyname;
+    private javax.swing.JTextField txtpieceno;
+    private javax.swing.JTextField txtproductcode;
+    private javax.swing.JTextField txtqtytotal;
+    private javax.swing.JTextField txtrecord;
+    private javax.swing.JTextField txtrecordtotal;
+    private javax.swing.JTextField txtsalestotal;
+    private javax.swing.JTextField txtsalestotal1;
+    private javax.swing.JTextField txtstockamttotal;
+    private javax.swing.JTextField txtstockkgtotal;
+    private javax.swing.JTextField txttargettotal;
+    private javax.swing.JTextField txtwidthfrom;
+    private javax.swing.JTextField txtwidthto;
+    private javax.swing.JTextField txtzone;
+    // End of variables declaration//GEN-END:variables
+    
+    private void GenerateInchargeCombo()
+    {
+        cmbInchargeModel=new EITLComboModel();
+        cmbIncharge.removeAllItems();
+        cmbIncharge.setModel(cmbInchargeModel);
+        
+        HashMap List=clsPriority.getInchargeList(EITLERPGLOBAL.gCompanyID,EITLERPGLOBAL.gNewUserID);
+        
+        for(int i=1;i<=List.size();i++) {
+            clsPriority ObjDept=(clsPriority) List.get(Integer.toString(i));
+            ComboData aData=new ComboData();
+            aData.Code=(int) ObjDept.getAttribute("INCHARGE_CD").getVal();
+            aData.Text=(String)ObjDept.getAttribute("INCHARGE_NAME").getObj();
+            cmbInchargeModel.addElement(aData);
+        }
+        
+    }
+    
+    
+    
+    private void GenerateCombo() {
+      cmbBuyerModel=new EITLComboModel();
+        //cmbBuyer.removeAllItems();
+        //cmbBuyer.setModel(cmbBuyerModel);
+        
+        HashMap List=new HashMap();
+        List=(new clsUser()).getList(" WHERE COMPANY_ID="+EITLERPGLOBAL.gCompanyID);
+        
+        for(int i=1;i<=List.size();i++) {
+            clsUser ObjUser=(clsUser)List.get(Integer.toString(i));
+         
+            ComboData aData=new ComboData();
+            aData.Code=(int)ObjUser.getAttribute("USER_ID").getVal();
+            aData.Text=(String)ObjUser.getAttribute("USER_NAME").getObj();
+            cmbBuyerModel.addElement(aData);
+        }
+        
+        //PRODUCTION PROCESS COMBO
+        cmbOrderModel=new EITLComboModel();
+        cmbOrder.removeAllItems();
+        cmbOrder.setModel(cmbOrderModel);
+        ComboData aData=new ComboData();
+ 
+        aData.Code=1;
+        aData.Text = "ORDER DATE";
+        cmbOrderModel.addElement(aData);
+       
+        aData=new ComboData();
+        aData.Code=2;
+        aData.Text = "AGREED WEAVING DATE";
+        cmbOrderModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=3;
+        aData.Text = "PIECE_NO";
+        cmbOrderModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=4;
+        aData.Text ="PRODUCT CODE";
+        cmbOrderModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=5;
+        aData.Text ="PRIORITY";
+        cmbOrderModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=6;
+        aData.Text ="PARTY CODE";
+        cmbOrderModel.addElement(aData);
+ 
+        aData = new ComboData();
+        aData.Code=7;
+        aData.Text ="PARTY NAME";
+        cmbOrderModel.addElement(aData);
+        
+
+        aData = new ComboData();
+        aData.Code=8;
+        aData.Text="COLOR_CARD";
+        cmbOrderModel.addElement(aData);
+        
+         aData = new ComboData();
+        aData.Code=9;
+        aData.Text ="REQUESTED DATE";
+        cmbOrderModel.addElement(aData);
+ 
+        aData = new ComboData();
+        aData.Code=10;
+        aData.Text="REV_REQ_DATE";
+        cmbOrderModel.addElement(aData);     
+        
+        aData = new ComboData();
+        aData.Code=11;
+        aData.Text ="COMMITED DATE";
+        cmbOrderModel.addElement(aData);
+        
+ 
+        
+        aData = new ComboData();
+        aData.Code=12;
+        aData.Text="REV_COMM_DATE";
+        cmbOrderModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=13;
+        aData.Text="WEAVING DATE";
+        cmbOrderModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=14;
+        aData.Text="MENDING DATE";
+        cmbOrderModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=15;
+        aData.Text="NEEDLING DATE";
+        cmbOrderModel.addElement(aData);
+        
+       
+        aData = new ComboData();
+        aData.Code=16;
+        aData.Text="WEAVING DELAY";
+        cmbOrderModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=17;
+        aData.Text="LENGTH";
+        cmbOrderModel.addElement(aData);
+
+        aData = new ComboData();
+        aData.Code=18;
+        aData.Text="WIDTH";
+        cmbOrderModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=19;
+        aData.Text="GSM";
+        cmbOrderModel.addElement(aData);
+
+        
+        aData = new ComboData();
+        aData.Code=20;
+        aData.Text="MACHINE_NO";
+        cmbOrderModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=21;
+        aData.Text="POSITION";
+        cmbOrderModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=22;
+        aData.Text="REF. NO.";
+        cmbOrderModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=23;
+        aData.Text="CONF. NO";
+        cmbOrderModel.addElement(aData);
+  
+        aData = new ComboData();
+        aData.Code=24;
+        aData.Text="PRIORITY DATE";
+        cmbOrderModel.addElement(aData);
+        
+        
+        
+        //STOCK COMBO
+        cmbStockModel = new EITLComboModel();
+        cmbStock.removeAllItems();
+        cmbStock.setModel(cmbStockModel);
+        
+        aData = new ComboData();
+        aData.Code=1;
+        aData.Text ="RECIEVED DATE";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=2;
+        aData.Text ="ORDER DATE";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=3;
+        aData.Text ="AGREED WEAVING DATE";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=4;
+        aData.Text ="PIECE NO";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=5;
+        aData.Text ="PARTY CODE";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=6;
+        aData.Text ="PARTY NAME";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=7;
+        aData.Text ="PRODUCT CODE ";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=8;
+        aData.Text ="PRIORITY";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=9;
+        aData.Text ="COLOR CARD";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=10;
+        aData.Text ="REQUESTED DATE";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=11;
+        aData.Text ="REV. REQ. DATE";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=12;
+        aData.Text ="COMMITED DATE";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=13;
+        aData.Text ="REV.COMMITED DATE";
+        cmbStockModel.addElement(aData);
+      
+        aData = new ComboData();
+        aData.Code=14;
+        aData.Text ="WEAVING DATE";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=15;
+        aData.Text ="MENDING DATE";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=16;
+        aData.Text ="NEEDLING DATE";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=17;
+        aData.Text ="WEAVING DELAY";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=18;
+        aData.Text ="LENGTH";
+        cmbStockModel.addElement(aData);
+        
+        
+        aData = new ComboData();
+        aData.Code=19;
+        aData.Text ="WIDTH";
+        cmbStockModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=20;
+        aData.Text ="GSM";
+        cmbStockModel.addElement(aData);
+
+        aData = new ComboData();
+        aData.Code=21;
+        aData.Text ="MACHINE NO.";
+        cmbStockModel.addElement(aData);
+
+        aData = new ComboData();
+        aData.Code=22;
+        aData.Text ="POSITION";
+        cmbStockModel.addElement(aData);
+
+        aData = new ComboData();
+        aData.Code=23;
+        aData.Text ="REF. NO";
+        cmbStockModel.addElement(aData);
+  
+        aData = new ComboData();
+        aData.Code=24;
+        aData.Text ="CONF.NO.";
+        cmbStockModel.addElement(aData);
+
+        aData = new ComboData();
+        aData.Code=25;
+        aData.Text ="PRIORITY_DATE DESC";
+        cmbStockModel.addElement(aData);
+
+
+        
+        
+        //DESPATCH COMBO
+        cmbDespatchModel = new EITLComboModel();
+        cmbDespatch.removeAllItems();
+        cmbDespatch.setModel(cmbDespatchModel);
+        
+        aData=new ComboData();
+        aData.Code=1;
+        aData.Text = "INVOICE DATE";
+        cmbDespatchModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=2;
+        aData.Text = "INVOICE NO";
+        cmbDespatchModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=3;
+        aData.Text = "ORDER DATE";
+        cmbDespatchModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=4;
+        aData.Text = "RECIEVED DATE";
+        cmbDespatchModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=5;
+        aData.Text = "PIECE NO";
+        cmbDespatchModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=6;
+        aData.Text = "PRODUCT CODE";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=7;
+        aData.Text = "PARTY CODE";
+        cmbDespatchModel.addElement(aData);
+  
+        aData=new ComboData();
+        aData.Code=8;
+        aData.Text = "PARTY NAME";
+        cmbDespatchModel.addElement(aData);
+  
+        aData=new ComboData();
+        aData.Code=9;
+        aData.Text = "PRIORITY";
+        cmbDespatchModel.addElement(aData);
+  
+        aData=new ComboData();
+        aData.Code=10;
+        aData.Text = "COLOR CARD";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=11;
+        aData.Text = "AGREED DATE";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=12;
+        aData.Text = "REQUESTED DATE ";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=13;
+        aData.Text = "COMMITED DATE";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=14;
+        aData.Text = "WEAVING DATE";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=15;
+        aData.Text = "MENDING DATE";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=16;
+        aData.Text = "NEEDLING DATE";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=17;
+        aData.Text = "WEAVING DELAY";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=18;
+        aData.Text = "PACK DATE";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=19;
+        aData.Text = "BALE_NO";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=20;
+        aData.Text = "ID_AD DIFF";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=21;
+        aData.Text = "ID RC DIFF";
+        cmbDespatchModel.addElement(aData);
+  
+        aData=new ComboData();
+        aData.Code=22;
+        aData.Text = "ID PD DIFF";
+        cmbDespatchModel.addElement(aData);
+
+
+        aData=new ComboData();
+        aData.Code=23;
+        aData.Text = "LENGTH";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=24;
+        aData.Text = "WIDTH";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=25;
+        aData.Text = "GSM";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=26;
+        aData.Text = "MACHINE NO/ POSITION";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=27;
+        aData.Text = "REF.NO";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=28;
+        aData.Text = "CONF. NO";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=29;
+        aData.Text = "LR DATE";
+        cmbDespatchModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=30;
+        aData.Text = "LR CARRIER";
+        cmbDespatchModel.addElement(aData);
+        
+        
+        
+        
+        //DISCOUNT COMBO
+        cmbDiscountModel = new EITLComboModel();
+        cmbDiscount.removeAllItems();
+        cmbDiscount.setModel(cmbDiscountModel);
+        aData = new ComboData();
+        aData.Code = 1;
+        aData.Text = "Memo Date";
+        cmbDiscountModel.addElement(aData);
+        
+        //SEAM COMBO
+        cmbSeamModel = new EITLComboModel();
+       // cmbSeam.removeAllItems();
+        //cmbSeam.setModel(cmbSeamModel);
+        aData = new ComboData();
+        aData.Code = 1;
+        aData.Text = "Piece No";
+        cmbSeamModel.addElement(aData);
+        
+        //CANCELLED COMBO
+        cmbCancelledModel=new EITLComboModel();
+        cmbCancelled.removeAllItems();
+        cmbCancelled.setModel(cmbOrderModel);
+        
+        aData=new ComboData();
+        aData.Code=1;
+        aData.Text = "Ref No";
+        cmbCancelledModel.addElement(aData);
+       
+        aData=new ComboData();
+        aData.Code=2;
+        aData.Text = "Conf No";
+        cmbCancelledModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=3;
+        aData.Text = "Machine No";
+        cmbCancelledModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=4;
+        aData.Text ="Position";
+        cmbCancelledModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=5;
+        aData.Text ="Order Date";
+        cmbCancelledModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=6;
+        aData.Text ="Piece No";
+        cmbCancelledModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=7;
+        aData.Text="Priority";
+        cmbCancelledModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=8;
+        aData.Text ="Length";
+        cmbCancelledModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=9;
+        aData.Text ="Width";
+        cmbCancelledModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=10;
+        aData.Text="GSM";
+        cmbCancelledModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=11;
+        aData.Text="Product Code";
+        cmbCancelledModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=12;
+        aData.Text="Zone";
+        cmbCancelledModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=13;
+        aData.Text="Weaving Date";
+        cmbCancelledModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=14;
+        aData.Text="Mending Date";
+        cmbCancelledModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=15;
+        aData.Text="Needling Date";
+        cmbCancelledModel.addElement(aData);
+
+        aData = new ComboData();
+        aData.Code=16;
+        aData.Text="Priority Date";
+        cmbCancelledModel.addElement(aData);
+
+        //HOLD COMBO
+        cmbHoldModel=new EITLComboModel();
+        cmbHold.removeAllItems();
+        cmbHold.setModel(cmbHoldModel);
+        
+        aData=new ComboData();
+        aData.Code=1;
+        aData.Text = "Ref No";
+        cmbHoldModel.addElement(aData);
+       
+        aData=new ComboData();
+        aData.Code=2;
+        aData.Text = "Conf No";
+        cmbHoldModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=3;
+        aData.Text = "Machine No";
+        cmbHoldModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=4;
+        aData.Text ="Position";
+        cmbHoldModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=5;
+        aData.Text ="Order Date";
+        cmbHoldModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=6;
+        aData.Text ="Piece No";
+        cmbHoldModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=7;
+        aData.Text="Priority";
+        cmbHoldModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=8;
+        aData.Text ="Length";
+        cmbHoldModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=9;
+        aData.Text ="Width";
+        cmbHoldModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=10;
+        aData.Text="GSM";
+        cmbHoldModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=11;
+        aData.Text="Product Code";
+        cmbHoldModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=12;
+        aData.Text="Zone";
+        cmbHoldModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=13;
+        aData.Text="Weaving Date";
+        cmbHoldModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=14;
+        aData.Text="Mending Date";
+        cmbHoldModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=15;
+        aData.Text="Needling Date";
+        cmbHoldModel.addElement(aData);
+
+        aData = new ComboData();
+        aData.Code=16;
+        aData.Text="Priority Date";
+        cmbHoldModel.addElement(aData);
+        /*
+        //TARGET COMBO
+        cmbTargetModel = new EITLComboModel();
+        cmbTarget.removeAllItems();
+        cmbTarget.setModel(cmbTargetModel);
+        
+        aData = new ComboData();
+        aData.Code=1;
+        aData.Text ="Quarter one";
+        cmbTargetModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=2;
+        aData.Text ="Quarter Two";
+        cmbTargetModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=3;
+        aData.Text ="Quarter Three";
+        cmbTargetModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=4;
+        aData.Text ="Quarter Four";
+        cmbTargetModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=5;
+        aData.Text ="Quarter one-Two";
+        cmbTargetModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=6;
+        aData.Text ="Quarter One-Two-Three";
+        cmbTargetModel.addElement(aData);
+        
+        aData = new ComboData();
+        aData.Code=7;
+        aData.Text ="Quarter One-Two-Three-Four";
+        cmbTargetModel.addElement(aData);
+        
+        
+        */
+        //
+        cmbApprovalModel=new EITLComboModel();
+   //     cmbApproval.removeAllItems();
+   //     cmbApproval.setModel(cmbApprovalModel);
+        
+        aData=new ComboData();
+        aData.Code=1;
+        aData.Text="Approved Indents";
+        cmbApprovalModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=0;
+        aData.Text="UnApproved Indents";
+        cmbApprovalModel.addElement(aData);
+        
+        
+        cmbDeptModel=new EITLComboModel();
+     // cmbDept.removeAllItems();
+     // cmbDept.setModel(cmbDeptModel);
+       
+        List=clsDepartment.getList(" WHERE COMPANY_ID="+EITLERPGLOBAL.gCompanyID);
+        for(int i=1;i<=List.size();i++) {
+            clsDepartment ObjDept=(clsDepartment) List.get(Integer.toString(i));
+            aData=new ComboData();
+            aData.Code=(int) ObjDept.getAttribute("DEPT_ID").getVal();
+            aData.Text=(String) ObjDept.getAttribute("DEPT_DESC").getObj();
+            cmbDeptModel.addElement(aData);
+        } 
+        
+        //INCHARGE COMBO
+        cmbInchargeModel=new EITLComboModel();
+        cmbIncharge.removeAllItems();
+        cmbIncharge.setModel(cmbInchargeModel);        
+        List=clsPriority.getInchargeList("");        
+        for(int i=1;i<=List.size();i++) {
+            clsPriority ObjDept= (clsPriority) List.get(Integer.toString(i));
+            //ComboData aData=new ComboData();
+            aData.Code=(int) ObjDept.getAttribute("INCHARGE_CD").getVal();
+            aData.Text=(String)ObjDept.getAttribute("INCHARGE_NAME").getObj();
+            cmbInchargeModel.addElement(aData);
+        } 
+        
+        //Machine COMBO
+        cmbMachineModel = new EITLComboModel();
+        cmbMachine.removeAllItems();
+        cmbMachine.setModel(cmbMachineModel);
+        
+        aData=new ComboData();
+        aData.Code=1;
+        aData.Text = "Machine No";
+        cmbMachineModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=2;
+        aData.Text = "Position No";
+        cmbMachineModel.addElement(aData);
+        
+        //Complaint COMBO
+        cmbComplaintModel = new EITLComboModel();
+        cmbComplaint.removeAllItems();
+        cmbComplaint.setModel(cmbComplaintModel);
+        
+        aData=new ComboData();
+        aData.Code=1;
+        aData.Text = "Complaint Nature";
+        cmbComplaintModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=2;
+        aData.Text= "Party Code";
+        cmbComplaintModel.addElement(aData);
+ 
+        aData.Code=3;
+        aData.Text= "Complaint Date";
+        cmbComplaintModel.addElement(aData);
+        
+        
+                //Agreed Date COMBO
+        cmbAgreedDateModel = new EITLComboModel();
+        cmbAgreedDate.removeAllItems();
+        cmbAgreedDate.setModel(cmbAgreedDateModel);
+        
+        aData=new ComboData();
+        aData.Code=1;
+        aData.Text = "All Felts ";
+        cmbAgreedDateModel.addElement(aData);
+ 
+/*
+        aData=new ComboData();
+        aData.Code=2;
+        aData.Text = "Locked Period Felts";
+        cmbAgreedDateModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=3;
+        aData.Text= "Evaluated Period Felts";
+        cmbAgreedDateModel.addElement(aData);
+ 
+        aData=new ComboData(); 
+        aData.Code=4;
+        aData.Text= "Planning Period Felts"  ;
+        cmbAgreedDateModel.addElement(aData);
+
+        aData=new ComboData();        
+        aData.Code=5;
+        aData.Text= "Felt not Manufacture yet"  ;
+        cmbAgreedDateModel.addElement(aData);
+
+        aData=new ComboData();      
+        aData.Code=6;
+        aData.Text= "Felt Recieved Early "  ;
+        cmbAgreedDateModel.addElement(aData);
+         
+        aData=new ComboData();       
+        aData.Code=7;
+        aData.Text= "Felt Recieved Delay"  ;
+        cmbAgreedDateModel.addElement(aData);
+
+         aData=new ComboData();
+         aData.Code=8;
+        aData.Text= "Felt Recieved Early, Despatched Early"  ;
+        cmbAgreedDateModel.addElement(aData);
+  
+        aData=new ComboData();        
+        aData.Code=9;
+        aData.Text= "Felt Recieved Early, Despatched Delay";
+        cmbAgreedDateModel.addElement(aData);
+ 
+        aData=new ComboData();
+        aData.Code=10;
+        aData.Text= "Felt Recieved Early, Not Despatched Yet";
+        cmbAgreedDateModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=11;
+        aData.Text= "Felt Recieved Delay, Despatched Within 5 days"  ;
+        cmbAgreedDateModel.addElement(aData);
+
+        
+               aData=new ComboData();
+               aData.Code=12;
+        aData.Text= "Felt Recieved Delay, Despatched After 5 days"  ;
+        cmbAgreedDateModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=13;
+        aData.Text= "Felt Recieved Delay, Not Despatched Yet"  ;
+        cmbAgreedDateModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=14;
+        aData.Text= "All Felt Recieved "  ;
+        cmbAgreedDateModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=15;
+        aData.Text= "All Felt Invoiced"  ;
+        cmbAgreedDateModel.addElement(aData);
+ 
+       */ 
+        
+        
+                       //Agreed Date Order by COMBO
+        cmbAgreedOrderModel = new EITLComboModel();
+        cmbAgreedOrder.removeAllItems();
+        cmbAgreedOrder.setModel(cmbAgreedOrderModel);
+        
+        aData=new ComboData();
+        aData.Code=1;
+        aData.Text = "Wvg Agreed Date,Party_code,Piece_no";
+        cmbAgreedOrderModel.addElement(aData);
+
+        aData=new ComboData();
+        aData.Code=2;
+        aData.Text = "Piece_no";
+        cmbAgreedOrderModel.addElement(aData);
+        
+        aData=new ComboData();
+        aData.Code=3;
+        aData.Text= "Party_code,Wvg_Agreed Date";
+        cmbAgreedOrderModel.addElement(aData);
+
+/*
+        aData=new ComboData();
+        aData.Code=4;
+        aData.Text= "Order_date,Piece_no"  ;
+        cmbAgreedOrderModel.addElement(aData);
+ 
+        aData=new ComboData();      
+        aData.Code=5;
+        aData.Text= "Felt_Recieved,Agreed_date,piece_no"  ;
+        cmbAgreedOrderModel.addElement(aData);
+
+        aData=new ComboData();     
+        aData.Code=6;
+        aData.Text= "Felt Invoiced,Agreed_date,piece_no "  ;
+        cmbAgreedOrderModel.addElement(aData);
+   
+        aData=new ComboData();     
+        aData.Code=7;
+        aData.Text= "Recieved Date or Finishing date ,piece_no "  ;
+        cmbAgreedOrderModel.addElement(aData);
+ 
+        aData=new ComboData();     
+        aData.Code=8;
+        aData.Text= "Invoice Date,piece_no "  ;
+        cmbAgreedOrderModel.addElement(aData);
+  
+        aData=new ComboData();     
+        aData.Code=9;
+        aData.Text= "Weaving Date,Mending Date, Needling Date,Recieved Date"  ;
+        cmbAgreedOrderModel.addElement(aData);
+   
+        aData=new ComboData();     
+        aData.Code=10;
+        aData.Text= "Mending Date,Needling Date,Weaving Date,Recived_Date"  ;
+        cmbAgreedOrderModel.addElement(aData);
+
+        aData=new ComboData();     
+        aData.Code=11;
+        aData.Text= "Needling Date, Mending Date ,Weaving Date, Recieved Date"  ;
+        cmbAgreedOrderModel.addElement(aData);
+
+         aData=new ComboData();     
+        aData.Code=12;
+        aData.Text= "Recieved Date,Needling Date, Mending date, Weaving Date "  ;
+        cmbAgreedOrderModel.addElement(aData);
+ 
+  
+        */
+    }
+    
+    private void FormatGridProductionProcess() {
+   //     try{
+     DataModelProductionProcess=new EITLTableModel();
+        TableProductionProcess.removeAll();
+      TableProductionProcess.setModel(DataModelProductionProcess);
+        
+        TableProductionProcess.setAutoResizeMode(TableProductionProcess.AUTO_RESIZE_OFF);
+        /* OLD ORIGINAL 223
+        DataModelProductionProcess.addColumn("Sr.");
+        DataModelProductionProcess.addColumn("Priority");
+        DataModelProductionProcess.addColumn("Priority Date");
+        DataModelProductionProcess.addColumn("Ref No");
+        DataModelProductionProcess.addColumn("Conf No");
+        DataModelProductionProcess.addColumn("Machine No");
+        DataModelProductionProcess.addColumn("Position");    
+        DataModelProductionProcess.addColumn("Piece No");
+        DataModelProductionProcess.addColumn("Party Code");
+        DataModelProductionProcess.addColumn("Party Name");
+        DataModelProductionProcess.addColumn("Order Date");
+        DataModelProductionProcess.addColumn("Product Code");
+        DataModelProductionProcess.addColumn("Item");
+        DataModelProductionProcess.addColumn("Style");
+        DataModelProductionProcess.addColumn("Length");
+        DataModelProductionProcess.addColumn("Width");
+        DataModelProductionProcess.addColumn("GSM");
+        DataModelProductionProcess.addColumn("Weight");
+        DataModelProductionProcess.addColumn("Rate");
+        DataModelProductionProcess.addColumn("Requested Date");
+        DataModelProductionProcess.addColumn("Commitment Date");
+        DataModelProductionProcess.addColumn("Agreed Date");
+        DataModelProductionProcess.addColumn("Days Difference");
+        DataModelProductionProcess.addColumn("Weaving Date");
+        DataModelProductionProcess.addColumn("Mending Date");
+        DataModelProductionProcess.addColumn("Needling Date");        
+        DataModelProductionProcess.addColumn("INS IND");
+        DataModelProductionProcess.addColumn("Bas Amt");
+        DataModelProductionProcess.addColumn("Memo Date");
+        DataModelProductionProcess.addColumn("Discount Per");
+        DataModelProductionProcess.addColumn("Dis Amt");
+        DataModelProductionProcess.addColumn("Dis Bas Amt");
+        DataModelProductionProcess.addColumn("Excise");
+        DataModelProductionProcess.addColumn("Seam Charge");
+        DataModelProductionProcess.addColumn("Insacc Amt");
+        DataModelProductionProcess.addColumn("Inv Amt");
+        DataModelProductionProcess.addColumn("Zone");
+        DataModelProductionProcess.addColumn("Incharge");  OLD ORIGINAL 223 */
+        /*
+        DataModelProductionProcess.addColumn("Sr.");
+        DataModelProductionProcess.addColumn("PRIORITY DESC");
+        DataModelProductionProcess.addColumn("PRIORITY DATE");
+        DataModelProductionProcess.addColumn("ORDER DATE");
+        DataModelProductionProcess.addColumn("MACHINE NO");
+        DataModelProductionProcess.addColumn("POSITION");
+        DataModelProductionProcess.addColumn("PIECE NO");        
+        DataModelProductionProcess.addColumn("PARTY CODE");
+        DataModelProductionProcess.addColumn("PARTY NAME");
+        DataModelProductionProcess.addColumn("PRODUCT CODE");
+        DataModelProductionProcess.addColumn("ITEM");
+        DataModelProductionProcess.addColumn("STYLE");
+        DataModelProductionProcess.addColumn("ORDER LENGTH");
+        DataModelProductionProcess.addColumn("ORDER WIDTH");
+        DataModelProductionProcess.addColumn("GSQ");
+        DataModelProductionProcess.addColumn("CALD WEIGHT");
+        DataModelProductionProcess.addColumn("RATE");
+        DataModelProductionProcess.addColumn("DELIV DATE");
+        DataModelProductionProcess.addColumn("COMM DATE");
+        DataModelProductionProcess.addColumn("AGREED DATE");
+        DataModelProductionProcess.addColumn("WEAVING DATE");
+        DataModelProductionProcess.addColumn("MENDING DATE");
+        DataModelProductionProcess.addColumn("NEEDLING DATE");
+        DataModelProductionProcess.addColumn("BAS AMT");
+        DataModelProductionProcess.addColumn("DISC PER");
+        DataModelProductionProcess.addColumn("DISAMT");
+        DataModelProductionProcess.addColumn("DISBASAMT");
+        DataModelProductionProcess.addColumn("INSACC AMT");
+        DataModelProductionProcess.addColumn("MEMO DATE");
+        DataModelProductionProcess.addColumn("EXCISE");        
+        DataModelProductionProcess.addColumn("SEAM CHARGE");
+        DataModelProductionProcess.addColumn("INV AMT");
+        DataModelProductionProcess.addColumn("INCHARGE NAME");
+        DataModelProductionProcess.addColumn("ZONE");
+        DataModelProductionProcess.addColumn("REF NO");
+        DataModelProductionProcess.addColumn("CONF NO");
+        DataModelProductionProcess.addColumn("INSURANCE CODE");
+        DataModelProductionProcess.addColumn("DAYS DIFF.");        
+        DataModelProductionProcess.addColumn("PRIORITY");
+        */
+       //updated on 14/10/2014 by Dhaval 
+                    DataModelProductionProcess.addColumn("Sr.");
+                    DataModelProductionProcess.addColumn("COLOR_CARD"); 
+                    DataModelProductionProcess.addColumn("PRIORITY DESC");       
+                    DataModelProductionProcess.addColumn("PRIORITY DATE");
+                    DataModelProductionProcess.addColumn("ORDER NO");
+		    DataModelProductionProcess.addColumn("ORDER DATE"); 
+                    DataModelProductionProcess.addColumn("ORDER REMARKS");
+                    DataModelProductionProcess.addColumn("MACHINE NO");
+                    DataModelProductionProcess.addColumn("POSITION");
+                    DataModelProductionProcess.addColumn("PIECE NO");                  
+                    DataModelProductionProcess.addColumn("PARTY CODE");
+                    DataModelProductionProcess.addColumn("PARTY NAME");
+                    DataModelProductionProcess.addColumn("PRODUCT CODE");
+                    DataModelProductionProcess.addColumn("ITEM");
+                    DataModelProductionProcess.addColumn("STYLE");
+                    DataModelProductionProcess.addColumn("ORDER LENGTH");
+                    DataModelProductionProcess.addColumn("RCVD LENGTH");  
+                    DataModelProductionProcess.addColumn("ORDER WIDTH");
+                    DataModelProductionProcess.addColumn("RECVD WIDTH");
+                    DataModelProductionProcess.addColumn("GSQ");
+                    DataModelProductionProcess.addColumn("GROSS SQ MTR");
+                    DataModelProductionProcess.addColumn("CALD WEIGHT");
+                    DataModelProductionProcess.addColumn("REQUESTED DATE");
+                    DataModelProductionProcess.addColumn("REV.REQ_DATE");
+                    DataModelProductionProcess.addColumn("REASON_REV.REQ");
+                    DataModelProductionProcess.addColumn("COMM DATE");
+                    DataModelProductionProcess.addColumn("REV_COMM_DATE");
+                    DataModelProductionProcess.addColumn("REASON_REV.COMM");
+                    DataModelProductionProcess.addColumn("AGREED DATE");
+                    DataModelProductionProcess.addColumn("AGREED WEAVING DATE");
+                    DataModelProductionProcess.addColumn("WEAVING DATE");
+                    DataModelProductionProcess.addColumn("WEAVING PIECE REMARKS");
+                    DataModelProductionProcess.addColumn("AGREED WEAVING DELAY");
+                    DataModelProductionProcess.addColumn("WARP_NO");
+                    DataModelProductionProcess.addColumn("MENDING DATE");
+                    DataModelProductionProcess.addColumn("NEEDLING DATE");
+                    DataModelProductionProcess.addColumn("CONSIGNMENT_NO");
+                    DataModelProductionProcess.addColumn("CONSIGNMENT_DATE");
+                    DataModelProductionProcess.addColumn("EXP_DESP_DATE");
+                    DataModelProductionProcess.addColumn("RCVD DATE");                    
+                    DataModelProductionProcess.addColumn("AD_RC_DAYS");
+                    DataModelProductionProcess.addColumn("RC_TO_DAYS");
+                    DataModelProductionProcess.addColumn("RATE");
+                    DataModelProductionProcess.addColumn("INVOICE AMT");
+ 		    DataModelProductionProcess.addColumn("INVOICE DATE");
+  		    DataModelProductionProcess.addColumn("MEMO DATE");
+  	 	    DataModelProductionProcess.addColumn("PACK DATE");
+ 		    DataModelProductionProcess.addColumn("BALE NO");
+                    DataModelProductionProcess.addColumn("STATION");
+                    DataModelProductionProcess.addColumn("INCHARGE NAME");
+                    DataModelProductionProcess.addColumn("ZONE");
+                    DataModelProductionProcess.addColumn("INSURANCE CODE");
+                    DataModelProductionProcess.addColumn("LOCK CODE"); 
+                    DataModelProductionProcess.addColumn("LR NO");
+                    DataModelProductionProcess.addColumn("LR DATE");
+                    DataModelProductionProcess.addColumn("CARRIER");
+                    DataModelProductionProcess.addColumn("FREIGHT");
+                    DataModelProductionProcess.addColumn("REMARKS");
+                    DataModelProductionProcess.addColumn("ID_AD");
+                    DataModelProductionProcess.addColumn("HUNDI CHARGE");
+                    DataModelProductionProcess.addColumn("REF NO");
+                    DataModelProductionProcess.addColumn("CONF NO");
+                    DataModelProductionProcess.addColumn("BAS AMT");
+                    DataModelProductionProcess.addColumn("DISC PER");
+                    DataModelProductionProcess.addColumn("DISAMT");
+                    DataModelProductionProcess.addColumn("DISBASAMT");
+                    DataModelProductionProcess.addColumn("EXCISE"); 
+                    DataModelProductionProcess.addColumn("SEAM_CHG"); 
+                    DataModelProductionProcess.addColumn("INSACC AMT"); 
+                    DataModelProductionProcess.addColumn("PRIORITY");
+                    DataModelProductionProcess.addColumn("AGREED_IND");
+                    DataModelProductionProcess.addColumn("AGREED_REMARK");
+                    
+        DataModelProductionProcess.TableReadOnly(true); 
+        //TableProductionProcess.getColumnModel().getColumn(1).setMinWidth(10);
+        TableProductionProcess.getColumnModel().getColumn(0).setMaxWidth(50);
+        /*
+    } 
+    catch(Exception e)    {
+        e.printStackTrace();
+    }      
+        */
+    }
+    
+    
+    private void FormatGridStock() {
+       DataModelStock=new EITLTableModel();
+        TableStock.removeAll();
+        TableStock.setModel(DataModelStock);
+        
+        TableStock.setAutoResizeMode(TableStock.AUTO_RESIZE_OFF);
+        DataModelStock.addColumn("Sr.");        
+        DataModelStock.addColumn("COLOR CARD");
+        DataModelStock.addColumn("PRIORITY DESC");
+        DataModelStock.addColumn("PRIORITY DATE");
+        DataModelStock.addColumn("PO_NO");
+        DataModelStock.addColumn("PO_DATE");
+        DataModelStock.addColumn("PO_REMARK");
+        DataModelStock.addColumn("ORDER DATE");
+        DataModelStock.addColumn("MACHINE NO");
+        DataModelStock.addColumn("POSITION");        
+        DataModelStock.addColumn("PIECE NO");
+        DataModelStock.addColumn("PARTY CODE");
+        DataModelStock.addColumn("PARTY NAME");
+        DataModelStock.addColumn("PRODUCT CODE");
+        DataModelStock.addColumn("ITEM DESC");
+        DataModelStock.addColumn("STYLE");
+        DataModelStock.addColumn("ORDER LENGTH");
+        DataModelStock.addColumn("RECD LENGTH");
+        DataModelStock.addColumn("ORDER WIDTH");
+        DataModelStock.addColumn("RECD WIDTH");
+        DataModelStock.addColumn("GSQ");
+        DataModelStock.addColumn("CALD WEIGHT");
+        DataModelStock.addColumn("ACTUAL WEIGHT");
+        DataModelStock.addColumn("RATE");
+        DataModelStock.addColumn("REQUESTED DATE");
+        DataModelStock.addColumn("REV. REQ. DATE");
+        DataModelStock.addColumn("REASON_REV_REQUESTED");
+        DataModelStock.addColumn("COMMITMENT DATE");
+        DataModelStock.addColumn("REV. COMM DATE");
+        DataModelStock.addColumn("REASON REV. COMM DATE");
+        DataModelStock.addColumn("AGREED DATE");
+        DataModelStock.addColumn("AGREED WEAVING DATE");
+        DataModelStock.addColumn("WEAVING DATE");
+        DataModelStock.addColumn("WEAVING PIECE REMARKS");
+        DataModelStock.addColumn("AGREED WEAVING DELAY");
+        DataModelStock.addColumn("EXP_DESP_DATE");
+        DataModelStock.addColumn("WARP_NO");
+        DataModelStock.addColumn("MENDING DATE");
+        DataModelStock.addColumn("NEEDLING DATE");
+        DataModelStock.addColumn("CONSIGNMENT_NO");
+        DataModelStock.addColumn("CONSIGNMENT_DATE");
+        DataModelStock.addColumn("RCVD DATE");
+        DataModelStock.addColumn("AD_RC DAYS");
+        DataModelStock.addColumn("RC_TO DAYS");
+        DataModelStock.addColumn("BAS AMT");
+        DataModelStock.addColumn("DISC PER");
+        DataModelStock.addColumn("DISAMT");
+        DataModelStock.addColumn("DISBASAMT");
+        DataModelStock.addColumn("INSACC AMT");
+        DataModelStock.addColumn("MEMO DATE");
+        DataModelStock.addColumn("EXCISE");
+        DataModelStock.addColumn("SEAM_CHARGE");
+        DataModelStock.addColumn("INVOICE AMT");
+        DataModelStock.addColumn("PACK DATE");
+        DataModelStock.addColumn("BALE NO");
+        DataModelStock.addColumn("STATION");
+        DataModelStock.addColumn("INCHARGE_NAME");        
+        DataModelStock.addColumn("ZONE");
+        DataModelStock.addColumn("REF_NO");
+        DataModelStock.addColumn("CONF_NO");
+        DataModelStock.addColumn("INSURANCE_CODE");        
+        DataModelStock.addColumn("LOCK CODE");
+        DataModelStock.addColumn("PRIORITY");
+
+        DataModelStock.TableReadOnly(true); 
+        TableStock.getColumnModel().getColumn(0).setMaxWidth(50);
+    }
+    
+    private void FormatGridDespatched() {
+       DataModelDespatched=new EITLTableModel();
+        TableDespatched.removeAll();
+        TableDespatched.setModel(DataModelDespatched);
+        
+        TableDespatched.setAutoResizeMode(TableDespatched.AUTO_RESIZE_OFF);
+        /*DataModelDespatched.addColumn("Sr.");
+        DataModelDespatched.addColumn("Party Code");
+        DataModelDespatched.addColumn("Party Name");
+        DataModelDespatched.addColumn("Invoice No");
+        DataModelDespatched.addColumn("Invoice Date");
+        DataModelDespatched.addColumn("Quality No");
+        DataModelDespatched.addColumn("Piece No");
+        DataModelDespatched.addColumn("Lenght");
+        DataModelDespatched.addColumn("Width");
+        DataModelDespatched.addColumn("Order Detail");
+        DataModelDespatched.addColumn("Order Date");
+        DataModelDespatched.addColumn("Total Gross");
+        DataModelDespatched.addColumn("Total Net Amt");
+        DataModelDespatched.addColumn("Gross Square Mtr");
+        DataModelDespatched.addColumn("Gross Kg");
+        DataModelDespatched.addColumn("Gross Amt");
+        DataModelDespatched.addColumn("Net Amt");
+        DataModelDespatched.addColumn("Zone");
+        DataModelDespatched.addColumn("Incharge");
+        DataModelDespatched.addColumn("LR Number");
+        DataModelDespatched.addColumn("LR Date");
+        DataModelDespatched.addColumn("carrier");
+        DataModelDespatched.addColumn("Freight");
+        DataModelDespatched.addColumn("Remarks"); */
+        
+        //SOHAL/DHAVAL 02.10.2014
+        
+        
+        //RISHI 11/11/2014
+                   DataModelDespatched.addColumn("Sr.");
+                   DataModelDespatched.addColumn("COLOR CARD");
+                   DataModelDespatched.addColumn("PARTY CODE");
+                   DataModelDespatched.addColumn("PARTY NAME");
+                   DataModelDespatched.addColumn("INVOICE NO");
+                   DataModelDespatched.addColumn("INVOICE DATE");
+                   DataModelDespatched.addColumn("PRODUCT CODE");                    
+                   DataModelDespatched.addColumn("GROUP");                    
+                   DataModelDespatched.addColumn("PIECE NO");
+                   DataModelDespatched.addColumn("PR PIECE NO");
+                   DataModelDespatched.addColumn("LENGTH");
+                   DataModelDespatched.addColumn("WIDTH");
+                   DataModelDespatched.addColumn("GSQ");
+                   DataModelDespatched.addColumn("GROSS SQ MTR");
+                   DataModelDespatched.addColumn("GROSS KG");
+                   DataModelDespatched.addColumn("GROSS AMOUNT");
+                   DataModelDespatched.addColumn("TRD DISCOUNT");
+                   DataModelDespatched.addColumn("BASIC DUTY");
+                   DataModelDespatched.addColumn("CESS1");
+                   DataModelDespatched.addColumn("CESS2");
+                   DataModelDespatched.addColumn("HUNDI CHARGE");
+                   DataModelDespatched.addColumn("INSURANCE");
+                   DataModelDespatched.addColumn("CHEM CHG");
+                   DataModelDespatched.addColumn("SPIRAL CHG"); 
+                   DataModelDespatched.addColumn("SEAM CHARGE");                     
+                   DataModelDespatched.addColumn("NET AMOUNT");
+                   DataModelDespatched.addColumn("ORDER DATE");
+                   DataModelDespatched.addColumn("FO ORDER DATE");
+                   DataModelDespatched.addColumn("ORDER DETAIL");
+                   DataModelDespatched.addColumn("REQUESTED DATE"); 
+                   DataModelDespatched.addColumn("REV.REQ.DATE"); 
+                   DataModelDespatched.addColumn("COMMITED DATE");                    
+                   DataModelDespatched.addColumn("REV.COMM.DATE");                    
+                   DataModelDespatched.addColumn("AGREED DATE");
+                   DataModelDespatched.addColumn("ID AD");
+                   DataModelDespatched.addColumn("WVG DATE");
+                   DataModelDespatched.addColumn("WVG DELAY");
+                   DataModelDespatched.addColumn("MND DATE");
+                   DataModelDespatched.addColumn("NDL DATE"); 
+                   DataModelDespatched.addColumn("RCVD DATE");
+                   DataModelDespatched.addColumn("ID RC DAYS");
+                   DataModelDespatched.addColumn("PACK DATE");
+                   DataModelDespatched.addColumn("ID PD DAYS");
+                   DataModelDespatched.addColumn("PO NO");
+                   DataModelDespatched.addColumn("PO DATE");
+                   DataModelDespatched.addColumn("REMARK");
+                   DataModelDespatched.addColumn("ZONE");
+                   DataModelDespatched.addColumn("INCHARGE NAME");
+                   DataModelDespatched.addColumn("NO OF PIECES");
+                   DataModelDespatched.addColumn("STYLE");
+                   DataModelDespatched.addColumn("PRIORITY");
+                   DataModelDespatched.addColumn("MACHINE");
+                   DataModelDespatched.addColumn("POSITION");
+                   DataModelDespatched.addColumn("REF NO");
+                   DataModelDespatched.addColumn("CONF NO");
+                   DataModelDespatched.addColumn("TOTAL GROSS");
+                   DataModelDespatched.addColumn("TOTAL NET AMOUNT");
+                   DataModelDespatched.addColumn("PRIORITY DESC");
+                   DataModelDespatched.addColumn("P_COLOR_CARD");
+                   DataModelDespatched.addColumn("S_COLOR_CARD");
+                   DataModelDespatched.addColumn("REV. REQ. REASON");
+                   DataModelDespatched.addColumn("REV. COMM. REASON");
+                   DataModelDespatched.addColumn("REMARK_REQ_HISTORY");
+                   DataModelDespatched.addColumn("REMARK_COMM_HISTORY");
+                   DataModelDespatched.addColumn("BALE_NO");
+                   DataModelDespatched.addColumn("PAYMENT_TERM");
+                   DataModelDespatched.addColumn("LR_NO");
+                   DataModelDespatched.addColumn("LR_DATE");
+                   DataModelDespatched.addColumn("CARRIER");
+                   DataModelDespatched.addColumn("FREIGHT");
+                   DataModelDespatched.addColumn("REMARKS");
+                   //DataModelDespatched.addColumn("PRIORITY DATE"); 
+                   
+        DataModelDespatched.TableReadOnly(true); 
+        TableDespatched.getColumnModel().getColumn(0).setMaxWidth(60);
+        
+    }
+    
+     private void FormatGridDiscount(){
+        DataModelDiscount =new EITLTableModel();
+        TableDiscount.removeAll();
+        TableDiscount.setModel(DataModelDiscount);
+        
+        TableDiscount.setAutoResizeMode(TableDiscount.AUTO_RESIZE_OFF);
+        DataModelDiscount.addColumn("Sr.");
+        DataModelDiscount.addColumn("Party Code");
+        DataModelDiscount.addColumn("Name");
+        DataModelDiscount.addColumn("Piece No");
+        DataModelDiscount.addColumn("Product Code");
+        DataModelDiscount.addColumn("Discount Per");
+        DataModelDiscount.addColumn("Memo Date");
+        DataModelDiscount.addColumn("Item Name");
+        DataModelDiscount.addColumn("Zone");
+        DataModelDiscount.addColumn("Incharge");
+        DataModelDiscount.TableReadOnly(true);        
+        TableDiscount.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+    
+     private void FormatGridTarget(){
+        DataModelTarget =new EITLTableModel();
+        TableTarget.removeAll();
+        TableTarget.setModel(DataModelTarget);
+        TableTarget.setAutoResizeMode(TableTarget.AUTO_RESIZE_OFF);
+        DataModelTarget.addColumn("Sr.");
+        DataModelTarget.addColumn("Party Code");
+        DataModelTarget.addColumn("Party Name");
+        DataModelTarget.addColumn("Product Code");
+        DataModelTarget.addColumn("TGT FY Yr");
+        DataModelTarget.addColumn("TGT From Date");
+        DataModelTarget.addColumn("TGT To Date");
+        DataModelTarget.addColumn("Last Yr. Sales");
+        DataModelTarget.addColumn("Curr. Sales");
+        DataModelTarget.addColumn("Last Sales%");
+        DataModelTarget.addColumn("TotalTarget");
+        
+        DataModelTarget.addColumn("TGT Q1");
+        DataModelTarget.addColumn("Sales-Q1");
+        DataModelTarget.addColumn("Q1%");
+        
+        DataModelTarget.addColumn("TGT Q2");
+        DataModelTarget.addColumn("Sales-Q2");
+        DataModelTarget.addColumn("Q2%");
+        
+        DataModelTarget.addColumn("TGT Q3");
+        DataModelTarget.addColumn("Sales-Q3");
+        DataModelTarget.addColumn("Q3%");
+        
+        DataModelTarget.addColumn("TGT Q4");
+        DataModelTarget.addColumn("Sales-Q4");
+        DataModelTarget.addColumn("Q4%");
+        
+ 
+        DataModelTarget.addColumn("SalesQ1Q2");
+        DataModelTarget.addColumn("Q1Q2%");
+      
+        DataModelTarget.addColumn("SalesQ1Q2Q3");
+        DataModelTarget.addColumn("Q1Q2Q3%");
+        
+        DataModelTarget.addColumn("YR%");
+        
+        DataModelTarget.addColumn("Incharge");
+       
+	for(int i=1;i<=20;i++)
+        {
+            DataModelTarget.addColumn("TGT Q1 Rev "+i);
+            DataModelTarget.addColumn("TGT Q2 Rev "+i);
+            DataModelTarget.addColumn("TGT Q3 Rev "+i);
+            DataModelTarget.addColumn("TGT Q4 Rev "+i);
+        }
+        
+        for(int i=29;i<=108;i++)
+        {
+            TableTarget.getColumnModel().getColumn(i).setMinWidth(110); 
+        }
+
+        DataModelTarget.TableReadOnly(true); 
+        TableTarget.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     /*
+     private void FormatGridTargetA(){
+        DataModelTargetA =new EITLTableModel();
+        TableTargetA.removeAll();
+        TableTargetA.setModel(DataModelTargetA);
+        TableTargetA.setAutoResizeMode(TableTargetA.AUTO_RESIZE_OFF);
+        DataModelTargetA.addColumn("Sr.");
+        DataModelTargetA.addColumn("Zone");
+        DataModelTargetA.addColumn("Party Code");
+        DataModelTargetA.addColumn("Name");
+        DataModelTargetA.addColumn("Sales 2011-12");
+        DataModelTargetA.addColumn("Sales 2012-13");
+        DataModelTargetA.addColumn("Sales 12-13 Q1");
+        DataModelTargetA.addColumn("Sales 12-13 Q2");
+        DataModelTargetA.addColumn("Sales 12-13 Q3");
+        DataModelTargetA.addColumn("Sales 12-13 Q4");
+        DataModelTargetA.addColumn("Stock");
+        DataModelTargetA.addColumn("Pending");
+        DataModelTargetA.addColumn("Total");
+        DataModelTargetA.addColumn("Target");
+        DataModelTargetA.addColumn("% Achieved");
+        DataModelTargetA.addColumn("Sale %");
+        DataModelTargetA.addColumn("% Q1");
+        DataModelTargetA.addColumn("% Q2");
+        DataModelTargetA.addColumn("% Q1Q2");
+        DataModelTargetA.addColumn("% Q3");
+        DataModelTargetA.addColumn("% Q1Q2Q3");
+        DataModelTargetA.addColumn("% Q4");
+        DataModelTargetA.addColumn("Incharge");
+        DataModelTargetA.TableReadOnly(true); 
+        TableTargetA.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     
+     */
+       
+     private void FormatGridMisc(){
+         DataModelMisc = new EITLTableModel();
+      //   TableMisc.removeAll();
+       //  TableMisc.setModel(DataModelMisc);
+         
+       // TableMisc.setAutoResizeMode(TableMisc.AUTO_RESIZE_OFF);
+        DataModelMisc.addColumn("Sr.");
+        DataModelMisc.addColumn("Piece No");
+        DataModelMisc.addColumn("Type");
+        DataModelMisc.addColumn("Entry Date");
+        DataModelMisc.addColumn("Expected Date");
+        DataModelMisc.addColumn("Item Code");
+        DataModelMisc.TableReadOnly(true); 
+        //TableMisc.getColumnModel().getColumn(0).setMaxWidth(50); 
+        
+     }
+     
+     
+     private void FormatGridSeam(){
+         
+         DataModelSeam = new EITLTableModel();
+   //      TableSeam.removeAll();
+    //     TableSeam.setModel(DataModelSeam);
+         
+     //   TableSeam.setAutoResizeMode(TableSeam.AUTO_RESIZE_OFF);
+        DataModelSeam.addColumn("Sr.");
+        DataModelSeam.addColumn("Item Code");
+        DataModelSeam.addColumn("Piece No");
+        DataModelSeam.addColumn("Seam Charge");
+        DataModelSeam.TableReadOnly(true);
+     }
+     
+     private void FormatGridSalesY(){
+       DataModelSalesY = new EITLTableModel();
+       TableSalesY.removeAll();
+       TableSalesY.setModel(DataModelSalesY);
+         
+        TableSalesY.setAutoResizeMode(TableSalesY.AUTO_RESIZE_OFF);
+        DataModelSalesY.addColumn("Sr.");
+        //DataModelSalesY.addColumn("Party Code");
+        DataModelSalesY.addColumn("Fin Year");
+        DataModelSalesY.addColumn("Total(lacs)");
+        DataModelSalesY.addColumn("Total(KG)");
+        DataModelSalesY.addColumn("Total(SQMTR)");
+        DataModelSalesY.addColumn("Dry (lacs)");
+        DataModelSalesY.addColumn("Dry (KG)");
+        DataModelSalesY.addColumn("Dry (SQMTR)");
+        DataModelSalesY.addColumn("Wet (lacs)");
+        DataModelSalesY.addColumn("Wet (KG)");
+        DataModelSalesY.addColumn("Wet (SQMTR)");
+        DataModelSalesY.addColumn("ACNE(lacs)");
+        DataModelSalesY.addColumn("ACNE(KG)");
+        DataModelSalesY.addColumn("ACNE(SQMTR)");
+        DataModelSalesY.TableReadOnly(true);
+        TableSalesY.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     
+     private void FormatGridSalesM(){
+       DataModelSalesM = new EITLTableModel();
+       TableSalesM.removeAll();
+       TableSalesM.setModel(DataModelSalesM);
+         
+        TableSalesM.setAutoResizeMode(TableSalesM.AUTO_RESIZE_OFF);
+        DataModelSalesM.addColumn("Sr.");
+        //DataModelSalesM.addColumn("Party Code");
+        DataModelSalesM.addColumn("Fin Year");
+        DataModelSalesM.addColumn("Apr");
+        DataModelSalesM.addColumn("May");
+        DataModelSalesM.addColumn("Jun");
+        DataModelSalesM.addColumn("Jul");
+        DataModelSalesM.addColumn("Aug");
+        DataModelSalesM.addColumn("Sep");
+        DataModelSalesM.addColumn("Oct");
+        DataModelSalesM.addColumn("Nov");
+        DataModelSalesM.addColumn("Dec");
+         DataModelSalesM.addColumn("Jan");
+        DataModelSalesM.addColumn("Feb");
+        DataModelSalesM.addColumn("Mar");
+        DataModelSalesM.addColumn("Total");      
+        DataModelSalesM.TableReadOnly(true);
+        TableSalesM.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     
+     private void ForamtGridDiverted(){
+         
+      DataModelDiverted=new EITLTableModel();
+      TableDiverted.removeAll();
+      TableDiverted.setModel(DataModelDiverted);
+        
+      TableDiverted.setAutoResizeMode(TableDiverted.AUTO_RESIZE_OFF);
+        DataModelDiverted.addColumn("Sr.");
+        DataModelDiverted.addColumn("Piece No");
+        DataModelDiverted.addColumn("Party Original");
+        DataModelDiverted.addColumn("Name Original");
+        DataModelDiverted.addColumn("Party Invoiced");    
+        DataModelDiverted.addColumn("Name Diverted");
+        DataModelDiverted.addColumn("Product Code");
+        DataModelDiverted.addColumn("Item");
+        DataModelDiverted.addColumn("Style");
+        DataModelDiverted.addColumn("Order Date");
+        DataModelDiverted.addColumn("Delivery Date");
+        DataModelDiverted.addColumn("Comm Date");
+        DataModelDiverted.addColumn("Rcvd Date");
+        DataModelDiverted.addColumn("Mtrs Order");
+        DataModelDiverted.addColumn("Mtrs Rcvd");
+        DataModelDiverted.addColumn("Width Order");
+        DataModelDiverted.addColumn("Width Rcvd");
+        DataModelDiverted.addColumn("GSQ");
+        DataModelDiverted.addColumn("Weight Rcvd");
+        DataModelDiverted.addColumn("Weight Invoiced");
+        DataModelDiverted.addColumn("Rate");
+        DataModelDiverted.addColumn("Pack Date");
+        DataModelDiverted.addColumn("Bale No");
+        DataModelDiverted.addColumn("Memo Date");
+        DataModelDiverted.addColumn("Disc Per");
+        DataModelDiverted.addColumn("Invoice No");
+        DataModelDiverted.addColumn("Invoice Date");
+        DataModelDiverted.addColumn("Total Gross");
+        DataModelDiverted.addColumn("Trd Discount");
+        DataModelDiverted.addColumn("Invoice Amount");
+        DataModelDiverted.addColumn("Ref No");
+        DataModelDiverted.addColumn("Conf No");
+        DataModelDiverted.addColumn("Machine No");
+        DataModelDiverted.addColumn("Position");
+        DataModelDiverted.addColumn("Zone");
+        DataModelDiverted.addColumn("Incharge");
+        DataModelDiverted.TableReadOnly(true);  
+        TableDiverted.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     
+     private void FormatGridMISAgeing()
+     {
+       DataModelMISAgeing = new EITLTableModel();
+       TableMISAgeing.removeAll();
+       TableMISAgeing.setModel(DataModelMISAgeing);
+         
+        TableMISAgeing.setAutoResizeMode(TableMISAgeing.AUTO_RESIZE_OFF);
+        DataModelMISAgeing.addColumn("Sr.");
+        //DataModelSalesM.addColumn("Party Code");
+        DataModelMISAgeing.addColumn("Fin Year");
+        DataModelMISAgeing.addColumn("Product Code");
+        DataModelMISAgeing.addColumn("Item Desc");
+        DataModelMISAgeing.addColumn("Total Count");
+        DataModelMISAgeing.addColumn("Total QTY");
+        DataModelMISAgeing.addColumn("Total Amt");
+        
+        DataModelMISAgeing.TableReadOnly(true);
+        TableMISAgeing.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     
+     private void FormatGridMISAgeing1()
+     {
+       DataModelMISAgeing1 = new EITLTableModel();
+       TableMISAgeing1.removeAll();
+       TableMISAgeing1.setModel(DataModelMISAgeing1);
+         
+        TableMISAgeing1.setAutoResizeMode(TableMISAgeing1.AUTO_RESIZE_OFF);
+        DataModelMISAgeing1.addColumn("Sr.");
+        //DataModelSalesM.addColumn("Party Code");
+        DataModelMISAgeing1.addColumn("Fin Year");
+        DataModelMISAgeing1.addColumn("Total Count");
+        DataModelMISAgeing1.addColumn("Total QTY");
+        DataModelMISAgeing1.addColumn("Total Amt");        
+        DataModelMISAgeing1.TableReadOnly(true);
+        TableMISAgeing1.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     
+     private void FormatGridPackedNotDespatched()
+     {
+       DataModelPackedNotDespatched = new EITLTableModel();
+       TablePackedNotDespatched.removeAll();
+       TablePackedNotDespatched.setModel(DataModelPackedNotDespatched);
+         
+        TablePackedNotDespatched.setAutoResizeMode(TablePackedNotDespatched.AUTO_RESIZE_OFF);
+        DataModelPackedNotDespatched.addColumn("Sr.");
+        //DataModelSalesM.addColumn("Party Code");
+        DataModelPackedNotDespatched.addColumn("Party Code");
+        DataModelPackedNotDespatched.addColumn("Name");
+        DataModelPackedNotDespatched.addColumn("Prioriy");
+        DataModelPackedNotDespatched.addColumn("Piece No");
+        DataModelPackedNotDespatched.addColumn("Order Date");
+        DataModelPackedNotDespatched.addColumn("Rcvd Date");
+        DataModelPackedNotDespatched.addColumn("Deliv Date ");
+        DataModelPackedNotDespatched.addColumn("Comm Mtr");
+        DataModelPackedNotDespatched.addColumn("Product Code");
+        DataModelPackedNotDespatched.addColumn("Item");
+        DataModelPackedNotDespatched.addColumn("Style");
+        DataModelPackedNotDespatched.addColumn("Mtrs Order");
+        DataModelPackedNotDespatched.addColumn("Mtrs Rcvd");
+        DataModelPackedNotDespatched.addColumn("Width Order");
+        DataModelPackedNotDespatched.addColumn("Width Rcvd");
+        DataModelPackedNotDespatched.addColumn("GSM");
+        DataModelPackedNotDespatched.addColumn("Kg Calc");
+        DataModelPackedNotDespatched.addColumn("Kg Rcvd");
+        DataModelPackedNotDespatched.addColumn("Rate");
+        DataModelPackedNotDespatched.addColumn("Bas Amt");
+        DataModelPackedNotDespatched.addColumn("Memo Date");
+        DataModelPackedNotDespatched.addColumn("Disc Per");
+        DataModelPackedNotDespatched.addColumn("Disc Amt");
+        DataModelPackedNotDespatched.addColumn("Disc BasAmt");
+        DataModelPackedNotDespatched.addColumn("Excise");
+        DataModelPackedNotDespatched.addColumn("Seam Chg");
+        DataModelPackedNotDespatched.addColumn("Inscc Amt");
+        DataModelPackedNotDespatched.addColumn("Inv Amt");
+        DataModelPackedNotDespatched.addColumn("Days");
+        DataModelPackedNotDespatched.addColumn("Ref No");
+        DataModelPackedNotDespatched.addColumn("Conf No");
+        DataModelPackedNotDespatched.addColumn("Machine No");
+        DataModelPackedNotDespatched.addColumn("Position");
+        DataModelPackedNotDespatched.addColumn("Station");
+        DataModelPackedNotDespatched.addColumn("Zone");        
+        DataModelPackedNotDespatched.addColumn("Ins Ind");
+        DataModelPackedNotDespatched.addColumn("Incharge");
+        DataModelPackedNotDespatched.addColumn("Bale No");
+        DataModelPackedNotDespatched.addColumn("Pack Date");
+        DataModelPackedNotDespatched.TableReadOnly(true);
+        TablePackedNotDespatched.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     
+     private void FormatGridAgeing(){
+         DataModelAgeing = new EITLTableModel();
+      TableAgeing.removeAll();
+      TableAgeing.setModel(DataModelAgeing);
+        
+      TableAgeing.setAutoResizeMode(TableAgeing.AUTO_RESIZE_OFF);
+     
+        DataModelAgeing.addColumn("Sr.");
+        DataModelAgeing.addColumn("Product Code");
+        DataModelAgeing.addColumn("Item Desc");
+        DataModelAgeing.addColumn("Count<=45");
+        DataModelAgeing.addColumn("Qty<=45");    
+        DataModelAgeing.addColumn("Amt<=45");
+        DataModelAgeing.addColumn("Count>45<=90");
+        DataModelAgeing.addColumn("Qty>45<=90");
+        DataModelAgeing.addColumn("Amt>45<=90");
+        DataModelAgeing.addColumn("Count>90<=180");
+        DataModelAgeing.addColumn("Qty>90<=180");
+        DataModelAgeing.addColumn("Amt>90<=180");
+        DataModelAgeing.addColumn("Count>180<=365");
+        DataModelAgeing.addColumn("Qty>180<=365");
+        DataModelAgeing.addColumn("Amt>180<=365");
+        DataModelAgeing.addColumn("Count>365<=730");
+        DataModelAgeing.addColumn("Qty>365<=730");
+        DataModelAgeing.addColumn("Amt>365<=730");
+        DataModelAgeing.addColumn("Count>730");
+        DataModelAgeing.addColumn("Qty>730");
+        DataModelAgeing.addColumn("Amt>730");
+        DataModelAgeing.addColumn("Total Count");
+        DataModelAgeing.addColumn("Total Qty");
+        DataModelAgeing.addColumn("Total Amt");
+         DataModelAgeing.TableReadOnly(true); 
+         TableAgeing.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }  
+     
+     
+     
+     private void FormatGridContacts()
+     {
+       DataModelContacts = new EITLTableModel();
+       TableContacts.removeAll();
+       TableContacts.setModel(DataModelContacts);
+         
+        TableContacts.setAutoResizeMode(TableContacts.AUTO_RESIZE_OFF);
+        DataModelContacts.addColumn("Sr.");
+        DataModelContacts.addColumn("Party Code");
+        DataModelContacts.addColumn("Name");
+        DataModelContacts.addColumn("Address 1");
+        DataModelContacts.addColumn("Address 2");
+        DataModelContacts.addColumn("Station");        
+        DataModelContacts.addColumn("Zone");
+        DataModelContacts.addColumn("Contact Person");
+        DataModelContacts.addColumn("Mobile");
+        DataModelContacts.addColumn("Landline");
+        DataModelContacts.addColumn("Email");        
+        DataModelContacts.addColumn("Fax");
+        DataModelContacts.addColumn("Office Address");
+        DataModelContacts.addColumn("Work Address");        
+        //DataModelContacts.addColumn("Sales Representative");
+        DataModelContacts.addColumn("Incharge");
+        DataModelContacts.TableReadOnly(true);
+        TableContacts.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     
+     private void FormatGridHold()
+     {
+      DataModelHold=new EITLTableModel();
+      TableHold.removeAll();
+      TableHold.setModel(DataModelHold);
+        
+        TableHold.setAutoResizeMode(TableHold.AUTO_RESIZE_OFF);
+     
+        DataModelHold.addColumn("Sr.");
+        DataModelHold.addColumn("Priority");
+        DataModelHold.addColumn("Priority Date");
+        DataModelHold.addColumn("Ref No");
+        DataModelHold.addColumn("Conf No");
+        DataModelHold.addColumn("Machine No");
+        DataModelHold.addColumn("Position");    
+        DataModelHold.addColumn("Piece No");
+        DataModelHold.addColumn("Party Code");
+        DataModelHold.addColumn("Party Name");
+        DataModelHold.addColumn("Order Date");
+        DataModelHold.addColumn("Product Code");
+        DataModelHold.addColumn("Item");
+        DataModelHold.addColumn("Style");
+        DataModelHold.addColumn("Length");
+        DataModelHold.addColumn("Width");
+        DataModelHold.addColumn("GSM");
+        DataModelHold.addColumn("Weight");
+        DataModelHold.addColumn("Rate");
+        DataModelHold.addColumn("Delivery Date");
+        DataModelHold.addColumn("Comm Date");
+        DataModelHold.addColumn("Weaving Date");
+        DataModelHold.addColumn("Mending Date");
+        DataModelHold.addColumn("Needling Date");        
+        DataModelHold.addColumn("INS IND");
+        DataModelHold.addColumn("Bas Amt");
+        DataModelHold.addColumn("Memo Date");
+        DataModelHold.addColumn("Discount Per");
+        DataModelHold.addColumn("Dis Amt");
+        DataModelHold.addColumn("Dis Bas Amt");
+        DataModelHold.addColumn("Excise");
+        DataModelHold.addColumn("Seam Charge");
+        DataModelHold.addColumn("Insacc Amt");
+        DataModelHold.addColumn("Inv Amt");
+        DataModelHold.addColumn("Zone");
+        DataModelHold.addColumn("Incharge");        
+        DataModelHold.TableReadOnly(true);    
+        TableHold.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     
+     private void FormatGridCancelled(){
+         DataModelCancelled=new EITLTableModel();
+      TableCancelled.removeAll();
+      TableCancelled.setModel(DataModelCancelled);
+        
+        TableCancelled.setAutoResizeMode(TableCancelled.AUTO_RESIZE_OFF);
+     
+        DataModelCancelled.addColumn("Sr.");
+        DataModelCancelled.addColumn("Priority");
+        DataModelCancelled.addColumn("Priority Date");
+        DataModelCancelled.addColumn("Ref No");
+        DataModelCancelled.addColumn("Conf No");
+        DataModelCancelled.addColumn("Machine No");
+        DataModelCancelled.addColumn("Position");    
+        DataModelCancelled.addColumn("Piece No");
+        DataModelCancelled.addColumn("Party Code");
+        DataModelCancelled.addColumn("Party Name");
+        DataModelCancelled.addColumn("Order Date");
+        DataModelCancelled.addColumn("Product Code");
+        DataModelCancelled.addColumn("Item");
+        DataModelCancelled.addColumn("Style");
+        DataModelCancelled.addColumn("Length");
+        DataModelCancelled.addColumn("Width");
+        DataModelCancelled.addColumn("GSM");
+        DataModelCancelled.addColumn("Weight");
+        DataModelCancelled.addColumn("Rate");
+        DataModelCancelled.addColumn("Delivery Date");
+        DataModelCancelled.addColumn("Comm Date");
+        DataModelCancelled.addColumn("Weaving Date");
+        DataModelCancelled.addColumn("Mending Date");
+        DataModelCancelled.addColumn("Needling Date");        
+        DataModelCancelled.addColumn("INS IND");
+        DataModelCancelled.addColumn("Bas Amt");
+        DataModelCancelled.addColumn("Memo Date");
+        DataModelCancelled.addColumn("Discount Per");
+        DataModelCancelled.addColumn("Dis Amt");
+        DataModelCancelled.addColumn("Dis Bas Amt");
+        DataModelCancelled.addColumn("Excise");
+        DataModelCancelled.addColumn("Seam Charge");
+        DataModelCancelled.addColumn("Insacc Amt");
+        DataModelCancelled.addColumn("Inv Amt");
+        DataModelCancelled.addColumn("Zone");
+        DataModelCancelled.addColumn("Incharge");        
+        DataModelCancelled.TableReadOnly(true);   
+        TableCancelled.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     
+     private void FormatGridMachine(){
+      DataModelMachine=new EITLTableModel();
+      TableMachine.removeAll();
+      TableMachine.setModel(DataModelMachine);
+        
+        TableMachine.setAutoResizeMode(TableMachine.AUTO_RESIZE_OFF);
+     
+//        DataModelMachine.addColumn("Sr.");
+//        DataModelMachine.addColumn("Party Code");
+//        DataModelMachine.addColumn("Machine No");
+//        DataModelMachine.addColumn("Position");
+//        DataModelMachine.addColumn("Position Desc");
+//        DataModelMachine.addColumn("Order Size");
+//        DataModelMachine.addColumn("Press Type");
+//        DataModelMachine.addColumn("GSM Range");
+//        DataModelMachine.addColumn("Max Felt Length");
+//        DataModelMachine.addColumn("Min Felt Length");
+//        DataModelMachine.addColumn("Linear Nip Load");
+//        DataModelMachine.addColumn("Paper Grade");
+//        DataModelMachine.addColumn("Furnish");
+//        DataModelMachine.addColumn("Type");
+//        DataModelMachine.addColumn("Speed");
+//        DataModelMachine.addColumn("Survey Date");
+//        DataModelMachine.addColumn("Wire Length");
+//        DataModelMachine.addColumn("Wire Width");
+//        DataModelMachine.addColumn("Wire Type");
+//        DataModelMachine.addColumn("Tech Rep");
+//        DataModelMachine.addColumn("Type Of Filler");
+//        DataModelMachine.addColumn("Paper Deckle");
+//        
+//        
+        DataModelMachine.addColumn("Sr.");
+        DataModelMachine.addColumn("MM_DOC_NO");
+        DataModelMachine.addColumn("MM_PARTY_CODE");
+        DataModelMachine.addColumn("MM_PARTY_NAME");
+        DataModelMachine.addColumn("MM_INCHARGE_NAME");
+        DataModelMachine.addColumn("MM_STATION");
+        DataModelMachine.addColumn("MM_MACHINE_NO");
+        DataModelMachine.addColumn("MM_MACHINE_TYPE_FORMING");
+        DataModelMachine.addColumn("MM_PAPER_GRADE");
+        DataModelMachine.addColumn("MM_MACHINE_SPEED_RANGE");
+        DataModelMachine.addColumn("MM_PAPER_GSM_RANGE");
+        DataModelMachine.addColumn("MM_MACHINE_TYPE_PRESSING");
+        DataModelMachine.addColumn("MM_FURNISH");
+        DataModelMachine.addColumn("MM_TYPE_OF_FILLER");
+        DataModelMachine.addColumn("MM_WIRE_DETAIL_1");
+        DataModelMachine.addColumn("MM_WIRE_DETAIL_2");
+        DataModelMachine.addColumn("MM_WIRE_DETAIL_3");
+        DataModelMachine.addColumn("MM_WIRE_DETAIL_4");
+        DataModelMachine.addColumn("MM_PAPER_DECKLE_AFTER_WIRE");
+        DataModelMachine.addColumn("MM_PAPER_DECKLE_AFTER_PRESS");
+        DataModelMachine.addColumn("MM_PAPER_DECKLE_AT_POPE_REEL");
+        DataModelMachine.addColumn("MM_DRYER_SECTION");
+        DataModelMachine.addColumn("MM_ZONE");
+        DataModelMachine.addColumn("MM_CAPACITY");
+        DataModelMachine.addColumn("MM_MACHINE_STATUS");
+        DataModelMachine.addColumn("MM_ZONE_REPRESENTATIVE");
+        DataModelMachine.addColumn("MM_DATE_OF_UPDATE");
+        DataModelMachine.addColumn("MM_TOTAL_DRYER_GROUP");
+        DataModelMachine.addColumn("MM_UNIRUM_GROUP");
+        DataModelMachine.addColumn("MM_CONVENTIONAL_GROUP");
+        DataModelMachine.addColumn("MM_HOOD_TYPE");
+        DataModelMachine.addColumn("MM_SIZE_PRESS");
+        DataModelMachine.addColumn("MM_SIZE_PRESS_POSITION");
+        DataModelMachine.addColumn("MM_SHEET_DRYNESS_SIZE_PRESS");
+        DataModelMachine.addColumn("MM_MACHINE_POSITION");
+        DataModelMachine.addColumn("MM_MACHINE_POSITION_DESC");
+        DataModelMachine.addColumn("MM_COMBINATION_CODE");
+        DataModelMachine.addColumn("MM_PRESS_TYPE");
+        DataModelMachine.addColumn("MM_PRESS_ROLL_DAI_MM");
+        DataModelMachine.addColumn("MM_PRESS_ROLL_FACE_TOTAL_MM");
+        DataModelMachine.addColumn("MM_PRESS_ROLL_FACE_NET_MM");
+        DataModelMachine.addColumn("MM_FELT_ROLL_WIDTH_MM");
+        DataModelMachine.addColumn("MM_PRESS_LOAD");
+        DataModelMachine.addColumn("MM_VACCUM_CAPACITY");
+        DataModelMachine.addColumn("MM_UHLE_BOX");
+        DataModelMachine.addColumn("MM_HP_SHOWER");
+        DataModelMachine.addColumn("MM_LP_SHOWER");
+        DataModelMachine.addColumn("MM_FELT_LENGTH");
+        DataModelMachine.addColumn("MM_FELT_WIDTH");
+        DataModelMachine.addColumn("MM_FELT_GSM");
+        DataModelMachine.addColumn("MM_FELT_WEIGHT");
+        DataModelMachine.addColumn("MM_FELT_TYPE");
+        DataModelMachine.addColumn("MM_FELT_STYLE");
+        DataModelMachine.addColumn("MM_AVG_LIFE");
+        DataModelMachine.addColumn("MM_AVG_PRODUCTION");
+        DataModelMachine.addColumn("MM_FELT_CONSUMPTION");
+        DataModelMachine.addColumn("MM_DINESH_SHARE");
+        DataModelMachine.addColumn("MM_REMARK_DESIGN");
+        DataModelMachine.addColumn("MM_REMARK_GENERAL");
+        DataModelMachine.addColumn("MM_NO_DRYER_CYLINDER");
+        DataModelMachine.addColumn("MM_CYLINDER_DIA_MM");
+        DataModelMachine.addColumn("MM_CYLINDER_FACE_NET_MM");
+        DataModelMachine.addColumn("MM_DRIVE_TYPE");
+        DataModelMachine.addColumn("MM_GUIDE_TYPE");
+        DataModelMachine.addColumn("MM_GUIDE_PAM_TYPE");
+        DataModelMachine.addColumn("MM_VENTILATION_TYPE");
+        DataModelMachine.addColumn("MM_FABRIC_LENGTH");
+        DataModelMachine.addColumn("MM_FABRIC_WIDTH");
+        DataModelMachine.addColumn("MM_SIZE_M2");
+        DataModelMachine.addColumn("MM_SCREEN_TYPE");
+        DataModelMachine.addColumn("MM_STYLE_DRY");
+        DataModelMachine.addColumn("MM_CFM_DRY");
+        DataModelMachine.addColumn("MM_AVG_LIFE_DRY");
+        DataModelMachine.addColumn("MM_CONSUMPTION_DRY");
+        DataModelMachine.addColumn("MM_DINESH_SHARE_DRY");
+        DataModelMachine.addColumn("MM_REMARK_DRY");
+        DataModelMachine.addColumn("MM_ITEM_CODE");
+        DataModelMachine.addColumn("MM_GRUP");
+
+        
+        
+        DataModelMachine.TableReadOnly(true);   
+        TableMachine.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     
+      private void FormatGridComplaint()
+     {
+       DataModelComplaint = new EITLTableModel();
+       TableComplaint.removeAll();
+       TableComplaint.setModel(DataModelComplaint);
+         
+        TableComplaint.setAutoResizeMode(TableComplaint.AUTO_RESIZE_OFF);
+        DataModelComplaint.addColumn("Sr.");
+        DataModelComplaint.addColumn("Complaint No");
+        DataModelComplaint.addColumn("Complaint Date");
+        DataModelComplaint.addColumn("Complaint Nature");
+        DataModelComplaint.addColumn("Resolution");
+        DataModelComplaint.addColumn("Attended On");
+        DataModelComplaint.addColumn("Attended By");
+        DataModelComplaint.addColumn("Close Date");        
+        DataModelComplaint.addColumn("Remarks");
+        DataModelComplaint.addColumn("Party Code");
+        DataModelComplaint.addColumn("Invoice No");
+        DataModelComplaint.addColumn("Invoice Date");
+        DataModelComplaint.addColumn("Invoice Amt");        
+        DataModelComplaint.addColumn("Piece No");
+        DataModelComplaint.addColumn("Machine No");
+        DataModelComplaint.addColumn("Position");        
+        DataModelComplaint.addColumn("Length");
+        DataModelComplaint.addColumn("Width");
+        DataModelComplaint.addColumn("Action_Date1");
+        DataModelComplaint.addColumn("Action_Taken1 ");
+        DataModelComplaint.addColumn("Action_Date2");
+        DataModelComplaint.addColumn("Action_Taken2 ");
+        DataModelComplaint.addColumn("Action_Date3");
+        DataModelComplaint.addColumn("Action_Taken3 ");
+        DataModelComplaint.addColumn("Action_Date4");
+        DataModelComplaint.addColumn("Action_Taken4 ");
+        DataModelComplaint.addColumn("Action_Date5");
+        DataModelComplaint.addColumn("Action_Taken5 ");
+        DataModelComplaint.addColumn("Action_Date6");
+        DataModelComplaint.addColumn("Action_Taken6 ");
+        DataModelComplaint.addColumn("Action_Date7");
+        DataModelComplaint.addColumn("Action_Taken7 ");
+        DataModelComplaint.addColumn("Action_Date8");
+        DataModelComplaint.addColumn("Action_Taken8 ");
+        DataModelComplaint.addColumn("Action_Date9");
+        DataModelComplaint.addColumn("Action_Taken9 ");
+        DataModelComplaint.addColumn("Action_Date10");
+        DataModelComplaint.addColumn("Action_Taken10 ");
+       
+        
+        //DataModelContacts.addColumn("Sales Representative");        
+        DataModelComplaint.TableReadOnly(true);
+        TableComplaint.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     
+     private void FormatGridAgreedDate()
+     {
+       DataModelAgreedDate = new EITLTableModel();
+       TableAgreedDate.removeAll();
+       TableAgreedDate.setModel(DataModelAgreedDate);
+         
+        TableAgreedDate.setAutoResizeMode(TableAgreedDate.AUTO_RESIZE_OFF);
+        DataModelAgreedDate.addColumn("SR.");
+        DataModelAgreedDate.addColumn("AGREEDDATE");
+        DataModelAgreedDate.addColumn("NATURE_AGREEDDATE");
+        DataModelAgreedDate.addColumn("PARTYCODE");
+        DataModelAgreedDate.addColumn("PARTYNAME");
+        DataModelAgreedDate.addColumn("PIECE STATUS");
+        DataModelAgreedDate.addColumn("PIECE NO.");
+        DataModelAgreedDate.addColumn("ORDER DATE");
+        DataModelAgreedDate.addColumn("PRODUCT CODE");
+        DataModelAgreedDate.addColumn("GROUP");
+        DataModelAgreedDate.addColumn("STYLE");
+        DataModelAgreedDate.addColumn("GSM");        
+        DataModelAgreedDate.addColumn("WVG_DATE");        
+        DataModelAgreedDate.addColumn("WVG_DELAY");        
+        DataModelAgreedDate.addColumn("MND_DATE");        
+        DataModelAgreedDate.addColumn("NDL_DATE");        
+        DataModelAgreedDate.addColumn("RECIEVED_DATE"); 
+        DataModelAgreedDate.addColumn("ORDER_MTR");
+        DataModelAgreedDate.addColumn("RCVD_MTR");
+        DataModelAgreedDate.addColumn("ORDER_WIDTH");
+        DataModelAgreedDate.addColumn("RCVD_WIDTH");
+        DataModelAgreedDate.addColumn("TH.WIEGHT");       
+        DataModelAgreedDate.addColumn("ACT.WIEGHT");       
+        DataModelAgreedDate.addColumn("INVOICE_DATE");  
+        DataModelAgreedDate.addColumn("INVOICE_NO");  
+        DataModelAgreedDate.addColumn("FELT_RECIEVED");  
+        DataModelAgreedDate.addColumn("FELT_INVOICED");  
+        DataModelAgreedDate.addColumn("DAYS_RCD_VS_AD ");  
+        DataModelAgreedDate.addColumn("DAYS_ID_VS_AD");  
+        DataModelAgreedDate.addColumn("DAYS_ID_VS_RCD");  
+        DataModelAgreedDate.addColumn("DAYS_AD_VS_NOW");  
+        
+       //DataModelContacts.addColumn("Sales Representative");        
+        DataModelAgreedDate.TableReadOnly(true);
+        TableAgreedDate.getColumnModel().getColumn(0).setMaxWidth(50); 
+     }
+     
+     
+    
+    private void GenerateProductionProcess() {
+       String strOrderDateFrom ="";
+       String strOrderDateTo = "";
+        try{
+          FormatGridProductionProcess(); //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strLengthFrom = txtlengthfrom.getText().toString();
+          strLengthTo = txtlengthto.getText().toString();
+          strWidthFrom = txtwidthfrom.getText().toString();
+          strWidthTo = txtwidthto.getText().toString();
+          strGSQFrom = txtgsqfrom.getText().toString();
+          strGSQTo = txtgsqto.getText().toString();
+          strPieceNo = txtpieceno.getText().toString();
+          strProductCode = txtproductcode.getText().toString();
+          strZone = txtzone.getText().toString();
+          strOrderDateFrom = EITLERPGLOBAL.formatDateDB(txtdatefrom.getText());
+          strOrderDateTo = EITLERPGLOBAL.formatDateDB(txtdateto.getText());
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          //rsTmp=data.getResult("SELECT PIECE_NO FROM FELT_ORDER_MASTER WHERE PARTY_CD="+SelUserID+"");
+        strSQL="";
+        //strSQL+="SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE, INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE    FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = "+SelUserID+" AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";
+        /*if(!txtpartycode.getText().equals("")){
+            strSQL+="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE, INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = "+SelUserID+" AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";
+        }
+        else{
+            strSQL+="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE, INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";
+        }
+          */ 
+        //strSQL+="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        //strSQL+="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM1' WHEN PRIORITY=3 THEN 'MEDIUM2' WHEN PRIORITY=4 THEN 'HIGH' END AS PRIOR,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        //strSQL+="SELECT PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        //strSQL+="SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT - (BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,WPSC,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        //strSQL+="SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE,PRIORITY FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT - (BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,WPSC,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        //strSQL+="SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,RATE,DELIV_DATE,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,ZONE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME FROM (SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE,COMM_DATE,AGREED_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT - (BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,WPSC,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,INCHARGE_CD FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        
+       //OLD ORIGINAL 223
+        //strSQL+="SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,RATE,DELIV_DATE,COMM_DATE,AGREED_DATE,DATEDIFF(COMM_DATE,DELIV_DATE) AS DELCOMDAYS,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,ZONE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME FROM (SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE,COMM_DATE,AGREED_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE,COMM_DATE,AGREED_DATE,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE,COMM_DATE,AGREED_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT - (BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,AGREED_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,WPSC,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,AGREED_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,INCHARGE_CD FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER   ";
+       //OLD ORIGINAL 223
+        
+      //strSQL+="SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH AS ORDER_LENGTH,WIDTH AS ORDER_WIDTH,GSQ,WEIGHT AS CALD_WEIGHT,RATE,DELIV_DATE,COMM_DATE,AGREED_DATE,DATEDIFF(COMM_DATE,DELIV_DATE) AS DELCOMDAYS,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,ZONE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME FROM " +
+        
+     // sohal 01.10.2014   
+     // strSQL+="SELECT PRIORITY_DESC,PRIORITY_DATE,ORDER_DATE,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,PRODUCT_CODE,ITEM,STYLE,LNGTH AS ORDER_LENGTH,WIDTH AS ORDER_WIDTH,GSQ,WEIGHT AS CALD_WEIGHT,RATE,DELIV_DATE,COMM_DATE,AGREED_DATE,WVG_DATE,MND_DATE,NDL_DATE,BAS_AMT,DISC_PER,DISAMT,DISBASAMT,INSACC_AMT,MEMO_DATE,EXCISE,SEAM_CHG,INV_AMT,INCHARGE_NAME,ZONE,REF_NO,CONF_NO,INSURANCE_CODE,DATEDIFF(COMM_DATE,DELIV_DATE) AS DELCOMDAYS,PRIORITY FROM (SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE,COMM_DATE,AGREED_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE,COMM_DATE,AGREED_DATE,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE,COMM_DATE,AGREED_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT - (BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,AGREED_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,WPSC,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,AGREED_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,INCHARGE_CD FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER "; 
+      
+      //sohal and dhaval 13.10.2014
+       // strSQL+="SELECT PRIORITY_DESC,PRIORITY_DATE,'' AS ORDER_NO,ORDER_DATE,'' AS ORDER_REMARKS,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,PRODUCT_CODE,ITEM,STYLE,LNGTH AS ORDER_LENGTH,'' AS RCVD_LENGTH,WIDTH AS ORDER_WIDTH,'' AS RCVD_WIDTH,GSQ,(LNGTH*WIDTH) AS GROSS_SQ_MTR,WEIGHT AS CALD_WEIGHT,DELIV_DATE AS REQUESTED_DATE,COMM_DATE,AGREED_DATE,WVG_DATE,MND_DATE,NDL_DATE,RCVD_DATE,DATEDIFF(AGREED_DATE,RCVD_DATE) AS AD_RC_DAYS,'' AS RC_TO_DAYS,RATE,INV_AMT AS INVOICE_AMT,'0000/00/00' AS INV_DATE,MEMO_DATE,'0000/00/00' AS PACK_DATE,'' AS BALE_NO,'' AS STATION,INCHARGE_NAME,ZONE,INSURANCE_CODE,'' AS LOCK_CODE,'' AS LR_NO,'0000/00/00' AS LR_DATE,'' AS CARRIER,'' AS FREIGHT,REMARKS,'' AS ID_AD,'' AS HUNDI_CHARGE,REF_NO,CONF_NO,BAS_AMT,DISC_PER,DISAMT,DISBASAMT,EXCISE,SEAM_CHG,INSACC_AMT,PRIORITY,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY  FROM(SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY,S_RCVD_DATE AS RCVD_DATE,AGREED_DATE,REMARKS FROM(SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY,S_RCVD_DATE,AGREED_DATE,REMARKS FROM(SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT - (BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY,S_RCVD_DATE,AGREED_DATE,REMARKS FROM(SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,WPSC,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY,S_RCVD_DATE,AGREED_DATE,A1.REMARKS AS REMARKS FROM(SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0 THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY,S_RCVD_DATE,AGREED_DATE,PRODUCTION.FELT_ORDER_MASTER.REMARKS FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+      //RISHI 31/01/2015 
+        //strSQL+="SELECT PRIORITY_DESC,PRIORITY_DATE,'' AS ORDER_NO,ORDER_DATE,'' AS ORDER_REMARKS,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,PRODUCT_CODE,ITEM,STYLE,LNGTH AS ORDER_LENGTH,'' AS RCVD_LENGTH,WIDTH AS ORDER_WIDTH,'' AS RCVD_WIDTH,GSQ,(LNGTH*WIDTH) AS GROSS_SQ_MTR,WEIGHT AS CALD_WEIGHT,DELIV_DATE AS REQUESTED_DATE,COMM_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,WVG_DATE,MND_DATE,NDL_DATE,RCVD_DATE,DATEDIFF(AGREED_DATE,RCVD_DATE) AS AD_RC_DAYS,'' AS RC_TO_DAYS,RATE,INV_AMT AS INVOICE_AMT,'0000/00/00' AS INV_DATE,MEMO_DATE,'0000/00/00' AS PACK_DATE,'' AS BALE_NO,'' AS STATION,INCHARGE_NAME,ZONE,INSURANCE_CODE,'' AS LOCK_CODE,'' AS LR_NO,'0000/00/00' AS LR_DATE,'' AS CARRIER,'' AS FREIGHT,REMARKS,'' AS ID_AD,'' AS HUNDI_CHARGE,REF_NO,CONF_NO,BAS_AMT,DISC_PER,DISAMT,DISBASAMT,EXCISE,SEAM_CHG,INSACC_AMT,PRIORITY,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK  FROM(SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,S_RCVD_DATE AS RCVD_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,REMARKS FROM(SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,S_RCVD_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,REMARKS FROM(SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT - (BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,S_RCVD_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,REMARKS FROM(SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,WPSC,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,S_RCVD_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,A1.REMARKS AS REMARKS FROM(SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0 THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,S_RCVD_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,PRODUCTION.FELT_ORDER_MASTER.REMARKS FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+       //Rishi 03/03/2015 Excise Duty Change 
+        strSQL+="SELECT PRIORITY_DESC,PRIORITY_DATE,'' AS ORDER_NO,ORDER_DATE,'' AS ORDER_REMARKS,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,PRODUCT_CODE,ITEM,STYLE,LNGTH AS ORDER_LENGTH,'' AS RCVD_LENGTH,WIDTH AS ORDER_WIDTH,'' AS RCVD_WIDTH,GSQ,(LNGTH*WIDTH) AS GROSS_SQ_MTR,WEIGHT AS CALD_WEIGHT,DELIV_DATE AS REQUESTED_DATE,COMM_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,WVG_DATE,MND_DATE,NDL_DATE,RCVD_DATE,DATEDIFF(AGREED_DATE,RCVD_DATE) AS AD_RC_DAYS,'' AS RC_TO_DAYS,RATE,INV_AMT AS INVOICE_AMT,'0000/00/00' AS INV_DATE,MEMO_DATE,'0000/00/00' AS PACK_DATE,'' AS BALE_NO,'' AS STATION,INCHARGE_NAME,ZONE,INSURANCE_CODE,'' AS LOCK_CODE,'' AS LR_NO,'0000/00/00' AS LR_DATE,'' AS CARRIER,'' AS FREIGHT,REMARKS,'' AS ID_AD,'' AS HUNDI_CHARGE,REF_NO,CONF_NO,BAS_AMT,DISC_PER,DISAMT,DISBASAMT,EXCISE,SEAM_CHG,INSACC_AMT,PRIORITY,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK  FROM(SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,S_RCVD_DATE AS RCVD_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,REMARKS FROM(SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.1250) AS EXCISE,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,S_RCVD_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,REMARKS FROM(SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT - (BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,S_RCVD_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,REMARKS FROM(SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,WPSC,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,S_RCVD_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,A1.REMARKS AS REMARKS FROM(SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0 THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,INCHARGE_CD,P_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,S_RCVD_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,PRODUCTION.FELT_ORDER_MASTER.REMARKS FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        strSQL+=" WHERE ";
+        System.out.println("strSQL 1 :"+strSQL);   
+        if(!txtpartycode.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PARTY_CD = "+SelUserID+" AND ";    
+        }
+        if(!txtzone.getText().toString().equals("")){
+         strSQL+= "DINESHMILLS.D_SAL_PARTY_MASTER.ZONE = '"+strZone+"' AND ";
+        }
+        /*if(!txtpieceno.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PIECE_NO = "+strPieceNo+" AND ";    
+        }*/
+        if(!txtpieceno.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PIECE_NO IN ("+strPieceNo+") AND ";    
+        }
+       /* if(!txtproductcode.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PRODUCT_CODE = "+strProductCode+" AND ";    
+        }*/    
+        if(!txtproductcode.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PRODUCT_CODE IN ("+strProductCode+") AND ";    
+        }  
+        if(!txtlengthfrom.getText().equals("")){
+        strSQL+="PRODUCTION.FELT_ORDER_MASTER.LNGTH >="+strLengthFrom+" AND ";    
+        }
+        if(!txtlengthto.getText().equals("")){
+        strSQL+="PRODUCTION.FELT_ORDER_MASTER.LNGTH <= "+strLengthTo+" AND ";   
+        }
+        if(!txtwidthfrom.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.WIDTH >= "+strWidthFrom+" AND ";  
+        }
+        if(!txtwidthto.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.WIDTH <= "+strWidthTo+" AND ";
+        }
+        if(!txtgsqfrom.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.GSQ >= "+strGSQFrom+" AND ";  
+        }
+        if(!txtgsqto.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.GSQ <= "+strGSQTo+" AND ";
+        }
+        if(!txtdatefrom.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.ORDER_DATE >= '"+strOrderDateFrom+"' AND ";  
+        }
+        if(!txtdateto.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.ORDER_DATE <= '"+strOrderDateTo+"' AND ";
+        }         
+        //strSQL+=" PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON A1.PRIORITY=P1.PRIORITY_ID) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD=PARTY_CODE) AS B) AS C";
+        //strSQL+=" PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') AND PRIORITY IN (1,2,3,4,5) ) AS A1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON A1.PRIORITY=P1.PRIORITY_ID) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD=PARTY_CODE) AS B) AS C";
+        //strSQL+=" PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') AND PRIORITY IN (1,2,3,4,5) ) AS A1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON A1.PRIORITY=P1.PRIORITY_ID) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD=PARTY_CODE) AS B) AS C )  AS D LEFT JOIN (SELECT INCHARGE_CD,AREA_IN,ITEM_IN,INCHARGE_NAME FROM (SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE) AS FI LEFT JOIN (SELECT * FROM PRODUCTION.FELT_INCHARGE_MAPPING) AS FIM ON FIM.INCHARGE_ID=FI.INCHARGE_CD) AS FM ON FM.AREA_IN=SUBSTRING(D.PARTY_CD,1,3) ";
+        strSQL+="PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') AND PRIORITY IN (1,2,3,4,5) AND MAIN_ACCOUNT_CODE='210010') AS A1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON A1.PRIORITY=P1.PRIORITY_ID) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD=PARTY_CODE) AS B) AS C )  AS D LEFT JOIN (SELECT * FROM PRODUCTION.FELT_INCHARGE) AS FI ON FI.INCHARGE_CD=D.INCHARGE_CD  ";
+        int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+="WHERE FI.INCHARGE_CD=1";    
+        }         
+        if(inchargeby==2){
+          strSQL+="WHERE FI.INCHARGE_CD=2";    
+        }
+        if(inchargeby==3){
+          strSQL+="WHERE FI.INCHARGE_CD=3";    
+        }
+        if(inchargeby==4){
+          strSQL+="WHERE FI.INCHARGE_CD=4";    
+        }
+        if(inchargeby==5){
+          strSQL+="WHERE FI.INCHARGE_CD=5";    
+        }
+        if(inchargeby==6){
+          strSQL+="WHERE FI.INCHARGE_CD=6";    
+        }
+        if(inchargeby==7){
+          strSQL+="WHERE D.INCHARGE_CD IS NULL";    
+        }
+        int Orderby=EITLERPGLOBAL.getComboCode(cmbOrder);            
+            if(Orderby==1){
+                strSQL+=" ORDER BY ORDER_DATE DESC ";
+            }
+            if(Orderby==2){
+                strSQL+=" ORDER BY  WVG_AGREED_DATE DESC ";
+            }
+            if(Orderby==3){
+                strSQL+=" ORDER BY PIECE_NO ";
+            }
+            if(Orderby==4){
+                strSQL+=" ORDER BY PRODUCT_CODE DESC ";
+            }
+            if(Orderby==5){
+                strSQL+=" ORDER BY PRIORITY DESC ";
+           }
+           if(Orderby==6){
+                strSQL+=" ORDER BY PARTY_CD ";
+            }
+           if(Orderby==7){
+                strSQL+=" ORDER BY PARTY_NAME ";
+            }
+           if(Orderby==8){
+                strSQL+=" ORDER BY P_COLOR_CARD ";
+            }
+           
+           
+          if(Orderby==9){
+                strSQL+=" ORDER BY REQUESTED_DATE DESC ";
+            }
+          if(Orderby==10){
+                strSQL+=" ORDER BY COMM_DATE DESC ";
+            }
+          if(Orderby==11){
+                strSQL+=" ORDER BY REV_REQ_DATE DESC ";
+            }
+          if(Orderby==12){
+                strSQL+=" ORDER BY REV_COMM_DATE DESC ";
+            }
+          if(Orderby==13){
+                strSQL+=" ORDER BY WVG_DATE DESC ";
+            }
+           if(Orderby==14){
+                strSQL+=" ORDER BY MND_DATE DESC ";
+            }
+           if(Orderby==15){
+                strSQL+=" ORDER BY NDL_DATE DESC ";
+            }
+           if(Orderby==16){
+                strSQL+=" ORDER BY WEAVING_REMARK ";
+            }
+        
+            if(Orderby==17){
+                strSQL+=" ORDER BY LNGTH DESC ";
+            }
+         
+            if(Orderby==18){
+                strSQL+=" ORDER BY WIDTH DESC ";
+            }
+         
+            if(Orderby==19){
+                strSQL+=" ORDER BY GSQ DESC ";
+            }
+         
+            if(Orderby==20) {
+                strSQL+=" ORDER BY MACHINE_NO ";
+            }
+         
+            if(Orderby==21){
+                strSQL+=" ORDER BY POSITION ";
+            }
+         
+            if(Orderby==22) {
+                strSQL+=" ORDER BY REF_NO ";
+            }            
+            if(Orderby==23) {
+                strSQL+=" ORDER BY CONF_NO ";
+            }
+            if(Orderby==24) {
+                strSQL+=" ORDER BY PRIORITY_DATE DESC ";
+            }
+           
+     
+         System.out.println("strSQL 2 :"+strSQL);   
+         rsTmp=data.getResult(strSQL);
+         rsTmp.first();
+         if(rsTmp.getRow()>0) {
+                int cnt=0;
+              
+                double kgsum = 0.00;
+                double invsum = 0.00;
+                while(!rsTmp.isAfterLast()) {
+                   
+                    cnt++; 
+                   txtrecordtotal.setText(Integer.toString(cnt));  
+                   
+                  //old original 223 
+                   //kgsum += Double.parseDouble(rsTmp.getString("WEIGHT"));
+                  // old original 223
+                   
+                  kgsum += Double.parseDouble(rsTmp.getString("CALD_WEIGHT"));
+                  invsum += Double.parseDouble(rsTmp.getString("INVOICE_AMT"));
+                  //txttotal.setText(Double.toString(Math.round(sum)));
+                  //txttotal.setText(Double.toString(sum));
+                   DecimalFormat df = new DecimalFormat("##.##");
+                   txtkgtotal.setText(df.format(kgsum));
+                   txtinvtotal.setText(df.format(invsum));
+                   
+                 //Object[] rowData=new Object[40];
+                    Object[] rowData=new Object[80];
+                    rowData[0]=Integer.toString(cnt);                    
+                    rowData[1]=rsTmp.getString("P_COLOR_CARD");                
+                    rowData[2]=rsTmp.getString("PRIORITY_DESC");
+                    rowData[3]=EITLERPGLOBAL.formatDate(rsTmp.getString("PRIORITY_DATE"));
+                    rowData[4]=rsTmp.getString("ORDER_NO");
+                    rowData[5]=EITLERPGLOBAL.formatDate(rsTmp.getString("ORDER_DATE")); 
+                    rowData[6]=rsTmp.getString("ORDER_REMARKS");
+                    rowData[7]=rsTmp.getString("MACHINE_NO");
+                    rowData[8]=rsTmp.getString("POSITION");
+                    rowData[9]=rsTmp.getString("PIECE_NO");                  
+                    rowData[10]=rsTmp.getString("PARTY_CD");
+                    rowData[11]=rsTmp.getString("PARTY_NAME");
+                    rowData[12]=rsTmp.getString("PRODUCT_CODE");
+                    rowData[13]=rsTmp.getString("ITEM");
+                    rowData[14]=rsTmp.getString("STYLE");
+                    rowData[15]=rsTmp.getString("ORDER_LENGTH");
+                    rowData[16]=rsTmp.getString("RCVD_LENGTH");   
+                    rowData[17]=rsTmp.getString("ORDER_WIDTH");
+                    rowData[18]=rsTmp.getString("RCVD_WIDTH");
+                    rowData[19]=rsTmp.getString("GSQ");
+                    rowData[20]=rsTmp.getString("GROSS_SQ_MTR");
+                    rowData[21]=rsTmp.getString("CALD_WEIGHT");
+                    rowData[22]=EITLERPGLOBAL.formatDate(rsTmp.getString("REQUESTED_DATE"));
+                    rowData[23]=EITLERPGLOBAL.formatDate(rsTmp.getString("REV_REQ_DATE"));
+                    rowData[24]=rsTmp.getString("REV_REQ_REASON");
+                    rowData[25]=EITLERPGLOBAL.formatDate(rsTmp.getString("COMM_DATE"));
+                    rowData[26]=EITLERPGLOBAL.formatDate(rsTmp.getString("REV_COMM_DATE"));
+                    rowData[27]=rsTmp.getString("REV_COMM_REASON");
+                    rowData[28]=EITLERPGLOBAL.formatDate(rsTmp.getString("AGREED_DATE"));
+                    rowData[29]=EITLERPGLOBAL.formatDate(rsTmp.getString("WVG_AGREED_DATE"));
+                    rowData[30]=EITLERPGLOBAL.formatDate(rsTmp.getString("WVG_DATE"));
+                    rowData[31]=rsTmp.getString("WVG_LAYER_REMARK");                    
+                    rowData[32]=rsTmp.getString("WEAVING_REMARK");                    
+                    rowData[33]=rsTmp.getString("WARP_NO"); 
+                    rowData[34]=EITLERPGLOBAL.formatDate(rsTmp.getString("MND_DATE"));
+                    rowData[35]=EITLERPGLOBAL.formatDate(rsTmp.getString("NDL_DATE"));
+                    rowData[36]=rsTmp.getString("CONSIGNMENT_NO"); 
+                    rowData[37]=EITLERPGLOBAL.formatDate(rsTmp.getString("CONSIGNMENT_DATE"));
+                    rowData[38]=EITLERPGLOBAL.formatDate(rsTmp.getString("EXP_DESP_DATE"));
+                    rowData[39]=EITLERPGLOBAL.formatDate(rsTmp.getString("RCVD_DATE"));
+                    rowData[40]=EITLERPGLOBAL.formatDate(rsTmp.getString("AD_RC_DAYS"));
+                    rowData[41]=EITLERPGLOBAL.formatDate(rsTmp.getString("RC_TO_DAYS"));
+                    rowData[42]=rsTmp.getString("RATE");
+                    rowData[43]=rsTmp.getString("INVOICE_AMT");
+                    rowData[44]=EITLERPGLOBAL.formatDate(rsTmp.getString("INV_DATE"));
+                    rowData[45]=EITLERPGLOBAL.formatDate(rsTmp.getString("MEMO_DATE"));
+                    rowData[46]=EITLERPGLOBAL.formatDate(rsTmp.getString("PACK_DATE"));
+                    rowData[47]=rsTmp.getString("BALE_NO");
+                    rowData[48]=rsTmp.getString("STATION");
+                    rowData[49]=rsTmp.getString("INCHARGE_NAME");
+                    rowData[50]=rsTmp.getString("ZONE");
+                    rowData[51]=rsTmp.getString("INSURANCE_CODE");
+                    rowData[52]=rsTmp.getString("LOCK_CODE"); 
+                    rowData[53]=rsTmp.getString("LR_NO");
+                    rowData[54]=EITLERPGLOBAL.formatDate(rsTmp.getString("LR_DATE"));
+                    rowData[55]=rsTmp.getString("CARRIER");
+                    rowData[56]=rsTmp.getString("FREIGHT");
+                    rowData[57]=rsTmp.getString("REMARKS");
+                    rowData[58]=rsTmp.getString("ID_AD");
+                    rowData[59]=rsTmp.getString("HUNDI_CHARGE");
+                    rowData[60]=rsTmp.getString("REF_NO");
+                    rowData[61]=rsTmp.getString("CONF_NO");
+                    rowData[62]=rsTmp.getString("BAS_AMT");
+                    rowData[63]=rsTmp.getString("DISC_PER");
+                    rowData[64]=rsTmp.getString("DISAMT");
+                    rowData[65]=rsTmp.getString("DISBASAMT");
+                    rowData[66]=rsTmp.getString("EXCISE"); 
+                    rowData[67]=rsTmp.getString("SEAM_CHG"); 
+                    rowData[68]=rsTmp.getString("INSACC_AMT"); 
+                    rowData[69]=rsTmp.getString("PRIORITY");
+                    rowData[70]=rsTmp.getString("AGREED_IND");
+                    rowData[71]=rsTmp.getString("AGREED_REMARK");
+            
+                    
+
+                    
+              /*  //old original                  
+                      rowData[0]=Integer.toString(cnt);
+                   // rowData[1]=rsTmp.getString("PRIOR");
+                    rowData[1]=rsTmp.getString("PRIORITY_DESC"); //ok
+                    rowData[2]=EITLERPGLOBAL.formatDate(rsTmp.getString("PRIORITY_DATE")); //ok
+                    rowData[3]=rsTmp.getString("REF_NO");  //OK
+                    rowData[4]=rsTmp.getString("CONF_NO"); //OK
+                    rowData[5]=rsTmp.getString("MACHINE_NO"); //OK
+                    rowData[6]=rsTmp.getString("POSITION");   //OK
+                    rowData[7]=rsTmp.getString("PIECE_NO");  //ok
+                    rowData[8]=rsTmp.getString("PARTY_CD");  //ok
+                    rowData[9]=rsTmp.getString("PARTY_NAME"); // ok
+                    rowData[10]=EITLERPGLOBAL.formatDate(rsTmp.getString("ORDER_DATE")); //ok
+                    rowData[11]=rsTmp.getString("PRODUCT_CODE");// OK
+                    rowData[12]=rsTmp.getString("ITEM"); //OK
+                    rowData[13]=rsTmp.getString("STYLE"); //OK
+                    rowData[14]=rsTmp.getString("LNGTH"); //OK AS ORDERED_LENGTH
+                    rowData[15]=rsTmp.getString("WIDTH"); //OK AS ORDERED_WIDTH
+                    rowData[16]=rsTmp.getString("GSQ");  //OK
+                    rowData[17]=rsTmp.getString("WEIGHT"); //OK AS CALD_WEIGHT
+                    rowData[18]=rsTmp.getString("RATE"); //OK
+                    rowData[19]=EITLERPGLOBAL.formatDate(rsTmp.getString("DELIV_DATE")); //OK
+                    rowData[20]=EITLERPGLOBAL.formatDate(rsTmp.getString("COMM_DATE")); //OK
+                    rowData[21]=EITLERPGLOBAL.formatDate(rsTmp.getString("AGREED_DATE")); //OK
+                    rowData[22]=rsTmp.getString("DELCOMDAYS");
+                    rowData[23]=EITLERPGLOBAL.formatDate(rsTmp.getString("WVG_DATE")); //OK
+                    rowData[24]=EITLERPGLOBAL.formatDate(rsTmp.getString("MND_DATE")); //OK
+                    rowData[25]=EITLERPGLOBAL.formatDate(rsTmp.getString("NDL_DATE")); //OK
+                    rowData[26]=rsTmp.getString("INSURANCE_CODE"); //OK
+                    rowData[27]=rsTmp.getString("BAS_AMT"); // OK
+                    rowData[28]=EITLERPGLOBAL.formatDate(rsTmp.getString("MEMO_DATE"));  //OK
+                    rowData[29]=rsTmp.getString("DISC_PER");  //OK
+                    rowData[30]=rsTmp.getString("DISAMT");  //OK
+                    rowData[31]=rsTmp.getString("DISBASAMT");  //OK
+                    rowData[32]=rsTmp.getString("EXCISE");  //OK
+                    rowData[33]=rsTmp.getString("SEAM_CHG");  //OK
+                    rowData[34]=rsTmp.getString("INSACC_AMT"); //OK
+                    rowData[35]=rsTmp.getString("INV_AMT");  //OK
+                    rowData[36]=rsTmp.getString("ZONE");
+                    //rowData[35]=EITLERPGLOBAL.formatDate(rsTmp.getString("PRIORITY_DATE"));
+                    rowData[37]=rsTmp.getString("INCHARGE_NAME");
+                    //rowData[5]=EITLERPGLOBAL.formatDate(rsTmp.getString("ORDER_DATE"));
+                    //rowData[10]=rsTmp.getString("GSQ");
+                    //rowData[7]=rsTmp.getString("BALNK");
+                  */
+                 
+                    DataModelProductionProcess.addRow(rowData);
+                   //}
+                   /*if(rsTmp.getString("PRIORITY_DESC").toString().equals("LOW")){
+                                  
+                   } */                   
+                    rsTmp.next();
+                }
+         }
+        /* else{
+             //JOptionPane.showMessageDialog(this,"","Message",JOptionPane.ERROR_MESSAGE);
+             if(!txtpieceno.getText().equals("")){
+            JOptionPane.showMessageDialog(this,"Search Piece No in Stock Available/Packed Not Despatched/Diverted/Despatched");
+            }
+         }*/         
+         //DisplayIndicators();
+       }
+      catch(Exception e){
+         e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage()); 
+      }
+ }
+    
+     private void GenerateStockProcess() {
+     String strReceivedDateFrom = "";
+     String strReceivedDateTo = "";
+        try{
+          FormatGridStock();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strLengthFrom = txtlengthfrom.getText().toString();
+          strLengthTo = txtlengthto.getText().toString();
+          strWidthFrom = txtwidthfrom.getText().toString();
+          strWidthTo = txtwidthto.getText().toString();
+          strGSQFrom = txtgsqfrom.getText().toString();
+          strGSQTo = txtgsqto.getText().toString();
+          strReceivedDateFrom = EITLERPGLOBAL.formatDateDB(txtdatefrom.getText());
+          strReceivedDateTo = EITLERPGLOBAL.formatDateDB(txtdateto.getText());
+          strPieceNo = txtpieceno.getText().toString();
+          strProductCode = txtproductcode.getText().toString();
+          strZone = txtzone.getText().toString();
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          //rsTmp=data.getResult("SELECT PIECE_NO FROM FELT_ORDER_MASTER WHERE PARTY_CD="+SelUserID+"");
+        strSQL= "";
+        //strSQL+="SELECT PRODUCT_CD,ORDER_CD,PIECE_NO,RCVD_DATE,RCVD_MTR,RECD_KG,RECD_WDTH,INWARD_NO,BALE_NO FROM ";
+        //strSQL+="PRODUCTION.FELT_PIECE_REGISTER WHERE ";
+        //strSQL+=" WH_CD != 2 AND PARTY_CODE = "+SelUserID+"";
+        
+        //strSQL="SELECT PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE,ITEM,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0)WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,REF_NO,CONF_NO,MACHINE_NO,POSITION,PARTY_CD,INSURANCE_CODE FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT, CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER D WHERE PRODUCT_CODE*10 = ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO  AND B.PARTY_CD = "+SelUserID+"  AND B.PARTY_CD = D.PARTY_CODE ) AS A  LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";
+        
+        /*if(!txtpartycode.getText().equals("")){
+         strSQL="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE,ITEM,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0)WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,REF_NO,CONF_NO,MACHINE_NO,POSITION,PARTY_CD,INSURANCE_CODE FROM (SELECT PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT, CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER D WHERE PRODUCT_CODE*10 = ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO  AND B.PARTY_CD = "+SelUserID+"  AND B.PARTY_CD = D.PARTY_CODE ) AS A  LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";   
+        }
+        else{
+        strSQL="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE,ITEM,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0)WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,REF_NO,CONF_NO,MACHINE_NO,POSITION,PARTY_CD,INSURANCE_CODE FROM (SELECT PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT, CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER D WHERE PRODUCT_CODE*10 = ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO AND B.PARTY_CD = D.PARTY_CODE ) AS A  LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";    
+        }*/
+        //strSQL+="SELECT PARTY_CD,NAME,CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE,ITEM,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0)WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(SYSDATE(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,INSURANCE_CODE FROM (SELECT NAME,GSQ,PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT NAME,GSQ,PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT NAME,GSQ,PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT, CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER D ";
+        //strSQL+="SELECT PARTY_CD,NAME,CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE,ITEM,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0)WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(SYSDATE(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,INSURANCE_CODE FROM (SELECT NAME,GSQ,PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT NAME,GSQ,PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT NAME,GSQ,PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1 FROM (SELECT NAME,GSQ,PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER D ";
+        //LAST UPDATED AS BELOW
+        //strSQL+="SELECT PARTY_CD,NAME,CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(NAME)),'PARTY DELETED IN COBOL') AS NAME,COALESCE(STATION,'Z STATION PARTY DELETED') AS STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1 FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+        //strSQL+="SELECT PARTY_CD,NAME,CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM1' WHEN PRIORITY=3 THEN 'MEDIUM2' WHEN PRIORITY=4 THEN 'HIGH' END AS PRIOR,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(NAME)),'PARTY DELETED IN COBOL') AS NAME,COALESCE(STATION,'Z STATION PARTY DELETED') AS STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1 FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+        //strSQL+="SELECT PARTY_CD,NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0 END AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(NAME)),'PARTY DELETED IN COBOL') AS NAME,COALESCE(STATION,'Z STATION PARTY DELETED') AS STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1 FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA1.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,WPSC, ST_FLAG_1 FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0 THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+        //strSQL+="SELECT PARTY_CD,NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CD,ITEM_DESC,STYLE,MTRS_ORDER,MTRS_RCVD ,WIDTH_ORDER,WIDTH_RCVD,GSQ,KG_CALC,KG_RCVD,RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME FROM (SELECT PARTY_CD,NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0 END AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,REGION FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,REGION FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,REGION FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(NAME)),'PARTY DELETED IN COBOL') AS NAME,COALESCE(STATION,'Z STATION PARTY DELETED') AS STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1,REGION FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA1.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,WPSC, ST_FLAG_1 FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0 THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+    // Ashutosh
+        //strSQL+="SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CD,ITEM_DESC,STYLE,MTRS_ORDER,MTRS_RCVD ,WIDTH_ORDER,WIDTH_RCVD,GSQ,KG_CALC,KG_RCVD,RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME,LOCK_CD FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CD,ITEM_DESC,STYLE,MTRS_ORDER,MTRS_RCVD ,WIDTH_ORDER,WIDTH_RCVD,GSQ,KG_CALC,KG_RCVD,RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0 END AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,INCHARGE_CD FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,INCHARGE_CD FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(PARTY_NAME)),'PARTY DELETED IN COBOL') AS PARTY_NAME,COALESCE(DISPATCH_STATION,'Z STATION PARTY DELETED') AS DISPATCH_STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1,INCHARGE_CD FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA1.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,WPSC, ST_FLAG_1 FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0 THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+    // Ashutosh
+       // strSQL+="SELECT PRIORITY,PRIORITY_DESC,PRIORITY_DATE,ORDER_DATE,PIECE_NO,PARTY_CD,PARTY_NAME,PRODUCT_CD,ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,KG_CALC AS CALD_WEIGHT,KG_RCVD AS ACTUAL_WEIGHT,RATE,DELIV_DATE,COMM_DATE,WEAVING_DT,MENDING_DT,NEEDLING_DT,RCVD_DATE,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,ROUND(BAS_AMT,2) AS BAS_AMT,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,INSACC_AMT,MEMO_DATE,ROUND(EXCISE,2) AS EXCISE,SEAM_CHG AS SEAM_CHARGE, INV_AMT AS INVOICE_AMT,MACHINE_NO,POSITION,PACK_DATE,BALE_NO,DISPATCH_STATION AS STATION,INCHARGE_NAME,ZONE,REF_NO,CONF_NO,INSURANCE_CODE,LOCK_CD FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CD,ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,KG_CALC,KG_RCVD,RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME,WEAVING_DT,MENDING_DT,NEEDLING_DT,PACK_DATE,BALE_NO FROM(SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0 END AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,PACK_DATE,BALE_NO FROM(SELECT PRIORITY_DATE,PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,PACK_DATE,BALE_NO FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,PACK_DATE,BALE_NO FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(PARTY_NAME)),'PARTY DELETED IN COBOL') AS PARTY_NAME,COALESCE(DISPATCH_STATION,'Z STATION PARTY DELETED') AS DISPATCH_STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,PACK_DATE,BALE_NO FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA1.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RECD_LENGTH * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,WPSC, ST_FLAG_1,WEAVING_DT,MENDING_DT,NEEDLING_DT,PACK_DATE,BALE_NO FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH AS ORDER_LENGTH,WIDTH AS ORDER_WIDTH,RCVD_MTR AS RECD_LENGTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0 THEN 0 END AS WPSC, ST_FLAG_1,WVG_DATE AS WEAVING_DT,MND_DATE AS MENDING_DT,NDL_DATE AS NEEDLING_DT,PACK_DATE,BALE_NO FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+     
+        //RISHI & ASHUTOSH 26/09/2014 
+        //strSQL+="SELECT PRIORITY,PRIORITY_DESC,PRIORITY_DATE,ORDER_DATE,PIECE_NO,PARTY_CD,PARTY_NAME,PRODUCT_CD,ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,KG_CALC AS CALD_WEIGHT,KG_RCVD AS ACTUAL_WEIGHT,RATE,DELIV_DATE,COMM_DATE,AGREED_DATE,WEAVING_DT,MENDING_DT,NEEDLING_DT,RCVD_DATE,ADRCDAYS,DAYS,BAS_AMT,DISC_PER,DISAMT,DISBASAMT,INSACC_AMT,MEMO_DATE,EXCISE,SEAM_CHG AS SEAM_CHARGE, INV_AMT AS INVOICE_AMT,MACHINE_NO,POSITION,PACK_DATE,BALE_NO,DISPATCH_STATION AS STATION,INCHARGE_NAME,ZONE,REF_NO,CONF_NO,INSURANCE_CODE,LOCK_CD FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CD,ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,KG_CALC,KG_RCVD,RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,DAYS,ADRCDAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,PACK_DATE,BALE_NO FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0 END AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,DATEDIFF(RCVD_DATE,AGREED_DATE) AS ADRCDAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,PACK_DATE,BALE_NO FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,PACK_DATE,BALE_NO FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,PACK_DATE,BALE_NO FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(PARTY_NAME)),'PARTY DELETED IN COBOL') AS PARTY_NAME,COALESCE(DISPATCH_STATION,'Z STATION PARTY DELETED') AS DISPATCH_STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,PACK_DATE,BALE_NO FROM  (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA1.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RECD_LENGTH * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,WPSC, ST_FLAG_1,WEAVING_DT,MENDING_DT,NEEDLING_DT, AGREED_DATE,PACK_DATE,BALE_NO FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH AS ORDER_LENGTH,WIDTH AS ORDER_WIDTH,RCVD_MTR AS RECD_LENGTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0 THEN 0 END AS WPSC, ST_FLAG_1,WVG_DATE AS WEAVING_DT,MND_DATE AS MENDING_DT,NDL_DATE AS NEEDLING_DT, AGREED_DATE,PACK_DATE,BALE_NO FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+       
+        //DHAVAL/SHOHAL 30/09/2014 
+      //  strSQL+="SELECT PRIORITY_DESC,PRIORITY_DATE,ORDER_DATE,PO_NO,PO_DATE,PO_REMARK,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,PRODUCT_CD,ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,KG_CALC AS CALD_WEIGHT,KG_RCVD AS ACTUAL_WEIGHT,RATE,DELIV_DATE,COMM_DATE,AGREED_DATE,WEAVING_DT,MENDING_DT,NEEDLING_DT,RCVD_DATE,ADRCDAYS,DAYS,BAS_AMT,DISC_PER,DISAMT,DISBASAMT,INSACC_AMT,MEMO_DATE,EXCISE,SEAM_CHG AS SEAM_CHARGE,INV_AMT AS INVOICE_AMT,PACK_DATE,BALE_NO,DISPATCH_STATION AS STATION,INCHARGE_NAME,ZONE,REF_NO,CONF_NO,INSURANCE_CODE,LOCK_CD,PRIORITY FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CD,ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,KG_CALC,KG_RCVD,RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,DAYS,ADRCDAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,PACK_DATE,BALE_NO ,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0 END AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,DATEDIFF(RCVD_DATE,AGREED_DATE) AS ADRCDAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(PARTY_NAME)),'PARTY DELETED IN COBOL') AS PARTY_NAME,COALESCE(DISPATCH_STATION,'Z STATION PARTY DELETED') AS DISPATCH_STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM  (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA1.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RECD_LENGTH * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,WPSC, ST_FLAG_1,WEAVING_DT,MENDING_DT,NEEDLING_DT, AGREED_DATE,PACK_DATE,BALE_NO ,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH AS ORDER_LENGTH,WIDTH AS ORDER_WIDTH,RCVD_MTR AS RECD_LENGTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0 THEN 0 END AS WPSC, ST_FLAG_1,WVG_DATE AS WEAVING_DT,MND_DATE AS MENDING_DT,NDL_DATE AS NEEDLING_DT, AGREED_DATE,PACK_DATE,BALE_NO ,PO_NO,PO_DATE,PO_REMARK FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+        //RISHI 10/11/2014 
+ //       strSQL+="SELECT PRIORITY_DESC,PRIORITY_DATE,ORDER_DATE,PO_NO,PO_DATE,PO_REMARK,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,PRODUCT_CD,ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,KG_CALC AS CALD_WEIGHT,KG_RCVD AS ACTUAL_WEIGHT,RATE,DELIV_DATE,COMM_DATE,AGREED_DATE,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY,WEAVING_DT,MENDING_DT,NEEDLING_DT,RCVD_DATE,ADRCDAYS,DAYS,BAS_AMT,DISC_PER,DISAMT,DISBASAMT,INSACC_AMT,MEMO_DATE,EXCISE,SEAM_CHG AS SEAM_CHARGE,INV_AMT AS INVOICE_AMT,PACK_DATE,BALE_NO,DISPATCH_STATION AS STATION,INCHARGE_NAME,ZONE,REF_NO,CONF_NO,INSURANCE_CODE,LOCK_CD,PRIORITY FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CD,ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,KG_CALC,KG_RCVD,RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,DAYS,ADRCDAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY,PACK_DATE,BALE_NO ,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0 END AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,DATEDIFF(RCVD_DATE,AGREED_DATE) AS ADRCDAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(PARTY_NAME)),'PARTY DELETED IN COBOL') AS PARTY_NAME,COALESCE(DISPATCH_STATION,'Z STATION PARTY DELETED') AS DISPATCH_STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM  (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA1.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RECD_LENGTH * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,WPSC, ST_FLAG_1,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY,PACK_DATE,BALE_NO ,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH AS ORDER_LENGTH,WIDTH AS ORDER_WIDTH,RCVD_MTR AS RECD_LENGTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0 THEN 0 END AS WPSC, ST_FLAG_1,WVG_DATE AS WEAVING_DT,MND_DATE AS MENDING_DT,NDL_DATE AS NEEDLING_DT, AGREED_DATE,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,REM_DEL_HISTORY,REM_COMM_HISTORY,PACK_DATE,BALE_NO ,PO_NO,PO_DATE,PO_REMARK FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+        
+        //RISHI 31/01/2015 
+       // strSQL+="SELECT PRIORITY_DESC,PRIORITY_DATE,ORDER_DATE,PO_NO,PO_DATE,PO_REMARK,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,PRODUCT_CD,ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,KG_CALC AS CALD_WEIGHT,KG_RCVD AS ACTUAL_WEIGHT,RATE,DELIV_DATE,COMM_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,WEAVING_DT,MENDING_DT,NEEDLING_DT,RCVD_DATE,ADRCDAYS,DAYS,BAS_AMT,DISC_PER,DISAMT,DISBASAMT,INSACC_AMT,MEMO_DATE,EXCISE,SEAM_CHG AS SEAM_CHARGE,INV_AMT AS INVOICE_AMT,PACK_DATE,BALE_NO,DISPATCH_STATION AS STATION,INCHARGE_NAME,ZONE,REF_NO,CONF_NO,INSURANCE_CODE,LOCK_CD,PRIORITY FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CD,ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,KG_CALC,KG_RCVD,RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,DAYS,ADRCDAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO ,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0 END AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,DATEDIFF(RCVD_DATE,AGREED_DATE) AS ADRCDAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(PARTY_NAME)),'PARTY DELETED IN COBOL') AS PARTY_NAME,COALESCE(DISPATCH_STATION,'Z STATION PARTY DELETED') AS DISPATCH_STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM  (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA1.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RECD_LENGTH * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,WPSC, ST_FLAG_1,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO ,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH AS ORDER_LENGTH,WIDTH AS ORDER_WIDTH,RCVD_MTR AS RECD_LENGTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0 THEN 0 END AS WPSC, ST_FLAG_1,WVG_DATE AS WEAVING_DT,MND_DATE AS MENDING_DT,NDL_DATE AS NEEDLING_DT, AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO ,PO_NO,PO_DATE,PO_REMARK FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+        
+        //Rishi 03/03/2015 Excise duty Change 
+         strSQL+="SELECT PRIORITY_DESC,PRIORITY_DATE,ORDER_DATE,PO_NO,PO_DATE,PO_REMARK,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,PRODUCT_CD,ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,KG_CALC AS CALD_WEIGHT,KG_RCVD AS ACTUAL_WEIGHT,RATE,DELIV_DATE,COMM_DATE,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,WEAVING_DT,MENDING_DT,NEEDLING_DT,RCVD_DATE,ADRCDAYS,DAYS,BAS_AMT,DISC_PER,DISAMT,DISBASAMT,INSACC_AMT,MEMO_DATE,EXCISE,SEAM_CHG AS SEAM_CHARGE,INV_AMT AS INVOICE_AMT,PACK_DATE,BALE_NO,DISPATCH_STATION AS STATION,INCHARGE_NAME,ZONE,REF_NO,CONF_NO,INSURANCE_CODE,LOCK_CD,PRIORITY FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CD,ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,KG_CALC,KG_RCVD,RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,DAYS,ADRCDAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO ,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0 END AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,DATEDIFF(RCVD_DATE,AGREED_DATE) AS ADRCDAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,PRIORITY_DATE,PRIORITY,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.1250) AS EXCISE,PRIORITY,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(PARTY_NAME)),'PARTY DELETED IN COBOL') AS PARTY_NAME,COALESCE(DISPATCH_STATION,'Z STATION PARTY DELETED') AS DISPATCH_STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1,INCHARGE_CD,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO,PO_NO,PO_DATE,PO_REMARK FROM  (SELECT PRIORITY_DATE,PRIORITY_DESC,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA1.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,ORDER_LENGTH,RECD_LENGTH,ORDER_WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RECD_LENGTH * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,WPSC, ST_FLAG_1,WEAVING_DT,MENDING_DT,NEEDLING_DT,AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO ,PO_NO,PO_DATE,PO_REMARK FROM (SELECT PRIORITY_DATE,PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH AS ORDER_LENGTH,WIDTH AS ORDER_WIDTH,RCVD_MTR AS RECD_LENGTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0 THEN 0 END AS WPSC, ST_FLAG_1,WVG_DATE AS WEAVING_DT,MND_DATE AS MENDING_DT,NDL_DATE AS NEEDLING_DT, AGREED_DATE,WVG_AGREED_DATE,WVG_LAYER_REMARK,CONSIGNMENT_NO,CONSIGNMENT_DATE,EXP_DESP_DATE,WARP_NO,S_COLOR_CARD,REV_REQ_DATE,REV_COMM_DATE,REV_REQ_REASON,REV_COMM_REASON,AGREED_IND,AGREED_REMARK,WEAVING_REMARK,PACK_DATE,BALE_NO ,PO_NO,PO_DATE,PO_REMARK FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+       
+        
+        
+        System.out.println("1 :- "+strSQL);   
+        strSQL+="WHERE ";
+        if(!txtpartycode.getText().equals("")){
+            strSQL+="B.PARTY_CD = '"+SelUserID+"' AND ";
+        }
+    // System.out.println("2 :- "+strSQL); 
+       /* if(!txtproductcode.getText().equals("")){
+            strSQL+="B.PRODUCT_CODE = "+strProductCode+" AND ";
+        }*/
+        /*if(!txtpieceno.getText().equals("")){
+            strSQL+="B.PIECE_NO = "+strPieceNo+" AND ";
+        }*/
+        if(!txtproductcode.getText().equals("")){
+            strSQL+="SUBSTRING(A.PRODUCT_CD,1,6) IN ("+strProductCode+") AND ";
+        }
+        if(!txtpieceno.getText().equals("")){
+            strSQL+="A.PIECE_NO IN ("+strPieceNo+") AND ";
+        }
+        if(!txtlengthfrom.getText().equals("")){
+            strSQL+="A.RCVD_MTR >= "+strLengthFrom+" AND ";
+        }
+        if(!txtlengthto.getText().equals("")){
+            strSQL+="A.RCVD_MTR <= "+strLengthTo+" AND ";
+        }
+        if(!txtwidthfrom.getText().equals("")){
+            strSQL+="A.RECD_WDTH >= "+strWidthFrom+" AND ";
+        }
+        if(!txtwidthto.getText().equals("")){
+            strSQL+="A.RECD_WDTH <= "+strWidthTo+" AND ";
+        }
+        if(!txtgsqfrom.getText().equals("")){
+            strSQL+="B.GSQ >= "+strGSQFrom+" AND ";
+        }
+        if(!txtgsqto.getText().equals("")){
+            strSQL+="B.GSQ <= "+strGSQTo+" AND ";
+        }
+        if(!txtdatefrom.getText().trim().equals("")){
+            strSQL+= "RCVD_DATE >= '"+strReceivedDateFrom+"' AND ";
+        }
+        if(!txtdateto.getText().trim().equals("")){
+            strSQL+= "RCVD_DATE <= '"+strReceivedDateTo+"' AND ";
+        }
+        
+        //strSQL+="PRODUCT_CODE*10 = ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO AND B.PARTY_CD = D.PARTY_CODE ) AS A  LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";    
+        //strSQL+="PRODUCT_CD = ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO AND B.PARTY_CD = D.PARTY_CODE ) AS FA LEFT JOIN (SELECT * FROM DINESHMILLS.D_SAL_PARTY_MASTER ) AS FP ON FA.PARTY_CD = FP.PARTY_CODE ) AS A  LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";
+        //last update as below
+        //strSQL+="A.PRODUCT_CD = H.ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO ) AS FA LEFT JOIN ";
+        //strSQL+="A.PRODUCT_CD = H.ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO ) AS FA1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON FA1.PRIORITY=P1.PRIORITY_ID ) AS FA LEFT JOIN ";
+        strSQL+="A.PRODUCT_CD = H.ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO ) AS FA1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON FA1.PRIORITY=P1.PRIORITY_ID) AS FA LEFT JOIN ";        
+      //System.out.println("3 :- "+strSQL);       
+      
+        //strSQL+="(SELECT * FROM DINESHMILLS.D_SAL_PARTY_MASTER) AS FP ON FA.PARTY_CD = FP.PARTY_CODE";
+        strSQL+="(SELECT * FROM DINESHMILLS.D_SAL_PARTY_MASTER WHERE MAIN_ACCOUNT_CODE='210010') AS FP ON FA.PARTY_CD = FP.PARTY_CODE";
+        if(!txtzone.getText().equals("")){
+         strSQL+= " WHERE ZONE = '"+strZone+"'";
+        } 
+        //strSQL+=") AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ";
+        strSQL+=") AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE ) AS B ) AS C ) AS D LEFT JOIN (SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE) AS FI ON FI.INCHARGE_CD=D.INCHARGE_CD ";        
+    // System.out.println("4 :- "+strSQL);    
+        int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+="WHERE FI.INCHARGE_CD=1";    
+        }         
+        if(inchargeby==2){
+          strSQL+="WHERE FI.INCHARGE_CD=2";    
+        }
+        if(inchargeby==3){
+          strSQL+="WHERE FI.INCHARGE_CD=3";    
+        }
+        if(inchargeby==4){
+          strSQL+="WHERE FI.INCHARGE_CD=4";    
+        }
+        if(inchargeby==5){
+          strSQL+="WHERE FI.INCHARGE_CD=5";    
+        }
+        if(inchargeby==6){
+          strSQL+="WHERE FI.INCHARGE_CD=6";          
+        }
+        if(inchargeby==7){
+          strSQL+="WHERE D.INCHARGE_CD IS NULL";          
+        } 
+        strSQL+=") AS E LEFT JOIN (SELECT LOCK_PIECE_NO,LOCK_CD FROM PRODUCTION.FELT_LOCK_TRN) AS FLT ON E.PIECE_NO=FLT.LOCK_PIECE_NO ";
+        
+     //System.out.println("5 :- "+strSQL);    
+        int Orderby=EITLERPGLOBAL.getComboCode(cmbStock);
+        if(Orderby==1) {
+                strSQL+=" ORDER BY RCVD_DATE DESC";
+            }
+        if(Orderby==2) {
+                strSQL+=" ORDER BY ORDER_DATE DESC";
+            }
+        if(Orderby==3){
+            strSQL+=" ORDER BY WVG_AGREED_DATE DESC";
+        }
+        if(Orderby==4) {
+                strSQL+=" ORDER BY PIECE_NO";
+            }
+        if(Orderby==5){
+            strSQL+=" ORDER BY PARTY_CD";
+        }
+        if(Orderby==6) {
+                strSQL+=" ORDER BY PARTY_NAME";
+            }
+        
+        if(Orderby==7){
+            strSQL+=" ORDER BY PRODUCT_CD ";            
+        }
+        if(Orderby==8) {
+                strSQL+=" ORDER BY PRIORITY DESC";
+            }
+
+        if(Orderby==9){
+            strSQL+=" ORDER BY S_COLOR_CARD";
+        } 
+        if(Orderby==10){
+            strSQL+=" ORDER BY DELIV_DATE DESC";
+        } 
+        
+        if(Orderby==11){
+            strSQL+=" ORDER BY REV_REQ_DATE DESC";
+        } 
+         if(Orderby==12){
+            strSQL+=" ORDER BY COMM_DATE DESC";
+        } 
+         if(Orderby==13){
+            strSQL+=" ORDER BY REV_COMM_DATE DESC";
+        } 
+         if(Orderby==14){
+            strSQL+=" ORDER BY WEAVING_DT DESC";
+        } 
+         if(Orderby==15){
+            strSQL+=" ORDER BY MENDING_DT DESC";
+        } 
+         if(Orderby==16){
+            strSQL+=" ORDER BY NEEDLING_DT DESC";
+        } 
+        
+        if(Orderby==17){
+            strSQL+=" ORDER BY WEAVING_REMARK";
+        }
+        
+        
+        if(Orderby==18){
+            strSQL+=" ORDER BY RECD_LENGTH";
+        }
+        if(Orderby==19){
+            strSQL+=" ORDER BY RECD_WDTH";
+        }
+        if(Orderby==20){
+            strSQL+=" ORDER BY GSQ";
+       
+        }
+        if(Orderby==21){
+            strSQL+=" ORDER BY MACHINE_NO";
+       
+        }
+        if(Orderby==22){
+            strSQL+=" ORDER BY POSITION";
+       
+        }
+        if(Orderby==23){
+            strSQL+=" ORDER BY REF_NO";
+       
+        }
+        if(Orderby==24){
+            strSQL+=" ORDER BY CONF_NO";
+       
+        }
+        if(Orderby==25){
+            strSQL+=" ORDER BY PRIORITY_DATE DESC";
+               }
+        
+        
+        
+        
+         System.out.println("6 :- "+strSQL); 
+         rsTmp=data.getResult(strSQL);
+         //rsTmp.first();
+         if(rsTmp.getRow()>0) {
+                int cnt=0;
+                double sum = 0.00;
+                //float sum = 0;
+                double invsum = 0.00;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++; 
+                  txtrecord.setText(Integer.toString(cnt));  
+                //ashutosh
+                 // sum += Double.parseDouble(rsTmp.getString("KG_RCVD")); 
+                 //invsum += Double.parseDouble(rsTmp.getString("INV_AMT"));
+               //ashutosh   
+                  
+                  sum += Double.parseDouble(rsTmp.getString("ACTUAL_WEIGHT")); 
+                  invsum += Double.parseDouble(rsTmp.getString("INVOICE_AMT"));
+                  
+                  //sum += Float.parseFloat(rsTmp.getString("KG_RCVD"));
+                  //amt += Double.parsetDouble(rsTmp.getString("INV_AMT"));
+                  
+                  //txttotal.setText(Double.toString(Math.round(sum)));
+                  //txttotal.setText(Double.toString(sum));
+                   DecimalFormat df = new DecimalFormat("###.##");
+                   txtstockkgtotal.setText(df.format(sum));
+                   txtstockamttotal.setText(df.format(invsum));
+                                  
+                 Object[] rowData=new Object[80];
+                    rowData[0]=Integer.toString(cnt);                    
+                    rowData[1]=rsTmp.getString("S_COLOR_CARD");
+                    rowData[2]=rsTmp.getString("PRIORITY_DESC");
+                    rowData[3]=EITLERPGLOBAL.formatDate(rsTmp.getString("PRIORITY_DATE"));
+                    rowData[4]=rsTmp.getString("PO_NO");
+                    rowData[5]=EITLERPGLOBAL.formatDate(rsTmp.getString("PO_DATE"));
+                    rowData[6]=rsTmp.getString("PO_REMARK");
+                    rowData[7]=EITLERPGLOBAL.formatDate(rsTmp.getString("ORDER_DATE"));
+                    rowData[8]=rsTmp.getString("MACHINE_NO");
+                    rowData[9]=rsTmp.getString("POSITION");
+                    rowData[10]=rsTmp.getString("PIECE_NO");                  
+                    rowData[11]=rsTmp.getString("PARTY_CD");
+                    rowData[12]=rsTmp.getString("PARTY_NAME");
+                    rowData[13]=rsTmp.getString("PRODUCT_CD");
+                    rowData[14]=rsTmp.getString("ITEM_DESC");
+                    rowData[15]=rsTmp.getString("STYLE");
+                    rowData[16]=rsTmp.getString("ORDER_LENGTH");
+                    rowData[17]=rsTmp.getString("RECD_LENGTH");
+                    rowData[18]=rsTmp.getString("ORDER_WIDTH");
+                    rowData[19]=rsTmp.getString("RECD_WDTH");
+                    rowData[20]=rsTmp.getString("GSQ");
+                    rowData[21]=rsTmp.getString("CALD_WEIGHT");
+                    rowData[22]=rsTmp.getString("ACTUAL_WEIGHT");
+                    rowData[23]=rsTmp.getString("RATE");
+                    rowData[24]=EITLERPGLOBAL.formatDate(rsTmp.getString("DELIV_DATE"));
+                    rowData[25]=EITLERPGLOBAL.formatDate(rsTmp.getString("REV_REQ_DATE"));
+                    rowData[26]=rsTmp.getString("REV_REQ_REASON");
+                    rowData[27]=EITLERPGLOBAL.formatDate(rsTmp.getString("COMM_DATE"));
+                    rowData[28]=EITLERPGLOBAL.formatDate(rsTmp.getString("REV_COMM_DATE"));
+                    rowData[29]=rsTmp.getString("REV_COMM_REASON");
+                    rowData[30]=EITLERPGLOBAL.formatDate(rsTmp.getString("AGREED_DATE"));
+                    rowData[31]=EITLERPGLOBAL.formatDate(rsTmp.getString("WVG_AGREED_DATE"));
+                    rowData[32]=EITLERPGLOBAL.formatDate(rsTmp.getString("WEAVING_DT"));
+                    rowData[33]=rsTmp.getString("WVG_LAYER_REMARK");                    
+                    rowData[34]=rsTmp.getString("WEAVING_REMARK");                    
+                    rowData[35]=rsTmp.getString("EXP_DESP_DATE");                    
+                    rowData[36]=rsTmp.getString("WARP_NO"); 
+                    rowData[37]=EITLERPGLOBAL.formatDate(rsTmp.getString("MENDING_DT"));
+                    rowData[38]=EITLERPGLOBAL.formatDate(rsTmp.getString("NEEDLING_DT"));
+                    rowData[39]=rsTmp.getString("CONSIGNMENT_NO"); 
+                    rowData[40]=EITLERPGLOBAL.formatDate(rsTmp.getString("CONSIGNMENT_DATE"));
+                    rowData[41]=EITLERPGLOBAL.formatDate(rsTmp.getString("RCVD_DATE"));
+                    rowData[42]=rsTmp.getString("ADRCDAYS");
+                    rowData[43]=rsTmp.getString("DAYS");
+                    rowData[44]=rsTmp.getString("BAS_AMT");
+                    rowData[45]=rsTmp.getString("DISC_PER");
+                    rowData[46]=rsTmp.getString("DISAMT");
+                    rowData[47]=rsTmp.getString("DISBASAMT");
+                    rowData[48]=rsTmp.getString("INSACC_AMT");
+                    rowData[49]=EITLERPGLOBAL.formatDate(rsTmp.getString("MEMO_DATE"));
+                    rowData[50]=rsTmp.getString("EXCISE");
+                    rowData[51]=rsTmp.getString("SEAM_CHARGE");
+                    rowData[52]=rsTmp.getString("INVOICE_AMT");                    
+                    rowData[53]=rsTmp.getString("PACK_DATE");
+                    rowData[54]=rsTmp.getString("BALE_NO");
+                    rowData[55]=rsTmp.getString("STATION");
+                    rowData[56]=rsTmp.getString("INCHARGE_NAME");
+                    rowData[57]=rsTmp.getString("ZONE");
+                    rowData[58]=rsTmp.getString("REF_NO");
+                    rowData[59]=rsTmp.getString("CONF_NO");
+                    rowData[60]=rsTmp.getString("INSURANCE_CODE");
+                    rowData[61]=rsTmp.getString("LOCK_CD");
+                    rowData[62]=rsTmp.getString("PRIORITY");
+     
+
+                    DataModelStock.addRow(rowData);
+              //   System.out.println("rsTmp.getString('PIECE_NO')");
+                    rsTmp.next();
+                 }
+                
+          }
+         /*else{
+             //JOptionPane.showMessageDialog(this,"","Message",JOptionPane.ERROR_MESSAGE);
+             if(!txtpieceno.getText().equals("")){
+            JOptionPane.showMessageDialog(this,"Search Piece No in Production Process/Packed Not Despatched/Diverted/Despatched");
+        }
+                    
+         }*/
+         
+        DisplayIndicators();
+        //CheckPIPiece();
+       
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }
+    }
+    
+    private void GenerateDespatched(){
+      String strInvoiceDateFrom = "";
+      String strInvoiceDateTo = "";
+      try{
+          FormatGridDespatched();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strLengthFrom = txtlengthfrom.getText().toString();
+          strLengthTo = txtlengthto.getText().toString();
+          strWidthFrom = txtwidthfrom.getText().toString();
+          strWidthTo = txtwidthto.getText().toString();
+          strPieceNo = txtpieceno.getText().toString();
+          strInvoiceDateFrom = EITLERPGLOBAL.formatDateDB(txtdatefrom.getText());
+          strInvoiceDateTo = EITLERPGLOBAL.formatDateDB(txtdateto.getText());
+          strProductCode = txtproductcode.getText().toString();
+          strZone = txtzone.getText().toString();
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          //rsTmp=data.getResult("SELECT PIECE_NO FROM FELT_ORDER_MASTER WHERE PARTY_CD="+SelUserID+"");
+        strSQL= "";
+        //strSQL+= "SELECT A.PARTY_CODE,NAME,INVOICE_NO,INVOICE_DATE,SUBSTRING(QUALITY_NO,1,6) AS QUALITY_NO,PIECE_NO,LENGTH,WIDTH,ORDER_DETAIL,ORDER_DATE,TOTAL_GROSS,TOTAL_NET_AMOUNT,GROSS_SQ_MTR,GROSS_KG,GROSS_AMOUNT,NET_AMOUNT,ZONE FROM PRODUCTION.FELT_INVOICE_DATA AS A,DINESHMILLS.D_SAL_PARTY_MASTER AS B ";
+        //strSQL+="SELECT PARTY_CODE,NAME,INVOICE_NO,INVOICE_DATE,SUBSTRING(QUALITY_NO,1,6) AS QUALITY_NO,PIECE_NO,LENGTH,WIDTH,ORDER_DETAIL,ORDER_DATE,TOTAL_GROSS,TOTAL_NET_AMOUNT,GROSS_SQ_MTR,GROSS_KG,GROSS_AMOUNT,NET_AMOUNT,ZONE,iNCHARGE_NAME FROM (SELECT A.PARTY_CODE AS PARTY_CODE,NAME,INVOICE_NO,INVOICE_DATE,SUBSTRING(QUALITY_NO,1,6) AS QUALITY_NO,PIECE_NO,LENGTH,WIDTH,ORDER_DETAIL,ORDER_DATE,TOTAL_GROSS,TOTAL_NET_AMOUNT,GROSS_SQ_MTR,GROSS_KG,GROSS_AMOUNT,NET_AMOUNT,ZONE,REGION FROM PRODUCTION.FELT_INVOICE_DATA AS A,DINESHMILLS.D_SAL_PARTY_MASTER AS B ";
+        
+      //old original   
+      //  strSQL+="SELECT FD.*,LR_NO,LR_DATE,CARRIER,FREIGHT,REMARKS FROM (SELECT PARTY_CODE,PARTY_NAME,INVOICE_NO,INVOICE_DATE,SUBSTRING(QUALITY_NO,1,6) AS QUALITY_NO,PIECE_NO,LENGTH,WIDTH,ORDER_DETAIL,ORDER_DATE,TOTAL_GROSS,TOTAL_NET_AMOUNT,GROSS_SQ_MTR,GROSS_KG,GROSS_AMOUNT,NET_AMOUNT,ZONE,INCHARGE_NAME FROM (SELECT A.PARTY_CODE AS PARTY_CODE,B.PARTY_NAME AS PARTY_NAME,INVOICE_NO,INVOICE_DATE,SUBSTRING(QUALITY_NO,1,6) AS QUALITY_NO,PIECE_NO,LENGTH,WIDTH,ORDER_DETAIL,ORDER_DATE,TOTAL_GROSS,TOTAL_NET_AMOUNT,GROSS_SQ_MTR,GROSS_KG,GROSS_AMOUNT,NET_AMOUNT,ZONE,INCHARGE_CD FROM PRODUCTION.FELT_INVOICE_DATA AS A,DINESHMILLS.D_SAL_PARTY_MASTER AS B ";
+        
+      //updated by rishi sir/sohal ON 04.09.2014        
+ //       strSQL+=("SELECT DIS.*,PRIORITY_DESC FROM(SELECT FD.*,LR_NO,LR_DATE,CARRIER,FREIGHT,REMARKS FROM (SELECT PARTY_CODE,PARTY_NAME,INVOICE_NO,INVOICE_DATE,QUALITY_NO,FO_GROUP,PIECE_NO,PR_PIECE_NO,LENGTH,WIDTH,FO_GSQ,GROSS_SQ_MTR,GROSS_KG,GROSS_AMOUNT,TRD_DISCOUNT,BASIC_DUTY,CESS1,CESS2,HUNDI_CHARGE,INSURANCE,CHEM_CHG,SPIRAL_CHG,SEAM_CHARGE,NET_AMOUNT,ORDER_DATE,FO_ORDER_DATE,ORDER_DETAIL,FO_DELIV_DATE,FO_COMM_DATE,FO_AGREED_DATE,ID_AD,FO_WVG_DATE,FO_MND_DATE,FO_NDL_DATE,PR_RCVD_DATE,PR_PACK_DATE,FO_PO_NO,FO_PO_DATE,FO_REMARK,ZONE,INCHARGE_NAME,NO_OF_PIECES,FO_STYLE,FO_PRIORITY,FO_MACHINE,FO_POSITION,FO_REF_NO,FO_CONF_NO,TOTAL_GROSS,TOTAL_NET_AMOUNT FROM(SELECT A.PARTY_CODE AS PARTY_CODE,B.PARTY_NAME AS PARTY_NAME,INVOICE_NO,INVOICE_DATE,SUBSTRING(QUALITY_NO,1,6) AS QUALITY_NO,FO_GROUP,PIECE_NO,PR_PIECE_NO,LENGTH,WIDTH,FO_GSQ,GROSS_SQ_MTR,GROSS_KG,GROSS_AMOUNT,TRD_DISCOUNT,BASIC_DUTY,CESS1,CESS2,HUNDI_CHARGE,INSURANCE,CHEM_CHG,SPIRAL_CHG,SEAM_CHARGE,NET_AMOUNT,ORDER_DATE,FO_ORDER_DATE,ORDER_DETAIL,FO_DELIV_DATE,FO_COMM_DATE,FO_AGREED_DATE,DATEDIFF(INVOICE_DATE,FO_AGREED_DATE) AS ID_AD,FO_WVG_DATE,FO_MND_DATE,FO_NDL_DATE,PR_RCVD_DATE,PR_PACK_DATE,FO_PO_NO,FO_PO_DATE,FO_REMARK,ZONE,INCHARGE_CD,NO_OF_PIECES,FO_STYLE,FO_PRIORITY,FO_MACHINE,FO_POSITION,FO_REF_NO,FO_CONF_NO,TOTAL_GROSS,TOTAL_NET_AMOUNT FROM PRODUCTION.FELT_INVOICE_DATA AS A,DINESHMILLS.D_SAL_PARTY_MASTER AS B ");
+     //UPDTED BY RISHI 11/11/2014
+        strSQL+=("SELECT DIS.*,PRIORITY_DESC FROM(SELECT FD.*,LR_NO,LR_DATE,CARRIER,FREIGHT,REMARKS FROM (SELECT PARTY_CODE,PARTY_NAME,INVOICE_NO,INVOICE_DATE,QUALITY_NO,FO_GROUP,PIECE_NO,PR_PIECE_NO,LENGTH,WIDTH,FO_GSQ,GROSS_SQ_MTR,GROSS_KG,GROSS_AMOUNT,TRD_DISCOUNT,BASIC_DUTY,CESS1,CESS2,HUNDI_CHARGE,INSURANCE,CHEM_CHG,SPIRAL_CHG,SEAM_CHARGE,NET_AMOUNT,ORDER_DATE,FO_ORDER_DATE,ORDER_DETAIL,FO_DELIV_DATE,FO_COMM_DATE,FO_AGREED_DATE,ID_AD,ID_RC,ID_PD,FO_WVG_DATE,FO_MND_DATE,FO_NDL_DATE,PR_RCVD_DATE,PR_PACK_DATE,FO_PO_NO,FO_PO_DATE,FO_REMARK,ZONE,INCHARGE_NAME,NO_OF_PIECES,FO_STYLE,FO_PRIORITY,FO_MACHINE,FO_POSITION,FO_REF_NO,FO_CONF_NO,TOTAL_GROSS,TOTAL_NET_AMOUNT,D_COLOR_CARD,BALE_NO,PAYMENT_TERM,FO_REV_REQ_DATE,FO_REV_COMM_DATE,FO_REASON_REV_REQ,FO_REASON_REV_COMM,FO_REM_REQ_HISTORY,FO_REM_COMM_HISTORY,FO_WEAVING_REMARK,S_COLOR_CARD,P_COLOR_CARD FROM(SELECT A.PARTY_CODE AS PARTY_CODE,B.PARTY_NAME AS PARTY_NAME,INVOICE_NO,INVOICE_DATE,SUBSTRING(QUALITY_NO,1,6) AS QUALITY_NO,FO_GROUP,PIECE_NO,PR_PIECE_NO,LENGTH,WIDTH,FO_GSQ,GROSS_SQ_MTR,GROSS_KG,GROSS_AMOUNT,TRD_DISCOUNT,BASIC_DUTY,CESS1,CESS2,HUNDI_CHARGE,INSURANCE,CHEM_CHG,SPIRAL_CHG,SEAM_CHARGE,NET_AMOUNT,ORDER_DATE,FO_ORDER_DATE,ORDER_DETAIL,FO_DELIV_DATE,FO_COMM_DATE,FO_AGREED_DATE,DATEDIFF(INVOICE_DATE,FO_AGREED_DATE) AS ID_AD,DATEDIFF(INVOICE_DATE,PR_RCVD_DATE) AS ID_RC,DATEDIFF(INVOICE_DATE,PR_PACK_DATE) AS ID_PD,FO_WVG_DATE,FO_MND_DATE,FO_NDL_DATE,PR_RCVD_DATE,PR_PACK_DATE,FO_PO_NO,FO_PO_DATE,FO_REMARK,ZONE,INCHARGE_CD,NO_OF_PIECES,FO_STYLE,FO_PRIORITY,FO_MACHINE,FO_POSITION,FO_REF_NO,FO_CONF_NO,TOTAL_GROSS,TOTAL_NET_AMOUNT,D_COLOR_CARD,BALE_NO,PAYMENT_TERM,FO_REV_REQ_DATE,FO_REV_COMM_DATE,FO_REASON_REV_REQ,FO_REASON_REV_COMM,FO_REM_REQ_HISTORY,FO_REM_COMM_HISTORY,FO_WEAVING_REMARK,S_COLOR_CARD,P_COLOR_CARD FROM PRODUCTION.FELT_INVOICE_DATA AS A,DINESHMILLS.D_SAL_PARTY_MASTER AS B ");
+        strSQL+="WHERE ";
+        if(!txtlengthfrom.getText().equals("")){
+          strSQL+= "LENGTH >= "+strLengthFrom+" AND ";    
+        }
+        if(!txtlengthto.getText().equals("")){
+          strSQL+= "LENGTH <= "+strLengthTo+" AND ";    
+        }
+        if(!txtwidthfrom.getText().equals("")){
+          strSQL+= "WIDTH >= "+strWidthFrom+" AND ";    
+        }
+        if(!txtwidthto.getText().equals("")){
+          strSQL+= "WIDTH <= "+strWidthTo+" AND ";    
+        }
+        if(!txtpartycode.getText().equals("")){
+          strSQL+= "A.PARTY_CODE = "+SelUserID+" AND ";    
+        }
+        if(!txtproductcode.getText().equals("")){
+          strSQL+= "SUBSTRING(QUALITY_NO,1,6) = "+strProductCode+" AND ";    
+        }
+        /*if(!txtpieceno.getText().equals("")){
+          strSQL+= "PIECE_NO = "+strPieceNo+" AND ";    
+        }*/
+        if(!txtpieceno.getText().equals("")){
+          strSQL+= "PIECE_NO IN ("+strPieceNo+") AND ";    
+        }
+        if(!txtdatefrom.getText().trim().equals("")){
+          strSQL+= "INVOICE_DATE >= '"+strInvoiceDateFrom+"' AND ";
+        }
+        if(!txtdateto.getText().trim().equals("")){
+            strSQL+= "INVOICE_DATE <= '"+strInvoiceDateTo+"' AND ";
+        }
+        if(!txtzone.getText().equals("")){
+            strSQL+= "ZONE = '"+strZone+"' AND ";    
+        }        
+        //strSQL+="A.PARTY_CODE = B.PARTY_CODE ";
+        //strSQL+="A.PARTY_CODE = B.PARTY_CODE ) AS C LEFT JOIN (SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE) AS FI ON FI.INCHARGE_CD=C.REGION ";
+        //strSQL+="A.PARTY_CODE = B.PARTY_CODE) AS C LEFT JOIN (SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE) AS FI ON FI.INCHARGE_CD=C.REGION) AS FD LEFT JOIN (SELECT INVOICE_NO,INVOICE_DATE,LR_NO,LR_DATE,CARRIER,FREIGHT,REMARKS FROM PRODUCTION.FELT_INVOICE_EXTRA_DETAIL ) AS FIED ON FD.INVOICE_NO=FIED.INVOICE_NO AND FD.INVOICE_DATE=FIED.INVOICE_DATE ";
+        strSQL+="A.PARTY_CODE = B.PARTY_CODE AND MAIN_ACCOUNT_CODE='210010') AS C LEFT JOIN (SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE) AS FI ON FI.INCHARGE_CD=C.INCHARGE_CD ";        
+        int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+="WHERE FI.INCHARGE_CD=1 ";    
+        }         
+        if(inchargeby==2){
+          strSQL+="WHERE FI.INCHARGE_CD=2 ";    
+        }
+        if(inchargeby==3){
+          strSQL+="WHERE FI.INCHARGE_CD=3 ";    
+        }
+        if(inchargeby==4){
+          strSQL+="WHERE FI.INCHARGE_CD=4 ";    
+        }
+        if(inchargeby==5){
+          strSQL+="WHERE FI.INCHARGE_CD=5 ";    
+        }
+        if(inchargeby==6){
+          strSQL+="WHERE FI.INCHARGE_CD=6 ";    
+        }
+        if(inchargeby==7){
+          strSQL+="WHERE C.INCHARGE_CD IS NULL";    
+        }
+        strSQL+=") AS FD LEFT JOIN (SELECT INVOICE_NO,INVOICE_DATE,LR_NO,LR_DATE,CARRIER,FREIGHT,REMARKS FROM PRODUCTION.FELT_INVOICE_EXTRA_DETAIL ) AS FIED ON FD.INVOICE_NO=FIED.INVOICE_NO AND FD.INVOICE_DATE=FIED.INVOICE_DATE ) AS DIS LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P ON DIS.FO_PRIORITY=P.PRIORITY_ID ";
+        int Orderby=EITLERPGLOBAL.getComboCode(cmbDespatch);
+            
+        if(Orderby==1) {
+                strSQL+="ORDER BY INVOICE_DATE DESC ";
+        }
+        if(Orderby==2) {
+                strSQL+="ORDER BY INVOICE_NO DESC ";
+        }
+        if(Orderby==3) {
+                strSQL+="ORDER BY FO_ORDER_DATE DESC ";
+        }
+        if(Orderby==4) {
+                strSQL+="ORDER BY PR_RCVD_DATE DESC ";
+        }
+        if(Orderby==5) {
+                strSQL+="ORDER BY PIECE_NO DESC ";
+        }
+        if(Orderby==6) {
+                strSQL+="ORDER BY QUALITY_NO DESC ";
+        }
+        if(Orderby==7) {
+                strSQL+="ORDER BY PARTY_CODE";
+        }
+        if(Orderby==8) {
+                strSQL+="ORDER BY PARTY_NAME ";
+        }
+        if(Orderby==9) {
+                strSQL+="ORDER BY FO_PRIORITY DESC ";
+        }
+        if(Orderby==10) {
+                strSQL+="ORDER BY D_COLOR_CARD";
+        }
+        if(Orderby==11) {
+                strSQL+="ORDER BY FO_AGREED_DATE DESC ";
+        }
+        if(Orderby==12) {
+                strSQL+="ORDER BY FO_DELIV_DATE DESC ";
+        }
+        if(Orderby==13) {
+                strSQL+="ORDER BY FO_COMM_DATE DESC ";
+        }
+        if(Orderby==14) {
+                strSQL+="ORDER BY FO_WVG_DATE DESC ";
+        }
+        if(Orderby==15) {
+                strSQL+="ORDER BY FO_MND_DATE DESC ";
+        }
+        if(Orderby==16) {
+                strSQL+="ORDER BY FO_NDL_DATE DESC ";
+        }
+        if(Orderby==17) {
+                strSQL+="ORDER BY FO_WEAVING_REMARK DESC";
+        }
+        if(Orderby==18) {
+                strSQL+="ORDER BY PR_PACK_DATE DESC ";
+        }
+        if(Orderby==19) {
+                strSQL+="ORDER BY BALE_NO DESC ";
+        }
+        if(Orderby==20) {
+                strSQL+="ORDER BY ID_AD DESC ";
+        }
+        if(Orderby==21) {
+                strSQL+="ORDER BY ID_RC DESC ";
+        }
+        if(Orderby==22) {
+                strSQL+="ORDER BY ID_PD DESC ";
+        }
+        if(Orderby==23) {
+                strSQL+="ORDER BY LENGTH DESC ";
+        }
+        if(Orderby==24) {
+                strSQL+="ORDER BY WIDTH DESC ";
+        }
+        if(Orderby==25) {
+                strSQL+="ORDER BY FO_GSQ DESC ";
+        }
+        if(Orderby==26) {
+                strSQL+="ORDER BY FO_MACHINE_NO DESC ";
+        }
+        if(Orderby==27) {
+                strSQL+="ORDER BY FO_REF_NO DESC ";
+        }
+        if(Orderby==28) {
+                strSQL+="ORDER BY FO_CONF_NO DESC ";
+        }
+        if(Orderby==29) {
+                strSQL+="ORDER BY LR_DATE DESC ";
+        }
+       if(Orderby==30) {
+                strSQL+="ORDER BY LR_CARRIER ";
+        }
+
+        
+        
+        
+         System.out.println(strSQL);
+         rsTmp=data.getResult(strSQL);
+         rsTmp.first();
+         if(rsTmp.getRow()>0) {
+                int cnt=0;
+                double sum=0.00;
+                double invsum = 0.00;
+                while(!rsTmp.isAfterLast()) {
+                   cnt++; 
+                   txtdespatchedtotal.setText(Integer.toString(cnt));
+                   sum += Double.parseDouble(rsTmp.getString("GROSS_KG"));
+                   invsum += Double.parseDouble(rsTmp.getString("NET_AMOUNT"));
+                   DecimalFormat df = new DecimalFormat("###.##");
+                   txtdespatchedkgtotal.setText(df.format(sum));
+                   txtdespatchedamttotal.setText(df.format(invsum));
+                                       
+
+                    
+                    //rowData[1]=rsTmp.getString("A.PARTY_CODE");
+                   /* rowData[1]=rsTmp.getString("PARTY_CODE");
+                    rowData[2]=rsTmp.getString("PARTY_NAME");
+                    rowData[3]=rsTmp.getString("INVOICE_NO");
+                    rowData[4]=EITLERPGLOBAL.formatDate(rsTmp.getString("INVOICE_DATE"));
+                    rowData[5]=rsTmp.getString("QUALITY_NO");
+                    rowData[6]=rsTmp.getString("PIECE_NO");
+                    rowData[7]=rsTmp.getString("LENGTH");
+                    rowData[8]=rsTmp.getString("WIDTH");
+                    rowData[9]=rsTmp.getString("ORDER_DETAIL");
+                    rowData[10]=EITLERPGLOBAL.formatDate(rsTmp.getString("ORDER_DATE"));
+                    rowData[11]=rsTmp.getString("TOTAL_GROSS");
+                    rowData[12]=rsTmp.getString("TOTAL_NET_AMOUNT");
+                    rowData[13]=rsTmp.getString("GROSS_SQ_MTR");
+                    rowData[14]=rsTmp.getString("GROSS_KG");
+                    rowData[15]=rsTmp.getString("GROSS_AMOUNT");
+                    rowData[16]=rsTmp.getString("NET_AMOUNT");
+                    rowData[17]=rsTmp.getString("ZONE");
+                    rowData[18]=rsTmp.getString("INCHARGE_NAME");
+                    rowData[19]=rsTmp.getString("LR_NO");
+                    rowData[20]=EITLERPGLOBAL.formatDate(rsTmp.getString("LR_DATE"));
+                    rowData[21]=rsTmp.getString("CARRIER");
+                    rowData[22]=rsTmp.getString("FREIGHT");
+                    rowData[23]=rsTmp.getString("REMARKS"); */
+                    //rowData[24]=rsTmp.getString("");        
+                    
+                //updated by sohal/dhaval 05.10.2014
+                 /* 
+                 rowData[0]=Integer.toString(cnt);
+                    rowData[1]=rsTmp.getString("PARTY_CODE");
+                    rowData[2]=rsTmp.getString("PARTY_NAME");
+                    rowData[3]=rsTmp.getString("INVOICE_NO");
+                    rowData[4]=EITLERPGLOBAL.formatDate(rsTmp.getString("INVOICE_DATE"));
+                    rowData[5]=rsTmp.getString("QUALITY_NO");                    
+                    rowData[6]=rsTmp.getString("FO_GROUP");                    
+                    rowData[7]=rsTmp.getString("PIECE_NO");
+                    rowData[8]=rsTmp.getString("PR_PIECE_NO");
+                    rowData[9]=rsTmp.getString("LENGTH");
+                    rowData[10]=rsTmp.getString("WIDTH");
+                    rowData[11]=rsTmp.getString("FO_GSQ");
+                    rowData[12]=rsTmp.getString("GROSS_SQ_MTR");
+                    rowData[13]=rsTmp.getString("GROSS_KG");
+                    rowData[14]=rsTmp.getString("GROSS_AMOUNT");
+                    rowData[15]=rsTmp.getString("TRD_DISCOUNT");
+                    rowData[16]=rsTmp.getString("BASIC_DUTY");
+                    rowData[17]=rsTmp.getString("CESS1");
+                    rowData[18]=rsTmp.getString("CESS2");
+                    rowData[19]=rsTmp.getString("HUNDI_CHARGE");
+                    rowData[20]=rsTmp.getString("INSURANCE");
+                    rowData[21]=rsTmp.getString("CHEM_CHG");
+                    rowData[22]=rsTmp.getString("SPIRAL_CHG"); 
+                     rowData[23]=rsTmp.getString("SEAM_CHARGE");                     
+                     rowData[24]=rsTmp.getString("NET_AMOUNT");
+                    rowData[25]=EITLERPGLOBAL.formatDate(rsTmp.getString("ORDER_DATE"));
+                    rowData[26]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_ORDER_DATE"));
+                    rowData[27]=rsTmp.getString("ORDER_DETAIL");
+                    rowData[28]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_DELIV_DATE")); 
+                    rowData[29]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_COMM_DATE"));                    
+                    rowData[30]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_AGREED_DATE"));
+                    rowData[31]=rsTmp.getString("ID_AD");
+                    rowData[32]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_WVG_DATE"));
+                    rowData[33]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_MND_DATE"));
+                    rowData[34]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_NDL_DATE")); 
+                    rowData[35]=EITLERPGLOBAL.formatDate(rsTmp.getString("PR_RCVD_DATE"));
+                    rowData[36]=EITLERPGLOBAL.formatDate(rsTmp.getString("PR_PACK_DATE"));
+                    rowData[37]=rsTmp.getString("FO_PO_NO");
+                    rowData[38]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_PO_DATE"));
+                    rowData[39]=rsTmp.getString("FO_REMARK");
+                    rowData[40]=rsTmp.getString("ZONE");
+                    rowData[41]=rsTmp.getString("INCHARGE_NAME");
+                    rowData[42]=rsTmp.getString("NO_OF_PIECES");
+                    rowData[43]=rsTmp.getString("FO_STYLE");
+                    rowData[44]=rsTmp.getString("FO_PRIORITY");
+                    rowData[45]=rsTmp.getString("FO_MACHINE");
+                    rowData[46]=rsTmp.getString("FO_POSITION");
+                    rowData[47]=rsTmp.getString("FO_REF_NO");
+                    rowData[48]=rsTmp.getString("FO_CONF_NO");
+                    rowData[49]=rsTmp.getString("TOTAL_GROSS");
+                    rowData[50]=rsTmp.getString("TOTAL_NET_AMOUNT");
+                    rowData[51]=rsTmp.getString("PRIORITY_DESC");
+                    rowData[52]=rsTmp.getString("LR_NO");
+                    rowData[53]=EITLERPGLOBAL.formatDate(rsTmp.getString("LR_DATE"));
+                    rowData[54]=rsTmp.getString("CARRIER");
+                    rowData[55]=rsTmp.getString("FREIGHT");
+                    rowData[56]=rsTmp.getString("REMARKS");
+                    */
+                    
+                     //updated by RISHI 11.11.2014
+                   
+                    Object[] rowData=new Object[80];
+  
+                    rowData[0]=Integer.toString(cnt);
+                    rowData[1]=rsTmp.getString("D_COLOR_CARD");
+                    rowData[2]=rsTmp.getString("PARTY_CODE");
+                    rowData[3]=rsTmp.getString("PARTY_NAME");
+                    rowData[4]=rsTmp.getString("INVOICE_NO");
+                    rowData[5]=EITLERPGLOBAL.formatDate(rsTmp.getString("INVOICE_DATE"));
+                    rowData[6]=rsTmp.getString("QUALITY_NO");                    
+                    rowData[7]=rsTmp.getString("FO_GROUP");                    
+                    rowData[8]=rsTmp.getString("PIECE_NO");
+                    rowData[9]=rsTmp.getString("PR_PIECE_NO");
+                    rowData[10]=rsTmp.getString("LENGTH");
+                    rowData[11]=rsTmp.getString("WIDTH");
+                    rowData[12]=rsTmp.getString("FO_GSQ");
+                    rowData[13]=rsTmp.getString("GROSS_SQ_MTR");
+                    rowData[14]=rsTmp.getString("GROSS_KG");
+                    rowData[15]=rsTmp.getString("GROSS_AMOUNT");
+                    rowData[16]=rsTmp.getString("TRD_DISCOUNT");
+                    rowData[17]=rsTmp.getString("BASIC_DUTY");
+                    rowData[18]=rsTmp.getString("CESS1");
+                    rowData[19]=rsTmp.getString("CESS2");
+                    rowData[20]=rsTmp.getString("HUNDI_CHARGE");
+                    rowData[21]=rsTmp.getString("INSURANCE");
+                    rowData[22]=rsTmp.getString("CHEM_CHG");
+                    rowData[23]=rsTmp.getString("SPIRAL_CHG"); 
+                    rowData[24]=rsTmp.getString("SEAM_CHARGE");                     
+                    rowData[25]=rsTmp.getString("NET_AMOUNT");
+                    rowData[26]=EITLERPGLOBAL.formatDate(rsTmp.getString("ORDER_DATE"));
+                    rowData[27]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_ORDER_DATE"));
+                    rowData[28]=rsTmp.getString("ORDER_DETAIL");
+                    rowData[29]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_DELIV_DATE")); 
+                    rowData[30]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_REV_REQ_DATE"));                    
+                    rowData[31]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_COMM_DATE"));                    
+                    rowData[32]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_REV_COMM_DATE"));                    
+                    rowData[33]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_AGREED_DATE"));
+                    rowData[34]=rsTmp.getString("ID_AD");
+                    rowData[35]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_WVG_DATE"));
+                    rowData[36]=rsTmp.getString("FO_WEAVING_REMARK");
+                    rowData[37]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_MND_DATE"));
+                    rowData[38]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_NDL_DATE")); 
+                    rowData[39]=EITLERPGLOBAL.formatDate(rsTmp.getString("PR_RCVD_DATE"));
+                    rowData[40]=rsTmp.getString("ID_RC");
+                    rowData[41]=EITLERPGLOBAL.formatDate(rsTmp.getString("PR_PACK_DATE"));
+                    rowData[42]=rsTmp.getString("ID_PD");
+                    rowData[43]=rsTmp.getString("FO_PO_NO");
+                    rowData[44]=EITLERPGLOBAL.formatDate(rsTmp.getString("FO_PO_DATE"));
+                    rowData[45]=rsTmp.getString("FO_REMARK");
+                    rowData[46]=rsTmp.getString("ZONE");
+                    rowData[47]=rsTmp.getString("INCHARGE_NAME");
+                    rowData[48]=rsTmp.getString("NO_OF_PIECES");
+                    rowData[49]=rsTmp.getString("FO_STYLE");
+                    rowData[50]=rsTmp.getString("FO_PRIORITY");
+                    rowData[51]=rsTmp.getString("FO_MACHINE");
+                    rowData[52]=rsTmp.getString("FO_POSITION");
+                    rowData[53]=rsTmp.getString("FO_REF_NO");
+                    rowData[54]=rsTmp.getString("FO_CONF_NO");
+                    rowData[55]=rsTmp.getString("TOTAL_GROSS");
+                    rowData[56]=rsTmp.getString("TOTAL_NET_AMOUNT");
+                    rowData[57]=rsTmp.getString("PRIORITY_DESC");
+                    rowData[58]=rsTmp.getString("P_COLOR_CARD");
+                    rowData[59]=rsTmp.getString("S_COLOR_CARD");
+                    rowData[60]=rsTmp.getString("FO_REASON_REV_REQ");
+                    rowData[61]=rsTmp.getString("FO_REASON_REV_COMM");
+                    rowData[62]=rsTmp.getString("FO_REM_REQ_HISTORY");
+                    rowData[63]=rsTmp.getString("FO_REM_COMM_HISTORY");
+                    rowData[64]=rsTmp.getString("BALE_NO");
+                    rowData[65]=rsTmp.getString("PAYMENT_TERM");
+                    rowData[66]=rsTmp.getString("LR_NO");
+                    rowData[67]=EITLERPGLOBAL.formatDate(rsTmp.getString("LR_DATE"));
+                    rowData[68]=rsTmp.getString("CARRIER");
+                    rowData[69]=rsTmp.getString("FREIGHT");
+                    rowData[70]=rsTmp.getString("REMARKS");
+                   
+                    //rowData[52]=EITLERPGLOBAL.formatDate(rsTmp.getString("PRIORITY_DATE"));                    
+                    DataModelDespatched.addRow(rowData);               
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }
+  }   
+    private void GenerateDiscountDetail(){
+      String strMemoDateFrom = "";
+      String strMemoDateTo = "";
+      try{
+          FormatGridDiscount();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strDiscountPerFrom = txtdiscountperfrom.getText().toString();
+          strDiscountPerTo = txtdiscountperto.getText().toString();
+          strMemoDateFrom = EITLERPGLOBAL.formatDateDB(txtdatefrom.getText());
+          strMemoDateTo = EITLERPGLOBAL.formatDateDB(txtdateto.getText());
+          strPieceNo = txtpieceno.getText().toString();
+          strProductCode = txtproductcode.getText().toString();
+          strZone = txtzone.getText().toString();
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          //rsTmp=data.getResult("SELECT PIECE_NO FROM FELT_ORDER_MASTER WHERE PARTY_CD="+SelUserID+"");
+        strSQL= "";
+        //strSQL+= "SELECT A.PARTY_CODE,NAME,PIECE_NO,DISC_PER,MEMO_DATE FROM PRODUCTION.FELT_DISCOUNT_MEMO AS A,DINESHMILLS.D_SAL_PARTY_MASTER AS B ";
+        //strSQL+="SELECT * FROM (SELECT COALESCE(ZONE,' ZERO') AS ZONE,FA.PARTY_CODE,COALESCE(NAME,'Z PARTY DELETED IN COBOL') AS NAME,PIECE,PRODUCT_CODE,DISC_PER,MEMO_DATE,GRUP FROM (SELECT A.PARTY_CODE,CONCAT(A.PIECE_NO,PIECE_EXT) AS PIECE,PRODUCT_CODE,DISC_PER,MEMO_DATE,D.GRUP FROM PRODUCTION.FELT_DISCOUNT_MEMO AS A,PRODUCTION.FELT_ORDER_MASTER AS C,PRODUCTION.FELT_RATE_MASTER AS D ";
+        strSQL+="SELECT ZONE,PARTY_COD,PARTY_NAME,PIECE,PRODUCT_CODE,DISC_PER,MEMO_DATE,GRUP,INCHARGE_NAME FROM (SELECT COALESCE(ZONE,' ZERO') AS ZONE,FA.PARTY_CODE AS PARTY_COD,COALESCE(PARTY_NAME,'Z PARTY DELETED IN COBOL') AS PARTY_NAME,PIECE,PRODUCT_CODE,DISC_PER,MEMO_DATE,GRUP,INCHARGE_CD FROM (SELECT A.PARTY_CODE,CONCAT(A.PIECE_NO,PIECE_EXT) AS PIECE,PRODUCT_CODE,DISC_PER,MEMO_DATE,D.GRUP FROM PRODUCTION.FELT_DISCOUNT_MEMO AS A,PRODUCTION.FELT_ORDER_MASTER AS C,PRODUCTION.FELT_RATE_MASTER AS D ";
+        strSQL+="WHERE "; 
+        if(!txtpartycode.getText().equals("")){
+         strSQL+= "PARTY_CODE = "+SelUserID+" AND ";             
+        }
+        if(!txtdiscountperfrom.getText().equals("")){
+         strSQL+= "DISC_PER >= "+strDiscountPerFrom+" AND ";
+        }
+        if(!txtdiscountperto.getText().equals("")){
+            strSQL+= "DISC_PER <= "+strDiscountPerTo+" AND ";
+        }
+        if(!txtdatefrom.getText().trim().equals("")){
+            strSQL+= "MEMO_DATE >= '"+strMemoDateFrom+"' AND ";
+        }
+        if(!txtdateto.getText().trim().equals("")){
+            strSQL+= "MEMO_DATE <= '"+strMemoDateTo+"' AND ";
+        }
+        if(!txtpieceno.getText().trim().equals("")){
+            strSQL+= "CONCAT(A.PIECE_NO,PIECE_EXT) IN ("+strPieceNo+") AND ";
+        }
+        if(!txtproductcode.getText().trim().equals("")){
+            strSQL+= "PRODUCT_CODE IN ("+strProductCode+") AND ";
+        }
+        
+        strSQL+="A.PIECE_NO = C.PIECE_NO AND (D.ITEM_CODE/10) = C.PRODUCT_CODE ) AS FA LEFT JOIN (SELECT * FROM DINESHMILLS.D_SAL_PARTY_MASTER WHERE MAIN_ACCOUNT_CODE='210010') AS  FP ON  FP.PARTY_CODE = FA.PARTY_CODE) AS E ";
+        if(!txtzone.getText().equals("")){
+            strSQL+= "WHERE ZONE='"+strZone+"' ";
+        }
+        strSQL+="LEFT JOIN (SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE) AS FI ON FI.INCHARGE_CD=E.INCHARGE_CD ";
+        //strSQL+= "A.PARTY_CODE = B.PARTY_CODE ";    
+        int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+="WHERE FI.INCHARGE_CD=1 ";    
+        }         
+        if(inchargeby==2){
+          strSQL+="WHERE FI.INCHARGE_CD=2 ";    
+        }
+        if(inchargeby==3){
+          strSQL+="WHERE FI.INCHARGE_CD=3 ";    
+        }
+        if(inchargeby==4){
+          strSQL+="WHERE FI.INCHARGE_CD=4 ";    
+        }
+        if(inchargeby==5){
+          strSQL+="WHERE FI.INCHARGE_CD=5 ";    
+        }
+        if(inchargeby==6){
+          strSQL+="WHERE FI.INCHARGE_CD=6 ";    
+        }
+        if(inchargeby==7){
+          strSQL+="WHERE E.INCHARGE_CD IS NULL ";    
+        }
+        int Orderby=EITLERPGLOBAL.getComboCode(cmbDiscount);
+           if(Orderby==1) {
+                strSQL=strSQL+"ORDER BY MEMO_DATE DESC";
+            }
+        
+         System.out.println("DISCOUNT" + strSQL);
+         rsTmp=data.getResult(strSQL);
+         rsTmp.first();
+         if(rsTmp.getRow()>0) {
+                int cnt=0;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++;
+                    txtdiscounttotal.setText(Integer.toString(cnt));
+                    
+                 Object[] rowData=new Object[10];
+                    rowData[0]=Integer.toString(cnt);
+                    //rowData[1]=rsTmp.getString("PARTY_CODE");
+                    rowData[1]=rsTmp.getString("PARTY_COD");
+                    rowData[2]=rsTmp.getString("PARTY_NAME");
+                    rowData[3]=rsTmp.getString("PIECE");
+                    rowData[4]=rsTmp.getString("PRODUCT_CODE");
+                    rowData[5]=rsTmp.getString("DISC_PER");
+                    rowData[6]=EITLERPGLOBAL.formatDate(rsTmp.getString("MEMO_DATE"));
+                    rowData[7]=rsTmp.getString("GRUP");  
+                    rowData[8]=rsTmp.getString("ZONE");
+                    rowData[9]=rsTmp.getString("INCHARGE_NAME");
+                    DataModelDiscount.addRow(rowData);
+                    rsTmp.next();
+                }
+         }        
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }
+               
+    }
+    
+    /*private void GenerateTargetDetail(){
+        
+      String SelUserID="";
+      String strSQL="";
+      try{
+          
+          processSalesTarget();
+          FormatGridTarget();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+        //  strZone = txtzone.getText().toString();
+            strProductCode = txtproductcode.getText().toString();
+        
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          
+        strSQL= "";
+        strSQL+="SELECT MAIN_ACCOUNT_CODE,PARTY_CODE,PARTY_NAME,PRODUCT_CODE,LAST_YR_SALES, TOTAL_SALES,PER_LAST_YR,TGT_FY_YR,TGT_FROM_DATE,TGT_TO_DATE,TOTAL_TGT,PER_YR,TGT_QTR_1,SALES_QTR1,PER_Q1,TGT_QTR_2,SALES_QTR2,PER_Q2,SALES_Q1Q2 ,PER_Q1Q2,TGT_QTR_3,SALES_QTR3,PER_Q3,SALES_Q1Q2Q3,PER_Q1Q2Q3,TGT_QTR_4,SALES_QTR4,PER_Q4,INCHARGE_ID,INCHARGE_NAME FROM (SELECT B.MAIN_ACCOUNT_CODE,A.PARTY_CODE,PARTY_NAME,PRODUCT_CODE,ROUND((LAST_YR_SALES/100000),2) AS LAST_YR_SALES, PER_LAST_YR, ROUND((TOTAL_SALES/100000),2) AS TOTAL_SALES,TGT_FY_YR,TGT_FROM_DATE,TGT_TO_DATE,ROUND((TOTAL_TGT/100000),2) AS TOTAL_TGT,PER_YR, ROUND((TGT_QTR_1/100000),2) AS TGT_QTR_1,ROUND((SALES_QTR1/100000),2) AS SALES_QTR1,PER_Q1, ROUND((TGT_QTR_2/100000),2) AS TGT_QTR_2,ROUND((SALES_QTR2/100000),2) AS SALES_QTR2,PER_Q2,ROUND((SALES_Q1Q2/100000),2) AS SALES_Q1Q2 ,PER_Q1Q2, ROUND((TGT_QTR_3/100000),2) AS TGT_QTR_3,ROUND((SALES_QTR3/100000),2) AS SALES_QTR3,PER_Q3,ROUND((SALES_Q1Q2Q3/100000),2) AS SALES_Q1Q2Q3 ,PER_Q1Q2Q3, ROUND((TGT_QTR_4/100000),2) AS TGT_QTR_4,ROUND((SALES_QTR4/100000),2) AS SALES_QTR4,PER_Q4,INCHARGE_ID FROM PRODUCTION.FELT_PARTY_ITEM_POSITION_TARGET AS A,DINESHMILLS.D_SAL_PARTY_MASTER AS B  WHERE  A.PARTY_CODE = B.PARTY_CODE AND MAIN_ACCOUNT_CODE='210010'  AND TOTAL_TGT + TOTAL_SALES >0 ) AS C LEFT JOIN ( SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE ) AS FI ON FI.INCHARGE_CD=C.INCHARGE_ID ";// ORDER BY PARTY_CODE,PRODUCT_CODE";
+      //  strSQL+="SELECT MAIN_ACCOUNT_CODE,PARTY_CODE,PARTY_NAME,PRODUCT_CODE,LAST_YR_SALES, TOTAL_SALES,PER_LAST_YR,TGT_FY_YR,TGT_FROM_DATE,TGT_TO_DATE,TOTAL_TGT,PER_YR,TGT_QTR_1,SALES_QTR1,PER_Q1,TGT_QTR_2,SALES_QTR2,PER_Q2,SALES_Q1Q2 ,PER_Q1Q2,TGT_QTR_3,SALES_QTR3,PER_Q3,SALES_Q1Q2Q3,PER_Q1Q2Q3,TGT_QTR_4,SALES_QTR4,PER_Q4,INCHARGE_ID,INCHARGE_NAME FROM (SELECT B.MAIN_ACCOUNT_CODE,A.PARTY_CODE,PARTY_NAME,PRODUCT_CODE,LAST_YR_SALES, PER_LAST_YR,TOTAL_SALES,TGT_FY_YR,TGT_FROM_DATE,TGT_TO_DATE,TOTAL_TGT,PER_YR,TGT_QTR_1,SALES_QTR1,PER_Q1,TGT_QTR_2,SALES_QTR2,PER_Q2,SALES_Q1Q2 ,PER_Q1Q2,TGT_QTR_3,SALES_QTR3,PER_Q3,SALES_Q1Q2Q3,PER_Q1Q2Q3,TGT_QTR_4,SALES_QTR4,PER_Q4,INCHARGE_ID FROM PRODUCTION.FELT_PARTY_ITEM_POSITION_TARGET AS A,DINESHMILLS.D_SAL_PARTY_MASTER AS B  WHERE  A.PARTY_CODE = B.PARTY_CODE AND MAIN_ACCOUNT_CODE='210010'  AND TOTAL_TGT + TOTAL_SALES >0 ) AS C LEFT JOIN ( SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE ) AS FI ON FI.INCHARGE_CD=C.INCHARGE_ID ";// ORDER BY PARTY_CODE,PRODUCT_CODE";
+        strSQL+= "WHERE MAIN_ACCOUNT_CODE = 210010 ";
+       
+        if(!txtpartycode.getText().equals("")){
+             strSQL+= "AND PARTY_CODE = "+SelUserID+" " ;
+         }
+        
+         if(!txtproductcode.getText().equals("")){
+             
+             if(txtproductcode.getText().equals("619000") || txtproductcode.getText().equals("629000") || txtproductcode.getText().equals("639000") || txtproductcode.getText().equals("ACNE") || txtproductcode.getText().equals("acne"))
+                {
+                   strSQL+= " AND PRODUCT_CODE = 'ACNE' ";
+                }
+             else if(txtproductcode.getText().equals("TOTAL") || txtproductcode.getText().equals("total") )
+                {
+                   strSQL+= " AND PRODUCT_CODE = 'TOTAL' ";
+                }
+                else
+                {
+              strSQL+= " AND SUBSTRING(PRODUCT_CODE,1,6) = "+strProductCode+" ";
+                }
+         }
+   
+        
+        
+        int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+=" AND INCHARGE_CD=1 ";    
+        }         
+        if(inchargeby==2){
+          strSQL+=" AND INCHARGE_CD=2 ";    
+        }
+        if(inchargeby==3){
+          strSQL+=" AND INCHARGE_CD=3 ";    
+        }
+        if(inchargeby==4){
+          strSQL+=" AND INCHARGE_CD=4 ";    
+        }
+        if(inchargeby==5){
+          strSQL+=" AND INCHARGE_CD=5 ";    
+        }
+        if(inchargeby==6){
+          strSQL+=" AND INCHARGE_CD=6 ";    
+        }
+        if(inchargeby==7){
+          strSQL+=" AND INCHARGE_CD IS NULL ";    
+        }
+        
+        
+        
+        strSQL+=" ORDER BY PARTY_CODE,PRODUCT_CODE";
+        
+        
+         System.out.println(strSQL);
+         rsTmp=data.getResult(strSQL);
+         rsTmp.first();
+         if(rsTmp.getRow()>0) {
+                int cnt=0;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++; 
+                    txttargettotal.setText(Integer.toString(cnt));
+                                        
+                 Object[] rowData=new Object[30];
+                    rowData[0]=Integer.toString(cnt);
+                    //rowData[1]=rsTmp.getString("PARTY_CODE");
+                    rowData[1]=rsTmp.getString("PARTY_CODE");
+                    rowData[2]=rsTmp.getString("PARTY_NAME");
+                    rowData[3]=rsTmp.getString("PRODUCT_CODE");
+                    rowData[4]=rsTmp.getString("TGT_FY_YR");
+                    rowData[5]=EITLERPGLOBAL.formatDate(rsTmp.getString("TGT_FROM_DATE"));
+                    rowData[6]=EITLERPGLOBAL.formatDate(rsTmp.getString("TGT_TO_DATE"));                  
+                     rowData[7]=rsTmp.getString("LAST_YR_SALES");
+                    rowData[8]=rsTmp.getString("TOTAL_SALES");
+                    rowData[9]=rsTmp.getString("PER_LAST_YR");
+                    rowData[10]=rsTmp.getString("TOTAL_TGT");
+                   
+                    
+                    rowData[11]=rsTmp.getString("TGT_QTR_1");
+                    rowData[12]=rsTmp.getString("SALES_QTR1");
+                    rowData[13]=rsTmp.getString("PER_Q1");
+                    
+                    rowData[14]=rsTmp.getString("TGT_QTR_2");
+                    rowData[15]=rsTmp.getString("SALES_QTR2");
+                     rowData[16]=rsTmp.getString("PER_Q2");
+           
+                    rowData[17]=rsTmp.getString("TGT_QTR_3");
+                    rowData[18]=rsTmp.getString("SALES_QTR3");
+                    rowData[19]=rsTmp.getString("PER_Q3");
+                   
+                    
+                    rowData[20]=rsTmp.getString("TGT_QTR_4");
+                    rowData[21]=rsTmp.getString("SALES_QTR4");
+                    rowData[22]=rsTmp.getString("PER_Q4");
+           
+                    
+                    rowData[23]=rsTmp.getString("SALES_Q1Q2");
+                    rowData[24]=rsTmp.getString("PER_Q1Q2");
+           
+                    
+                   rowData[25]=rsTmp.getString("SALES_Q1Q2Q3");
+                    rowData[26]=rsTmp.getString("PER_Q1Q2Q3");
+               
+                    rowData[27]=rsTmp.getString("PER_YR");
+                  
+                    rowData[28]=rsTmp.getString("INCHARGE_NAME");
+                    DataModelTarget.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }
+        
+    }   
+    */
+    private void GenerateTargetDetail(){
+        
+      String SelUserID="";
+      String strSQL="";
+      try{
+          
+          processSalesTarget();
+          FormatGridTarget();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+        //  strZone = txtzone.getText().toString();
+            strProductCode = txtproductcode.getText().toString();
+        
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          
+        strSQL= "";
+        strSQL+="SELECT MAIN_ACCOUNT_CODE,PARTY_CODE,PARTY_NAME,PRODUCT_CODE,LAST_YR_SALES, TOTAL_SALES,PER_LAST_YR,TGT_FY_YR,TGT_FROM_DATE,TGT_TO_DATE,TOTAL_TGT,PER_YR,TGT_QTR_1,SALES_QTR1,PER_Q1,TGT_QTR_2,SALES_QTR2,PER_Q2,SALES_Q1Q2 ,PER_Q1Q2,TGT_QTR_3,SALES_QTR3,PER_Q3,SALES_Q1Q2Q3,PER_Q1Q2Q3,TGT_QTR_4,SALES_QTR4,PER_Q4,INCHARGE_ID,INCHARGE_NAME, ";
+        
+        strSQL = strSQL + " TGT_QTR_1_OLD,";
+        strSQL = strSQL + " TGT_QTR_2_OLD,";
+        strSQL = strSQL + " TGT_QTR_3_OLD,";
+        strSQL = strSQL + " TGT_QTR_4_OLD,";
+         
+        for(int i=2;i<=20;i++)
+        {
+            strSQL = strSQL + " TGT_QTR_1_OLD_R"+i+",";
+            strSQL = strSQL + " TGT_QTR_2_OLD_R"+i+",";
+            strSQL = strSQL + " TGT_QTR_3_OLD_R"+i+",";
+            
+            if(i!=20)
+            {
+                strSQL = strSQL + " TGT_QTR_4_OLD_R"+i+",";
+            }
+            else
+            {
+                strSQL = strSQL + " TGT_QTR_4_OLD_R"+i;
+            }
+            
+        }
+                    //TGT_QTR_1_OLD_R2
+                    //TGT_QTR_2_OLD_R2
+                    //TGT_QTR_3_OLD_R2
+                    //TGT_QTR_4_OLD_R2
+        strSQL = strSQL + " FROM (SELECT B.MAIN_ACCOUNT_CODE,A.PARTY_CODE,PARTY_NAME,PRODUCT_CODE,ROUND((LAST_YR_SALES/100000),2) AS LAST_YR_SALES, PER_LAST_YR, ROUND((TOTAL_SALES/100000),2) AS TOTAL_SALES,TGT_FY_YR,TGT_FROM_DATE,TGT_TO_DATE,ROUND((TOTAL_TGT/100000),2) AS TOTAL_TGT,PER_YR, ROUND((TGT_QTR_1/100000),2) AS TGT_QTR_1,ROUND((SALES_QTR1/100000),2) AS SALES_QTR1,PER_Q1, ROUND((TGT_QTR_2/100000),2) AS TGT_QTR_2,ROUND((SALES_QTR2/100000),2) AS SALES_QTR2,PER_Q2,ROUND((SALES_Q1Q2/100000),2) AS SALES_Q1Q2 ,PER_Q1Q2, ROUND((TGT_QTR_3/100000),2) AS TGT_QTR_3,ROUND((SALES_QTR3/100000),2) AS SALES_QTR3,PER_Q3,ROUND((SALES_Q1Q2Q3/100000),2) AS SALES_Q1Q2Q3 ,PER_Q1Q2Q3, ROUND((TGT_QTR_4/100000),2) AS TGT_QTR_4,ROUND((SALES_QTR4/100000),2) AS SALES_QTR4,PER_Q4,INCHARGE_ID, ";
+        
+        strSQL = strSQL + "  ROUND((TGT_QTR_1_OLD/100000),2) AS TGT_QTR_1_OLD,";
+        strSQL = strSQL + "  ROUND((TGT_QTR_2_OLD/100000),2) AS TGT_QTR_2_OLD,";
+        strSQL = strSQL + "  ROUND((TGT_QTR_3_OLD/100000),2) AS TGT_QTR_3_OLD,";
+        strSQL = strSQL + "  ROUND((TGT_QTR_4_OLD/100000),2) AS TGT_QTR_4_OLD,";
+         
+        for(int i=2;i<=20;i++)
+        {
+            strSQL = strSQL + "  ROUND((TGT_QTR_1_OLD_R"+i+"/100000),2) AS TGT_QTR_1_OLD_R"+i+",";
+            strSQL = strSQL + "  ROUND((TGT_QTR_2_OLD_R"+i+"/100000),2) A"
+                    + "S TGT_QTR_2_OLD_R"+i+",";
+            strSQL = strSQL + "  ROUND((TGT_QTR_3_OLD_R"+i+"/100000),2) AS TGT_QTR_3_OLD_R"+i+",";
+            
+            if(i!=20)
+            {
+                strSQL = strSQL + "  ROUND((TGT_QTR_4_OLD_R"+i+"/100000),2) AS TGT_QTR_4_OLD_R"+i+",";
+            }
+            else
+            {
+                strSQL = strSQL + "  ROUND((TGT_QTR_4_OLD_R"+i+"/100000),2) AS TGT_QTR_4_OLD_R"+i;
+            }
+        }
+        strSQL = strSQL + " FROM PRODUCTION.FELT_PARTY_ITEM_POSITION_TARGET AS A,DINESHMILLS.D_SAL_PARTY_MASTER AS B  WHERE  A.PARTY_CODE = B.PARTY_CODE AND MAIN_ACCOUNT_CODE='210010'  AND TOTAL_TGT + TOTAL_SALES >0 ) AS C LEFT JOIN ( SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE ) AS FI ON FI.INCHARGE_CD=C.INCHARGE_ID ";// ORDER BY PARTY_CODE,PRODUCT_CODE";
+      //  strSQL+="SELECT MAIN_ACCOUNT_CODE,PARTY_CODE,PARTY_NAME,PRODUCT_CODE,LAST_YR_SALES, TOTAL_SALES,PER_LAST_YR,TGT_FY_YR,TGT_FROM_DATE,TGT_TO_DATE,TOTAL_TGT,PER_YR,TGT_QTR_1,SALES_QTR1,PER_Q1,TGT_QTR_2,SALES_QTR2,PER_Q2,SALES_Q1Q2 ,PER_Q1Q2,TGT_QTR_3,SALES_QTR3,PER_Q3,SALES_Q1Q2Q3,PER_Q1Q2Q3,TGT_QTR_4,SALES_QTR4,PER_Q4,INCHARGE_ID,INCHARGE_NAME FROM (SELECT B.MAIN_ACCOUNT_CODE,A.PARTY_CODE,PARTY_NAME,PRODUCT_CODE,LAST_YR_SALES, PER_LAST_YR,TOTAL_SALES,TGT_FY_YR,TGT_FROM_DATE,TGT_TO_DATE,TOTAL_TGT,PER_YR,TGT_QTR_1,SALES_QTR1,PER_Q1,TGT_QTR_2,SALES_QTR2,PER_Q2,SALES_Q1Q2 ,PER_Q1Q2,TGT_QTR_3,SALES_QTR3,PER_Q3,SALES_Q1Q2Q3,PER_Q1Q2Q3,TGT_QTR_4,SALES_QTR4,PER_Q4,INCHARGE_ID FROM PRODUCTION.FELT_PARTY_ITEM_POSITION_TARGET AS A,DINESHMILLS.D_SAL_PARTY_MASTER AS B  WHERE  A.PARTY_CODE = B.PARTY_CODE AND MAIN_ACCOUNT_CODE='210010'  AND TOTAL_TGT + TOTAL_SALES >0 ) AS C LEFT JOIN ( SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE ) AS FI ON FI.INCHARGE_CD=C.INCHARGE_ID ";// ORDER BY PARTY_CODE,PRODUCT_CODE";
+        strSQL+= "WHERE MAIN_ACCOUNT_CODE = 210010 ";
+       
+        if(!txtpartycode.getText().equals("")){
+             strSQL+= "AND PARTY_CODE = "+SelUserID+" " ;
+         }
+        
+         if(!txtproductcode.getText().equals("")){
+             
+             if(txtproductcode.getText().equals("619000") || txtproductcode.getText().equals("629000") || txtproductcode.getText().equals("639000") || txtproductcode.getText().equals("ACNE") || txtproductcode.getText().equals("acne"))
+                {
+                   strSQL+= " AND PRODUCT_CODE = 'ACNE' ";
+                }
+             else if(txtproductcode.getText().equals("TOTAL") || txtproductcode.getText().equals("total") )
+                {
+                   strSQL+= " AND PRODUCT_CODE = 'TOTAL' ";
+                }
+                else
+                {
+              strSQL+= " AND SUBSTRING(PRODUCT_CODE,1,6) = "+strProductCode+" ";
+                }
+         }
+  
+        int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+=" AND INCHARGE_CD=1 ";    
+        }         
+        if(inchargeby==2){
+          strSQL+=" AND INCHARGE_CD=2 ";    
+        }
+        if(inchargeby==3){
+          strSQL+=" AND INCHARGE_CD=3 ";    
+        }
+        if(inchargeby==4){
+          strSQL+=" AND INCHARGE_CD=4 ";    
+        }
+        if(inchargeby==5){
+          strSQL+=" AND INCHARGE_CD=5 ";    
+        }
+        if(inchargeby==6){
+          strSQL+=" AND INCHARGE_CD=6 ";    
+        }
+        if(inchargeby==7){
+          strSQL+=" AND INCHARGE_CD IS NULL ";    
+        }
+        
+        /*
+            int Orderby=EITLERPGLOBAL.getComboCode(cmbTarget);
+            
+            if(Orderby==1) {
+                strSQL=strSQL+" ORDER BY PIECE_NO ";
+            }
+          
+        */
+        
+        strSQL+=" ORDER BY PARTY_CODE,PRODUCT_CODE";
+        
+        
+         System.out.println("sql : "+strSQL);
+         rsTmp=data.getResult(strSQL);
+         rsTmp.first();
+         if(rsTmp.getRow()>0) {
+                int cnt=0;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++; 
+                    txttargettotal.setText(Integer.toString(cnt));
+                                        
+                 Object[] rowData=new Object[109];
+                    rowData[0]=Integer.toString(cnt);
+                    //rowData[1]=rsTmp.getString("PARTY_CODE");
+                    rowData[1]=rsTmp.getString("PARTY_CODE");
+                    rowData[2]=rsTmp.getString("PARTY_NAME");
+                    rowData[3]=rsTmp.getString("PRODUCT_CODE");
+                    rowData[4]=rsTmp.getString("TGT_FY_YR");
+                    rowData[5]=EITLERPGLOBAL.formatDate(rsTmp.getString("TGT_FROM_DATE"));
+                    rowData[6]=EITLERPGLOBAL.formatDate(rsTmp.getString("TGT_TO_DATE"));                  
+                    rowData[7]=rsTmp.getString("LAST_YR_SALES");
+                    rowData[8]=rsTmp.getString("TOTAL_SALES");
+                    rowData[9]=rsTmp.getString("PER_LAST_YR");
+                    rowData[10]=rsTmp.getString("TOTAL_TGT");
+                   
+                    rowData[11]=rsTmp.getString("TGT_QTR_1");
+                    rowData[12]=rsTmp.getString("SALES_QTR1");
+                    rowData[13]=rsTmp.getString("PER_Q1");
+                    
+                    rowData[14]=rsTmp.getString("TGT_QTR_2");
+                    rowData[15]=rsTmp.getString("SALES_QTR2");
+                    rowData[16]=rsTmp.getString("PER_Q2");
+           
+                    rowData[17]=rsTmp.getString("TGT_QTR_3");
+                    rowData[18]=rsTmp.getString("SALES_QTR3");
+                    rowData[19]=rsTmp.getString("PER_Q3");
+                   
+                    
+                    rowData[20]=rsTmp.getString("TGT_QTR_4");
+                    rowData[21]=rsTmp.getString("SALES_QTR4");
+                    rowData[22]=rsTmp.getString("PER_Q4");
+           
+                    rowData[23]=rsTmp.getString("SALES_Q1Q2");
+                    rowData[24]=rsTmp.getString("PER_Q1Q2");
+           
+                    rowData[25]=rsTmp.getString("SALES_Q1Q2Q3");
+                    rowData[26]=rsTmp.getString("PER_Q1Q2Q3");
+               
+                    rowData[27]=rsTmp.getString("PER_YR");
+                  
+                    rowData[28]=rsTmp.getString("INCHARGE_NAME");
+                    
+                    rowData[29]=rsTmp.getString("TGT_QTR_1_OLD");
+                    rowData[30]=rsTmp.getString("TGT_QTR_2_OLD");
+                    rowData[31]=rsTmp.getString("TGT_QTR_3_OLD");
+                    rowData[32]=rsTmp.getString("TGT_QTR_4_OLD");
+                       
+                    int j=32;
+                    
+                    //TGT_QTR_1_OLD
+                    //TGT_QTR_2_OLD
+                    //TGT_QTR_3_OLD
+                    //TGT_QTR_4_OLD
+                    //TGT_QTR_1_OLD_R2
+                    //TGT_QTR_2_OLD_R2
+                    //TGT_QTR_3_OLD_R2
+                    //TGT_QTR_4_OLD_R2
+                    for(int i=2;i<=20;i++)
+                    {
+                        j++;
+                        rowData[j]=rsTmp.getString("TGT_QTR_1_OLD_R"+i);
+                        j++;
+                        rowData[j]=rsTmp.getString("TGT_QTR_2_OLD_R"+i);
+                        j++;
+                        rowData[j]=rsTmp.getString("TGT_QTR_3_OLD_R"+i);
+                        j++;
+                        rowData[j]=rsTmp.getString("TGT_QTR_4_OLD_R"+i);
+                    }
+                    
+                    
+                    DataModelTarget.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }
+        
+    }   
+    private void GenerateMiscDetail(){
+      String SelUserID="";
+      String strSQL="";
+      try{
+          FormatGridMisc();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          strSQL= "";
+        strSQL+= "SELECT PIECE_NO,TYPE,ENTRY_DATE,EXPECTED_DATE,ITEM_CODE FROM PRODUCTION.FELT_MISC_DATA ";
+        strSQL+= "WHERE PARTY_CODE = "+SelUserID+"";
+        
+         System.out.println(strSQL);
+         rsTmp=data.getResult(strSQL);
+         rsTmp.first();
+         if(rsTmp.getRow()>0) {
+                int cnt=0;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++; 
+                    
+                 Object[] rowData=new Object[6];
+                    rowData[0]=Integer.toString(cnt);
+                    rowData[1]=rsTmp.getString("PIECE_NO");
+                    rowData[2]=rsTmp.getString("TYPE");
+                    rowData[3]=EITLERPGLOBAL.formatDate(rsTmp.getString("ENTRY_DATE"));                  
+                    rowData[4]=EITLERPGLOBAL.formatDate(rsTmp.getString("EXPECTED_DATE"));
+                    rowData[5]=rsTmp.getString("ITEM_CODE");
+                    DataModelMisc.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }            
+    }
+    
+    private void GenerateSeamDetail(){
+     String SelUserID="";
+     String strSQL="";
+      try{
+          FormatGridMisc();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          strSQL= "";
+        strSQL+= "SELECT ITEM_CODE,PIECE_NO,SEAM_CHG FROM PRODUCTION.FELT_SEAM_DATA ";
+        strSQL+= "WHERE PARTY_CODE = "+SelUserID+"";
+        
+   /*      int Orderby=EITLERPGLOBAL.getComboCode(cmbSeam);
+            
+            if(Orderby==1) {
+                strSQL=strSQL+" ORDER BY PIECE_NO ";
+            }
+     */   
+        
+         System.out.println(strSQL);
+         rsTmp=data.getResult(strSQL);
+         rsTmp.first();
+         if(rsTmp.getRow()>0) {
+                int cnt=0;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++; 
+                    
+                 Object[] rowData=new Object[4];
+                    rowData[0]=Integer.toString(cnt);
+                    rowData[1]=rsTmp.getString("ITEM_CODE");
+                    rowData[2]=rsTmp.getString("PIECE_NO");
+                    rowData[3]=rsTmp.getString("SEAM_CHG");                  
+                    DataModelSeam.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }    
+        
+    }
+    
+     private void GenerateSalesDetailY(){
+     String SelUserID="";
+     String strSQL="";
+      try{
+          FormatGridSalesY();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strProductCode = txtproductcode.getText().toString();
+          strZone = txtzone.getText().toString();
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          strSQL= "";
+        //strSQL+= "SELECT FINYR,SUM(TOTAL_NET_AMOUNT) AS TOTAL FROM PRODUCTION.FELT_INVOICE_DATA ";
+          strSQL+="SELECT  FINYR,SUM(TOTAL_NET_AMOUNT) AS TOTAL,SUM(GROSS_KG) AS KG,SUM(GROSS_SQ_MTR) AS SQMTR,SUM(COALESCE(CASE WHEN   CATEGORY ='DRY' THEN TOTAL_NET_AMOUNT END,0))  AS DRYNET,SUM(COALESCE(CASE WHEN   CATEGORY ='DRY' THEN GROSS_KG END ,0))  AS DRYKG,SUM(COALESCE(CASE WHEN   CATEGORY ='DRY' THEN GROSS_SQ_MTR END,0))  AS DRYSQMTR,SUM(COALESCE(CASE WHEN   CATEGORY ='WET' THEN TOTAL_NET_AMOUNT END,0))  AS WETNET,SUM(COALESCE(CASE WHEN   CATEGORY ='WET' THEN GROSS_KG END ,0))  AS WETKG,SUM(COALESCE(CASE WHEN   CATEGORY ='WET' THEN GROSS_SQ_MTR END,0))  AS WETSQMTR,SUM(COALESCE(CASE WHEN   CATEGORY ='AC' THEN TOTAL_NET_AMOUNT END,0))  AS ACNET,SUM(COALESCE(CASE WHEN   CATEGORY ='AC' THEN GROSS_KG END ,0))  AS ACKG,SUM(COALESCE(CASE WHEN   CATEGORY ='AC' THEN GROSS_SQ_MTR END,0))  AS ACSQMTR  FROM (SELECT  *  FROM (SELECT * FROM PRODUCTION.FELT_INVOICE_DATA,PRODUCTION.FELT_RATE_MASTER  ";
+          strSQL+= "WHERE QUALITY_NO = ITEM_CODE AND ";        
+        if(!txtpartycode.getText().equals("")){
+          strSQL+= "PARTY_CODE = "+SelUserID+" AND ";  
+        }
+        if(!txtproductcode.getText().equals("")){
+          strSQL+= "SUBSTRING(QUALITY_NO,1,6) IN ("+strProductCode+") AND ";  
+        }
+        if(!txtzone.getText().equals("")){
+          strSQL+= "ZONE1='"+strZone+"' AND ";  
+        }        
+        //strSQL+= "FINYR != '2007-2008' GROUP BY FINYR ";
+        //strSQL+= "ORDER BY FINYR DESC"; 
+          strSQL+="FINYR != '2007-2008') AS A LEFT JOIN (SELECT PARTY_CODE AS PARTY,INCHARGE_CD FROM DINESHMILLS.D_SAL_PARTY_MASTER) AS B ON A.PARTY_CODE = B.PARTY) AS C ";
+         int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+="WHERE INCHARGE_CD = 1";    
+        }         
+        if(inchargeby==2){
+          strSQL+="WHERE INCHARGE_CD = 2";    
+        }
+        if(inchargeby==3){
+          strSQL+="WHERE INCHARGE_CD = 3";    
+        }
+        if(inchargeby==4){
+          strSQL+="WHERE INCHARGE_CD = 4";    
+        }
+        if(inchargeby==5){
+          strSQL+="WHERE INCHARGE_CD = 5";    
+        }
+        if(inchargeby==6){
+          strSQL+="WHERE INCHARGE_CD = 6";    
+        }
+         if(inchargeby==7){
+          strSQL+="WHERE INCHARGE_CD IS NULL";    
+        }
+         strSQL+=" GROUP BY FINYR ORDER BY FINYR DESC ";
+        System.out.println(strSQL);
+        rsTmp=data.getResult(strSQL);
+        rsTmp.first();
+        if(rsTmp.getRow()>0) {
+                int cnt=0;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++; 
+                    txtsalestotal.setText(Integer.toString(cnt));
+                    
+                 Object[] rowData=new Object[15];
+                    rowData[0]=Integer.toString(cnt);
+                    //rowData[1]=rsTmp.getString("PARTY_CODE");
+                    rowData[1]=rsTmp.getString("FINYR");
+                    rowData[2]=rsTmp.getString("TOTAL");                  
+                    rowData[3]=rsTmp.getString("KG");                  
+                    rowData[4]=rsTmp.getString("SQMTR");                  
+                    rowData[5]=rsTmp.getString("DRYNET");                  
+                    rowData[6]=rsTmp.getString("DRYKG");                  
+                    rowData[7]=rsTmp.getString("DRYSQMTR");                  
+                    rowData[8]=rsTmp.getString("WETNET");                  
+                    rowData[9]=rsTmp.getString("WETKG");                  
+                    rowData[10]=rsTmp.getString("WETSQMTR");                  
+                    rowData[11]=rsTmp.getString("ACNET");                  
+                    rowData[12]=rsTmp.getString("ACKG");                  
+                    rowData[13]=rsTmp.getString("ACSQMTR");                  
+                    DataModelSalesY.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }        
+    }
+    
+    private void  GenerateSalesDetailM(){
+     String SelUserID="";
+     String strSQL="";
+     try{
+        FormatGridSalesM();  //clear existing content of table
+        SelUserID = txtpartycode.getText().toString();
+        strProductCode=txtproductcode.getText().toString();
+        strZone = txtzone.getText().toString();
+        ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+        strSQL= "";
+        //strSQL+= "SELECT PARTY_CODE,EXTRACT(YEAR FROM INVOICE_DATE) As YEAR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =1  THEN TOTAL_NET_AMOUNT END) AS JAN,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =2  THEN TOTAL_NET_AMOUNT END) AS FEB,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =3  THEN TOTAL_NET_AMOUNT END) AS MAR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =4  THEN TOTAL_NET_AMOUNT END) AS APR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =5  THEN TOTAL_NET_AMOUNT END) AS MAY,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =6  THEN TOTAL_NET_AMOUNT END) AS JUN,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =7  THEN TOTAL_NET_AMOUNT END) AS JUL,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =8  THEN TOTAL_NET_AMOUNT END) AS AUG,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =9  THEN TOTAL_NET_AMOUNT END) AS SEP,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =10  THEN TOTAL_NET_AMOUNT END) AS OCT,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =11  THEN TOTAL_NET_AMOUNT END) AS NOV,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =12  THEN TOTAL_NET_AMOUNT END) AS DEC,";
+        //strSQL+= " SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) IN (1,2,3,4,5,6,7,8,9,10,11,12) THEN TOTAL_NET_AMOUNT END) AS TOTAL FROM PRODUCTION.FELT_INVOICE_DATA ";
+        //strSQL+= "WHERE PARTY_CODE = "+SelUserID+"";
+        //strSQL+= "GROUP BY PARTY_CODE,EXTRACT(YEAR FROM INVOICE_DATE)";
+        //strSQL+="SELECT PARTY_CODE ,EXTRACT(YEAR FROM INVOICE_DATE) AS YEAR ,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =1  THEN TOTAL_NET_AMOUNT END) AS JAN,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =2  THEN TOTAL_NET_AMOUNT END) AS FEB,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =3  THEN TOTAL_NET_AMOUNT END) AS MAR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =4  THEN TOTAL_NET_AMOUNT END) AS APR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =5  THEN TOTAL_NET_AMOUNT END) AS MAY,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =6  THEN TOTAL_NET_AMOUNT END) AS JUN,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =7  THEN TOTAL_NET_AMOUNT END) AS JUL,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =8  THEN TOTAL_NET_AMOUNT END) AS AUG,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =9  THEN TOTAL_NET_AMOUNT END) AS SEP,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =10  THEN TOTAL_NET_AMOUNT END) AS OCT,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =11  THEN TOTAL_NET_AMOUNT END) AS NOV,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =12  THEN TOTAL_NET_AMOUNT END) AS DEC1 ,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) IN (1,2,3,4,5,6,7,8,9,10,11,12)  THEN TOTAL_NET_AMOUNT END) AS TOTAL FROM PRODUCTION.FELT_INVOICE_DATA WHERE PARTY_CODE = "+SelUserID+" GROUP BY PARTY_CODE,EXTRACT(YEAR FROM INVOICE_DATE)";    
+        
+         //strSQL+="SELECT FINYR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =4  THEN TOTAL_NET_AMOUNT END) AS APR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =5  THEN TOTAL_NET_AMOUNT END) AS MAY,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =6  THEN TOTAL_NET_AMOUNT END) AS JUN,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =7  THEN TOTAL_NET_AMOUNT END) AS JUL,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =8  THEN TOTAL_NET_AMOUNT END) AS AUG,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =9  THEN TOTAL_NET_AMOUNT END) AS SEP,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =10  THEN TOTAL_NET_AMOUNT END) AS OCT,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =11  THEN TOTAL_NET_AMOUNT END) AS NOV,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =12  THEN TOTAL_NET_AMOUNT END) AS DEC1 ,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =1  THEN TOTAL_NET_AMOUNT END) AS JAN,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =2  THEN TOTAL_NET_AMOUNT END) AS FEB,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =3  THEN TOTAL_NET_AMOUNT END) AS MAR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) IN (1,2,3,4,5,6,7,8,9,10,11,12)  THEN TOTAL_NET_AMOUNT END) AS TOTAL FROM PRODUCTION.FELT_INVOICE_DATA ";
+        strSQL="SELECT FINYR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =4  THEN TOTAL_NET_AMOUNT END) AS APR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =5  THEN TOTAL_NET_AMOUNT END) AS MAY,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =6  THEN TOTAL_NET_AMOUNT END) AS JUN,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =7  THEN TOTAL_NET_AMOUNT END) AS JUL,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =8  THEN TOTAL_NET_AMOUNT END) AS AUG,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =9  THEN TOTAL_NET_AMOUNT END) AS SEP,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =10  THEN TOTAL_NET_AMOUNT END) AS OCT,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =11  THEN TOTAL_NET_AMOUNT END) AS NOV,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =12  THEN TOTAL_NET_AMOUNT END) AS DEC1 ,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =1  THEN TOTAL_NET_AMOUNT END) AS JAN,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =2  THEN TOTAL_NET_AMOUNT END) AS FEB,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =3  THEN TOTAL_NET_AMOUNT END) AS MAR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) IN (1,2,3,4,5,6,7,8,9,10,11,12)  THEN TOTAL_NET_AMOUNT END) AS TOTAL FROM (SELECT  *  FROM (SELECT *  FROM PRODUCTION.FELT_INVOICE_DATA ";
+         strSQL+="WHERE ";
+         if(!txtpartycode.getText().equals("")){
+          strSQL+="PARTY_CODE = "+SelUserID+" AND ";
+        }
+         if(!txtproductcode.getText().equals("")){
+          strSQL+="SUBSTRING(QUALITY_NO,1,6) IN ("+strProductCode+") AND ";
+        } 
+         if(!txtzone.getText().equals("")){
+          strSQL+="ZONE1='"+strZone+"' AND ";
+        }
+         //strSQL+="FINYR != '2007-2008' GROUP BY FINYR ORDER BY FINYR DESC ";  
+         strSQL+="FINYR != '2007-2008') AS A LEFT JOIN (SELECT PARTY_CODE AS PARTY,INCHARGE_CD FROM DINESHMILLS.D_SAL_PARTY_MASTER) AS B ON A.PARTY_CODE = B.PARTY) AS C ";
+         int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+="WHERE INCHARGE_CD = 1";    
+        }         
+        if(inchargeby==2){
+          strSQL+="WHERE INCHARGE_CD = 2";    
+        }
+        if(inchargeby==3){
+          strSQL+="WHERE INCHARGE_CD = 3";    
+        }
+        if(inchargeby==4){
+          strSQL+="WHERE INCHARGE_CD = 4";    
+        }
+        if(inchargeby==5){
+          strSQL+="WHERE INCHARGE_CD = 5";    
+        }
+        if(inchargeby==6){
+          strSQL+="WHERE INCHARGE_CD = 6";    
+        }
+         if(inchargeby==7){
+          strSQL+="WHERE INCHARGE_CD IS NULL";    
+        }
+         strSQL+=" GROUP BY FINYR ORDER BY FINYR DESC ";
+         
+         
+        // strSQL+="SELECT FINYR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =4  THEN TOTAL_NET_AMOUNT END) AS APR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =5  THEN TOTAL_NET_AMOUNT END) AS MAY,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =6  THEN TOTAL_NET_AMOUNT END) AS JUN,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =7  THEN TOTAL_NET_AMOUNT END) AS JUL,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =8  THEN TOTAL_NET_AMOUNT END) AS AUG,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =9  THEN TOTAL_NET_AMOUNT END) AS SEP,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =10  THEN TOTAL_NET_AMOUNT END) AS OCT,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =11  THEN TOTAL_NET_AMOUNT END) AS NOV,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =12  THEN TOTAL_NET_AMOUNT END) AS DEC1 ,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =1  THEN TOTAL_NET_AMOUNT END) AS JAN,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =2  THEN TOTAL_NET_AMOUNT END) AS FEB,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) =3  THEN TOTAL_NET_AMOUNT END) AS MAR,SUM(CASE WHEN EXTRACT(MONTH FROM INVOICE_DATE) IN (1,2,3,4,5,6,7,8,9,10,11,12)  THEN TOTAL_NET_AMOUNT END) AS TOTAL FROM PRODUCTION.FELT_INVOICE_DATA WHERE FINYR != '2007-2008' GROUP BY FINYR ORDER BY FINYR DESC";    
+        
+        System.out.println(strSQL);
+        rsTmp=data.getResult(strSQL);
+        rsTmp.first();
+        if(rsTmp.getRow()>0) {
+                int cnt=0;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++; 
+                     txtsalestotal1.setText(Integer.toString(cnt));
+                    
+                 Object[] rowData=new Object[15];
+                    rowData[0]=Integer.toString(cnt);
+                    //rowData[1]=rsTmp.getString("PARTY_CODE");
+                    rowData[1]=rsTmp.getString("FINYR");
+                    rowData[2]=rsTmp.getString("APR");
+                    rowData[3]=rsTmp.getString("MAY");
+                    rowData[4]=rsTmp.getString("JUN");
+                    rowData[5]=rsTmp.getString("JUL");                  
+                    rowData[6]=rsTmp.getString("AUG");                  
+                    rowData[7]=rsTmp.getString("SEP");                  
+                    rowData[8]=rsTmp.getString("OCT");                  
+                    rowData[9]=rsTmp.getString("NOV");                  
+                    rowData[10]=rsTmp.getString("DEC1");                  
+                    rowData[11]=rsTmp.getString("JAN");
+                    rowData[12]=rsTmp.getString("FEB");
+                    rowData[13]=rsTmp.getString("MAR");
+                    rowData[14]=rsTmp.getString("TOTAL");
+                    DataModelSalesM.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }     
+    }  
+    
+    private void GenerateDivertedDetail(){
+     String strInvoiceDateFrom = "";
+     String strInvoiceDateTo = "";
+      try{
+          ForamtGridDiverted();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strLengthFrom = txtlengthfrom.getText().toString();
+          strLengthTo =  txtlengthto.getText().toString();
+          strWidthFrom = txtwidthfrom.getText().toString();
+          strWidthTo = txtwidthto.getText().toString();
+          strGSQFrom = txtgsqfrom.getText().toString();
+          strGSQTo = txtgsqto.getText().toString();
+          strPieceNo = txtpieceno.getText().toString();
+          strProductCode = txtproductcode.getText().toString();
+          strInvoiceDateFrom = EITLERPGLOBAL.formatDateDB(txtdatefrom.getText());
+          strInvoiceDateTo = EITLERPGLOBAL.formatDateDB(txtdateto.getText());
+          strZone =txtzone.getText().toString();
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          strSQL= "";
+        /*if(!txtpartycode.getText().equals("")){
+        strSQL+= "SELECT A.PIECE_NO,PARTY_CD AS PARTY_ORIGINAL,NAME AS NAME_ORIGINAL,DESP_PARTY AS PARTY_INVOICED, PARTY_NAME AS NAME_DIVERTED,PRODUCT_CODE,ITEM,STYLE,ORDER_DATE,DELIV_DATE ,COMM_DATE,RCVD_DATE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,RECD_KG AS WIEGHT_RCVD,GROSS_KG AS WIEGHT_INVOICED,RATE,PACK_DATE,A.BALE_NO,MEMO_DATE,COALESCE(DISC_PER,0) AS DISC_PER,INVOICE_NO,INVOICE_DATE,TOTAL_GROSS,TRD_DISCOUNT,INVOICE_AMOUNT,REF_NO,CONF_NO,MACHINE_NO,POSITION FROM( SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,B.ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,B.WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE ,I.INVOICE_NO,I.INVOICE_DATE,INVOICE_AMOUNT,TOTAL_NET_AMOUNT,I.RATE,GROSS_SQ_MTR,GROSS_KG,TRD_DISCOUNT,TOTAL_GROSS,PACK_DATE,A.BALE_NO,A.DESP_PARTY,PARTY_NAME,NAME FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER D,PRODUCTION.FELT_INVOICE_DATA I WHERE PRODUCT_CODE*10 = ITEM_CODE AND A.INVOICE_NO = I.INVOICE_NO AND A.INVOICE_DATE = I.INVOICE_DATE AND A.ORDER_NO = I.PIECE_NO AND A.ORDER_NO = B.PIECE_NO AND ( B.PARTY_CD = "+SelUserID+" OR A.DESP_PARTY = "+SelUserID+") AND A.DESP_PARTY != A.PARTY_CODE AND B.PARTY_CD = D.PARTY_CODE) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT)AND PARTY_CD =PARTY_CODE";    
+        }else{
+        strSQL+= "SELECT A.PIECE_NO,PARTY_CD AS PARTY_ORIGINAL,NAME AS NAME_ORIGINAL,DESP_PARTY AS PARTY_INVOICED, PARTY_NAME AS NAME_DIVERTED,PRODUCT_CODE,ITEM,STYLE,ORDER_DATE,DELIV_DATE ,COMM_DATE,RCVD_DATE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,RECD_KG AS WIEGHT_RCVD,GROSS_KG AS WIEGHT_INVOICED,RATE,PACK_DATE,A.BALE_NO,MEMO_DATE,COALESCE(DISC_PER,0) AS DISC_PER,INVOICE_NO,INVOICE_DATE,TOTAL_GROSS,TRD_DISCOUNT,INVOICE_AMOUNT,REF_NO,CONF_NO,MACHINE_NO,POSITION FROM( SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,B.ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,B.WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE ,I.INVOICE_NO,I.INVOICE_DATE,INVOICE_AMOUNT,TOTAL_NET_AMOUNT,I.RATE,GROSS_SQ_MTR,GROSS_KG,TRD_DISCOUNT,TOTAL_GROSS,PACK_DATE,A.BALE_NO,A.DESP_PARTY,PARTY_NAME,NAME FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER D,PRODUCTION.FELT_INVOICE_DATA I WHERE PRODUCT_CODE*10 = ITEM_CODE AND A.INVOICE_NO = I.INVOICE_NO AND A.INVOICE_DATE = I.INVOICE_DATE AND A.ORDER_NO = I.PIECE_NO AND A.ORDER_NO = B.PIECE_NO AND A.DESP_PARTY != A.PARTY_CODE AND B.PARTY_CD = D.PARTY_CODE) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT)AND PARTY_CD =PARTY_CODE";    
+        }*/
+        //strSQL+="SELECT A.PIECE_NO,PARTY_CD AS PARTY_ORIGINAL,NAME AS NAME_ORIGINAL,DESP_PARTY AS PARTY_INVOICED, PARTY_NAME AS NAME_DIVERTED,PRODUCT_CODE,ITEM,STYLE,ORDER_DATE,DELIV_DATE ,COMM_DATE,RCVD_DATE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,GSQ,RECD_KG AS WIEGHT_RCVD,GROSS_KG AS WIEGHT_INVOICED,RATE,PACK_DATE,A.BALE_NO,MEMO_DATE,COALESCE(DISC_PER,0) AS DISC_PER,INVOICE_NO,INVOICE_DATE,TOTAL_GROSS,TRD_DISCOUNT,INVOICE_AMOUNT,REF_NO,CONF_NO,MACHINE_NO,POSITION,ZONE FROM( SELECT ZONE,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,B.ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,B.WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE ,I.INVOICE_NO,I.INVOICE_DATE,INVOICE_AMOUNT,TOTAL_NET_AMOUNT,I.RATE,GROSS_SQ_MTR,GROSS_KG,TRD_DISCOUNT,TOTAL_GROSS,PACK_DATE,A.BALE_NO,A.DESP_PARTY,PARTY_NAME,NAME FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER D,PRODUCTION.FELT_INVOICE_DATA I ";
+        strSQL+="SELECT PIECE_NUM,PARTY_ORIGINAL,NAME_ORIGINAL,PARTY_INVOICED,NAME_DIVERTED,PRODUCT_CODE,ITEM,STYLE,ORDER_DATE,DELIV_DATE ,COMM_DATE,RCVD_DATE,MTRS_ORDER,MTRS_RCVD ,WIDTH_ORDER,WIDTH_RCVD,GSQ,WIEGHT_RCVD,WIEGHT_INVOICED,RATE,PACK_DATE,BALE_NUM,MEMO_DATE,COALESCE(DISC_PER,0) AS DISC_PER,INVOICE_NO,INVOICE_DATE,TOTAL_GROSS,TRD_DISCOUNT,INVOICE_AMOUNT,REF_NO,CONF_NO,MACHINE_NO,POSITION,ZONE,INCHARGE_NAME FROM (SELECT A.PIECE_NO AS PIECE_NUM,PARTY_CD AS PARTY_ORIGINAL,NAME_ORIGINAL,DESP_PARTY AS PARTY_INVOICED,NAME_DIVERTED,PRODUCT_CODE,ITEM,STYLE,ORDER_DATE,DELIV_DATE ,COMM_DATE,RCVD_DATE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,GSQ,RECD_KG AS WIEGHT_RCVD,GROSS_KG AS WIEGHT_INVOICED,RATE,PACK_DATE,A.BALE_NO AS BALE_NUM,MEMO_DATE,COALESCE(DISC_PER,0) AS DISC_PER,INVOICE_NO,INVOICE_DATE,TOTAL_GROSS,TRD_DISCOUNT,INVOICE_AMOUNT,REF_NO,CONF_NO,MACHINE_NO,POSITION,ZONE,INCHARGE_CD FROM ( SELECT ZONE,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,B.ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,B.WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE ,I.INVOICE_NO,I.INVOICE_DATE,INVOICE_AMOUNT,TOTAL_NET_AMOUNT,I.RATE,GROSS_SQ_MTR,GROSS_KG,TRD_DISCOUNT,TOTAL_GROSS,PACK_DATE,A.BALE_NO,A.DESP_PARTY,I.PARTY_NAME AS NAME_DIVERTED,D.PARTY_NAME AS NAME_ORIGINAL,INCHARGE_CD FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER D,PRODUCTION.FELT_INVOICE_DATA I ";
+        strSQL+="WHERE ";
+        if(!txtpartycode.getText().equals("")){
+            strSQL+= "(B.PARTY_CD = "+SelUserID+" OR A.DESP_PARTY = "+SelUserID+") AND ";
+        }
+        /*if(!txtpieceno.getText().equals("")){
+            strSQL+= "A.PIECE_NO = "+strPieceNo+" AND ";
+        }*/
+        /*if(!txtproductcode.getText().equals("")){
+            strSQL+= "B.PRODUCT_CODE = "+strProductCode+" AND ";
+        }*/
+        if(!txtpieceno.getText().equals("")){
+            strSQL+="A.PIECE_NO IN ("+strPieceNo+") AND ";
+        }
+        if(!txtproductcode.getText().equals("")){
+            strSQL+="B.PRODUCT_CODE IN ("+strProductCode+") AND ";
+        }
+        if(!txtlengthfrom.getText().equals("")){
+            strSQL+="B.LNGTH >= "+strLengthFrom+" AND ";
+        }        
+        if(!txtlengthto.getText().equals("")){
+            strSQL+="B.LNGTH <= "+strLengthTo+" AND ";
+        }
+        if(!txtwidthfrom.getText().equals(""))
+        {
+            strSQL+="B.WIDTH >= "+strWidthFrom+" AND ";
+        }
+        if(!txtwidthto.getText().equals("")){
+            strSQL+="B.WIDTH <= "+strWidthTo+" AND ";
+        }
+        if(!txtgsqfrom.getText().equals(""))
+        {
+            strSQL+="B.GSQ >= "+strGSQFrom+" AND ";
+        }
+        if(!txtgsqto.getText().equals("")){
+            strSQL+="B.GSQ <= "+strGSQTo+" AND ";
+        }
+        if(!txtdatefrom.getText().trim().equals("")){
+            strSQL+="I.INVOICE_DATE >= '"+strInvoiceDateFrom+"' AND ";
+        }
+        if(!txtdateto.getText().trim().equals("")){
+            strSQL+="I.INVOICE_DATE <= '"+strInvoiceDateTo+"' AND ";
+        }
+        if(!txtzone.getText().equals("")){
+            strSQL+="ZONE = '"+strZone+"' AND ";
+        }
+        //strSQL+="PRODUCT_CODE*10 = ITEM_CODE AND A.INVOICE_NO = I.INVOICE_NO AND A.INVOICE_DATE = I.INVOICE_DATE AND A.ORDER_NO = I.PIECE_NO AND A.ORDER_NO = B.PIECE_NO AND A.DESP_PARTY != A.PARTY_CODE AND B.PARTY_CD = D.PARTY_CODE) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT)AND PARTY_CD =PARTY_CODE";      
+        strSQL+="PRODUCT_CODE*10 = ITEM_CODE AND A.INVOICE_NO = I.INVOICE_NO AND A.INVOICE_DATE = I.INVOICE_DATE AND A.ORDER_NO = I.PIECE_NO AND A.ORDER_NO = B.PIECE_NO AND A.DESP_PARTY != A.PARTY_CODE AND B.PARTY_CD = D.PARTY_CODE) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD = PARTY_CODE) AS C LEFT JOIN (SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE) AS FI ON FI.INCHARGE_CD=C.INCHARGE_CD ";
+        int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+="WHERE FI.INCHARGE_CD=1 ";    
+        }         
+        if(inchargeby==2){
+          strSQL+="WHERE FI.INCHARGE_CD=2 ";    
+        }
+        if(inchargeby==3){
+          strSQL+="WHERE FI.INCHARGE_CD=3 ";    
+        }
+        if(inchargeby==4){
+          strSQL+="WHERE FI.INCHARGE_CD=4 ";    
+        }
+        if(inchargeby==5){
+          strSQL+="WHERE FI.INCHARGE_CD=5 ";    
+        }
+        if(inchargeby==6){
+          strSQL+="WHERE FI.INCHARGE_CD=6 ";    
+        }
+        if(inchargeby==7){
+          strSQL+="WHERE C.INCHARGE_CD IS NULL ";    
+        }
+        System.out.println(strSQL);
+        rsTmp=data.getResult(strSQL);
+        rsTmp.first();
+        if(rsTmp.getRow()>0) {
+                int cnt=0;
+                double sum = 0.00;
+                double invsum = 0.00;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++; 
+                    txtdivertedtotal.setText(Integer.toString(cnt));
+                    sum += Double.parseDouble(rsTmp.getString("WIEGHT_INVOICED")); 
+                 
+                  invsum += Double.parseDouble(rsTmp.getString("INVOICE_AMOUNT"));
+                  
+                   DecimalFormat df = new DecimalFormat("###.##");
+                   txtdivertedkgtotal.setText(df.format(sum));
+                   txtdivertedamttotal.setText(df.format(invsum));
+                    
+                 Object[] rowData=new Object[36];
+                    rowData[0]=Integer.toString(cnt);
+                    //rowData[1]=rsTmp.getString("PIECE_NO");
+                    rowData[1]=rsTmp.getString("PIECE_NUM");
+                    rowData[2]=rsTmp.getString("PARTY_ORIGINAL");
+                    rowData[3]=rsTmp.getString("NAME_ORIGINAL");
+                    rowData[4]=rsTmp.getString("PARTY_INVOICED");
+                    rowData[5]=rsTmp.getString("NAME_DIVERTED");
+                    rowData[6]=rsTmp.getString("PRODUCT_CODE");
+                    rowData[7]=rsTmp.getString("ITEM");
+                    rowData[8]=rsTmp.getString("STYLE");
+                    rowData[9]=EITLERPGLOBAL.formatDate(rsTmp.getString("ORDER_DATE"));
+                    rowData[10]=EITLERPGLOBAL.formatDate(rsTmp.getString("DELIV_DATE"));                  
+                    rowData[11]=EITLERPGLOBAL.formatDate(rsTmp.getString("COMM_DATE"));                  
+                    rowData[12]=EITLERPGLOBAL.formatDate(rsTmp.getString("RCVD_DATE"));                  
+                    rowData[13]=rsTmp.getString("MTRS_ORDER");                  
+                    rowData[14]=rsTmp.getString("MTRS_RCVD");                  
+                    rowData[15]=rsTmp.getString("WIDTH_ORDER");                  
+                    rowData[16]=rsTmp.getString("WIDTH_RCVD");
+                    rowData[17]=rsTmp.getString("GSQ");
+                    rowData[18]=rsTmp.getString("WIEGHT_RCVD");
+                    rowData[19]=rsTmp.getString("WIEGHT_INVOICED");                  
+                    rowData[20]=rsTmp.getString("RATE");                  
+                    rowData[21]=EITLERPGLOBAL.formatDate(rsTmp.getString("PACK_DATE"));                  
+                    //rowData[22]=rsTmp.getString("BALE_NO"); 
+                    rowData[22]=rsTmp.getString("BALE_NUM");                  
+                    rowData[23]=EITLERPGLOBAL.formatDate(rsTmp.getString("MEMO_DATE"));                  
+                    rowData[24]=rsTmp.getString("DISC_PER");                  
+                    rowData[25]=rsTmp.getString("INVOICE_NO");
+                    rowData[26]=EITLERPGLOBAL.formatDate(rsTmp.getString("INVOICE_DATE"));
+                    rowData[27]=rsTmp.getString("TOTAL_GROSS");                  
+                    rowData[28]=rsTmp.getString("TRD_DISCOUNT");                  
+                    rowData[29]=rsTmp.getString("INVOICE_AMOUNT");                  
+                    rowData[30]=rsTmp.getString("REF_NO");                  
+                    rowData[31]=rsTmp.getString("CONF_NO");                  
+                    rowData[32]=rsTmp.getString("MACHINE_NO");                  
+                    rowData[33]=rsTmp.getString("POSITION");
+                    rowData[34]=rsTmp.getString("ZONE");
+                    rowData[35]=rsTmp.getString("INCHARGE_NAME");
+                    DataModelDiverted.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+        else{
+             //JOptionPane.showMessageDialog(this,"","Message",JOptionPane.ERROR_MESSAGE);
+             if(!txtpieceno.getText().equals("")){
+            JOptionPane.showMessageDialog(this,"Search Piece No in Production Process/Stock Available/Despatched");
+        }
+        
+        }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }        
+    }
+    /*
+    private void GenerateTargetDetailA(){
+      String SelUserID="";
+      String strSQL="";
+      try{
+          FormatGridTargetA();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strZone = txtzone.getText().toString();
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          
+          strSQL+="";
+      /* if(!txtpartycode.getText().equals("")){
+          //strSQL+="SELECT ZONE,PARTY_CODE,NAME,COALESCE(ROUND(S1112/100000,2)) AS S1112,COALESCE(ROUND(S1213/100000,2)) S1213,COALESCE(ROUND(STOCK/100000,2)) AS STOCK,COALESCE(ROUND(PENDING/100000,2)) AS PENDING,COALESCE(ROUND((S1213+ STOCK + PENDING)/100000,2)) AS TOTAL ,COALESCE(ROUND(TARGET/100000,2)) AS TARGET, COALESCE(ROUND((((S1213+ STOCK + PENDING)-TARGET )/TARGET) *100,1),0) AS PER FROM (SELECT ZONE,B1.PARTY_CODE,NAME,S1112,S1213,TARGET,STOCK,COALESCE(PENDING_ORDER,0) AS PENDING FROM (SELECT ZONE,A1.PARTY_CODE,NAME,S1112,S1213,COALESCE(TOTAL_TGT,0) AS TARGET,COALESCE(STOCKORDER,0) AS STOCK FROM (SELECT ZONE,PM.PARTY_CODE,NAME,COALESCE(S1112,0) AS S1112,COALESCE(S1213,0) AS S1213 FROM (SELECT ZONE,PARTY_CODE,NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER ) AS PM LEFT JOIN (SELECT PARTY_CODE,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2011-04-01' AND INVOICE_DATE <='2012-03-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S1112,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-04-01' AND FELT_INVOICE_DATA.INVOICE_DATE <=NOW() THEN TOTAL_NET_AMOUNT  END,0)) AS S1213 FROM PRODUCTION.FELT_INVOICE_DATA   WHERE  PARTY_CODE = "+SelUserID+" GROUP BY PARTY_CODE) AS INV ON INV.PARTY_CODE = PM.PARTY_CODE) AS A1 LEFT JOIN (SELECT * FROM PRODUCTION.FELT_TARGET_DATA WHERE TGT_FROM_DATE  >='2011-04-01' AND TGT_TO_DATE <='2012-03-31'   AND  PARTY_CODE = "+SelUserID+" ) AS A2 ON A1.PARTY_CODE = A2.PARTY_CODE LEFT JOIN (SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS STOCKORDER  FROM (SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,EXCISE,WPSC,DISBASAMT,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, (DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT FROM (SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT A.PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PIECE_NO,E.PARTY_CODE AS PARTY_CD,PRODUCT_CD AS PRODUCT_CODE,RCVD_MTR AS LNGTH,RECD_WDTH AS WIDTH,RECD_KG AS WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,CASE WHEN SQM_IND =1 THEN RCVD_MTR *RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_PIECE_REGISTER E,PRODUCTION.FELT_RATE_MASTER F,DINESHMILLS.D_SAL_PARTY_MASTER G WHERE E.PRODUCT_CD = F.ITEM_CODE  AND  E.PARTY_CODE = "+SelUserID+" AND E.WH_CD !=2 AND E.PARTY_CODE = G.PARTY_CODE ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D GROUP BY PARTY_CD ) AS A3 ON A1.PARTY_CODE=A3.PARTY_CD ) AS B1 LEFT JOIN (SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS PENDING_ORDER  FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, EXCISE,WPSC,DISBASAMT, CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, (DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER, BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT, CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE  AND  PARTY_CODE = "+SelUserID+" AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO   WHERE  PARTY_CODE = "+SelUserID+") AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D GROUP BY PARTY_CD  ) AS C1 ON B1.PARTY_CODE = C1.PARTY_CD) AS TARGET WHERE (S1213+TARGET+STOCK+PENDING) !=0 ORDER BY ZONE,TARGET DESC,NAME";      
+         // strSQL+="SELECT ZONE,PARTY_CODE,NAME,COALESCE(ROUND(S1112/100000,2)) AS S1112,COALESCE(ROUND(S1213/100000,2)) S1213,COALESCE(ROUND(S12131/100000,2)) S12131,COALESCE(ROUND(S12132/100000,2)) AS S12132,COALESCE(ROUND(S12133/100000,2)) AS S12133,COALESCE(ROUND(S12134/100000,2)) AS S12134,COALESCE(ROUND(STOCK/100000,2)) AS STOCK,COALESCE(ROUND(PENDING/100000,2)) AS PENDING,COALESCE(ROUND((S1213+ STOCK + PENDING)/100000,2)) AS TOTAL ,COALESCE(ROUND(TARGET/100000,2)) AS TARGET, COALESCE(ROUND((((S1213+ STOCK + PENDING)-TARGET )/TARGET) *100,1),0) AS PER,COALESCE(ROUND((S1213/TARGET) *100,1),0) AS SALPER,COALESCE(ROUND((S12131/TARGETQ1) *100,1),0) AS PERQ1,COALESCE(ROUND((S12132/TARGETQ2) *100,1),0) AS PERQ2,COALESCE(ROUND(((S12131+S12132) / (TARGETQ1+TARGETQ2)) *100,1),0) AS PERQ1Q2,COALESCE(ROUND((S12133/TARGETQ3) *100,1),0) AS PERQ3,COALESCE(ROUND(((S12131+S12132+S12133) / (TARGETQ1+TARGETQ2+TARGETQ3)) *100,1),0) AS PERQ1Q2Q3,COALESCE(ROUND((S12134/TARGETQ4) *100,1),0) AS PERQ4 FROM (SELECT ZONE,B1.PARTY_CODE,NAME,S1112,S1213,S12131,S12132,S12133,S12134,TARGET,TARGETQ1,TARGETQ2,TARGETQ3,TARGETQ4,STOCK,COALESCE(PENDING_ORDER,0) AS PENDING FROM (SELECT ZONE,A1.PARTY_CODE,NAME,S1112,S1213,S12131,S12132,S12133,S12134,COALESCE(TOTAL_TGT,0) AS TARGET,COALESCE(TGT_QTR_1,0) AS TARGETQ1,COALESCE(TGT_QTR_2,0) AS TARGETQ2,COALESCE(TGT_QTR_3,0) AS TARGETQ3,COALESCE(TGT_QTR_4,0) AS TARGETQ4,COALESCE(STOCKORDER,0) AS STOCK FROM (SELECT ZONE,PM.PARTY_CODE,NAME,COALESCE(S1112,0) AS S1112,COALESCE(S1213,0) AS S1213,COALESCE(S12131,0) AS S12131,COALESCE(S12132,0) AS S12132,COALESCE(S12133,0) AS S12133,COALESCE(S12134,0) AS S12134 FROM (SELECT ZONE,PARTY_CODE,NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER ) AS PM LEFT JOIN (SELECT PARTY_CODE,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2011-04-01' AND INVOICE_DATE <='2012-03-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S1112,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-04-01' AND FELT_INVOICE_DATA.INVOICE_DATE <=NOW() THEN TOTAL_NET_AMOUNT  END,0)) AS S1213,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-04-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-06-30' THEN TOTAL_NET_AMOUNT  END,0)) AS S12131,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-07-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-09-30' THEN TOTAL_NET_AMOUNT  END,0)) AS S12132,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-10-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-12-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S12133 ,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2013-01-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2013-03-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S12134 FROM PRODUCTION.FELT_INVOICE_DATA WHERE PARTY_CODE = "+SelUserID+" GROUP BY PARTY_CODE) AS INV ON INV.PARTY_CODE = PM.PARTY_CODE) AS A1 LEFT JOIN (SELECT * FROM PRODUCTION.FELT_TARGET_DATA WHERE TGT_FROM_DATE  >='2011-04-01' AND TGT_TO_DATE <='2012-03-31' AND PARTY_CODE = "+SelUserID+") AS A2 ON A1.PARTY_CODE = A2.PARTY_CODE LEFT JOIN (SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS STOCKORDER  FROM (SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,EXCISE,WPSC,DISBASAMT,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, (DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT FROM (SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT A.PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PIECE_NO,E.PARTY_CODE AS PARTY_CD,PRODUCT_CD AS PRODUCT_CODE,RCVD_MTR AS LNGTH,RECD_WDTH AS WIDTH,RECD_KG AS WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,CASE WHEN SQM_IND =1 THEN RCVD_MTR *RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_PIECE_REGISTER E,PRODUCTION.FELT_RATE_MASTER F,DINESHMILLS.D_SAL_PARTY_MASTER G WHERE E.PRODUCT_CD = F.ITEM_CODE  AND E.WH_CD !=2 AND E.PARTY_CODE = "+SelUserID+" AND E.PARTY_CODE = G.PARTY_CODE ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D GROUP BY PARTY_CD ) AS A3 ON A1.PARTY_CODE=A3.PARTY_CD ) AS B1 LEFT JOIN (SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS PENDING_ORDER  FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, EXCISE,WPSC,DISBASAMT, CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, (DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER, BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT, CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CODE = "+SelUserID+" AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO WHERE  PARTY_CODE = "+SelUserID+") AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D GROUP BY PARTY_CD  ) AS C1 ON B1.PARTY_CODE = C1.PARTY_CD) AS TARGET WHERE (S1213+TARGET+STOCK+PENDING) !=0 ORDER BY ZONE,TARGET DESC,NAME";
+         strSQL+="SELECT ZONE,PARTY_CODE,NAME,COALESCE(ROUND(S1112/100000,2)) AS S1112,COALESCE(ROUND(S1213/100000,2)) S1213,COALESCE(ROUND(S12131/100000,2)) S12131,COALESCE(ROUND(S12132/100000,2)) AS S12132,COALESCE(ROUND(S12133/100000,2)) AS S12133,COALESCE(ROUND(S12134/100000,2)) AS S12134,COALESCE(ROUND(STOCK/100000,2)) AS STOCK,COALESCE(ROUND(PENDING/100000,2)) AS PENDING,COALESCE(ROUND((S1213+ STOCK + PENDING)/100000,2)) AS TOTAL ,COALESCE(ROUND(TARGET/100000,2)) AS TARGET, COALESCE(ROUND((((S1213+ STOCK + PENDING)-TARGET )/TARGET) *100,1),0) AS PER,COALESCE(ROUND(((S1213-TARGET)/TARGET) *100,1),0) AS SALPER,COALESCE(ROUND(((S12131-TARGETQ1)/TARGETQ1) *100,1),0) AS PERQ1,COALESCE(ROUND(((S12132-TARGETQ2)/TARGETQ2) *100,1),0) AS PERQ2,COALESCE(ROUND(((S12131+S12132-TARGETQ1-TARGETQ2) / (TARGETQ1+TARGETQ2)) *100,1),0) AS PERQ1Q2,COALESCE(ROUND((S12133-TARGETQ3/TARGETQ3) *100,1),0) AS PERQ3,COALESCE(ROUND(((S12131+S12132+S12133-TARGETQ1-TARGETQ2-TARGETQ3) / (TARGETQ1+TARGETQ2+TARGETQ3)) *100,1),0) AS PERQ1Q2Q3,COALESCE(ROUND(((S12134-TARGETQ4)/TARGETQ4) *100,1),0) AS PERQ4 FROM (SELECT ZONE,B1.PARTY_CODE,NAME,S1112,S1213,S12131,S12132,S12133,S12134,TARGET,TARGETQ1,TARGETQ2,TARGETQ3,TARGETQ4,STOCK,COALESCE(PENDING_ORDER,0) AS PENDING FROM (SELECT ZONE,A1.PARTY_CODE,NAME,S1112,S1213,S12131,S12132,S12133,S12134,COALESCE(TOTAL_TGT,0) AS TARGET,COALESCE(TGT_QTR_1,0) AS TARGETQ1,COALESCE(TGT_QTR_2,0) AS TARGETQ2,COALESCE(TGT_QTR_3,0) AS TARGETQ3,COALESCE(TGT_QTR_4,0) AS TARGETQ4,COALESCE(STOCKORDER,0) AS STOCK FROM (SELECT ZONE,PM.PARTY_CODE,NAME,COALESCE(S1112,0) AS S1112,COALESCE(S1213,0) AS S1213,COALESCE(S12131,0) AS S12131,COALESCE(S12132,0) AS S12132,COALESCE(S12133,0) AS S12133,COALESCE(S12134,0) AS S12134 FROM (SELECT ZONE,PARTY_CODE,NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER ) AS PM LEFT JOIN (SELECT PARTY_CODE,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2011-04-01' AND INVOICE_DATE <='2012-03-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S1112,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-04-01' AND FELT_INVOICE_DATA.INVOICE_DATE <=NOW() THEN TOTAL_NET_AMOUNT  END,0)) AS S1213,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-04-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-06-30' THEN TOTAL_NET_AMOUNT  END,0)) AS S12131,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-07-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-09-30' THEN TOTAL_NET_AMOUNT  END,0)) AS S12132,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-10-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-12-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S12133 ,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2013-01-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2013-03-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S12134 FROM PRODUCTION.FELT_INVOICE_DATA WHERE PARTY_CODE = "+SelUserID+" GROUP BY PARTY_CODE) AS INV ON INV.PARTY_CODE = PM.PARTY_CODE) AS A1 LEFT JOIN (SELECT * FROM PRODUCTION.FELT_TARGET_DATA WHERE TGT_FROM_DATE  >='2011-04-01' AND TGT_TO_DATE <='2012-03-31' AND PARTY_CODE = "+SelUserID+") AS A2 ON A1.PARTY_CODE = A2.PARTY_CODE LEFT JOIN (SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS STOCKORDER  FROM (SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,EXCISE,WPSC,DISBASAMT,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, (DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT FROM (SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT A.PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PIECE_NO,E.PARTY_CODE AS PARTY_CD,PRODUCT_CD AS PRODUCT_CODE,RCVD_MTR AS LNGTH,RECD_WDTH AS WIDTH,RECD_KG AS WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,CASE WHEN SQM_IND =1 THEN RCVD_MTR *RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_PIECE_REGISTER E,PRODUCTION.FELT_RATE_MASTER F,DINESHMILLS.D_SAL_PARTY_MASTER G WHERE E.PRODUCT_CD = F.ITEM_CODE  AND E.WH_CD !=2 AND E.PARTY_CODE = "+SelUserID+" AND E.PARTY_CODE = G.PARTY_CODE ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D GROUP BY PARTY_CD ) AS A3 ON A1.PARTY_CODE=A3.PARTY_CD ) AS B1 LEFT JOIN (SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS PENDING_ORDER  FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, EXCISE,WPSC,DISBASAMT, CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, (DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER, BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT, CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CODE = "+SelUserID+" AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO WHERE  PARTY_CODE = "+SelUserID+") AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D GROUP BY PARTY_CD  ) AS C1 ON B1.PARTY_CODE = C1.PARTY_CD) AS TARGET WHERE (S1213+TARGET+STOCK+PENDING) !=0 ORDER BY ";
+       }else{
+        
+           //strSQL+="SELECT ZONE,PARTY_CODE,NAME,COALESCE(ROUND(S1112/100000,2)) AS S1112,COALESCE(ROUND(S1213/100000,2)) S1213,COALESCE(ROUND(STOCK/100000,2)) AS STOCK,COALESCE(ROUND(PENDING/100000,2)) AS PENDING,COALESCE(ROUND((S1213+ STOCK + PENDING)/100000,2)) AS TOTAL ,COALESCE(ROUND(TARGET/100000,2)) AS TARGET, COALESCE(ROUND((((S1213+ STOCK + PENDING)-TARGET )/TARGET) *100,1),0) AS PER FROM (SELECT ZONE,B1.PARTY_CODE,NAME,S1112,S1213,TARGET,STOCK,COALESCE(PENDING_ORDER,0) AS PENDING FROM (SELECT ZONE,A1.PARTY_CODE,NAME,S1112,S1213,COALESCE(TOTAL_TGT,0) AS TARGET,COALESCE(STOCKORDER,0) AS STOCK FROM (SELECT ZONE,PM.PARTY_CODE,NAME,COALESCE(S1112,0) AS S1112,COALESCE(S1213,0) AS S1213 FROM (SELECT ZONE,PARTY_CODE,NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER ) AS PM LEFT JOIN (SELECT PARTY_CODE,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2011-04-01' AND INVOICE_DATE <='2012-03-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S1112,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-04-01' AND FELT_INVOICE_DATA.INVOICE_DATE <=NOW() THEN TOTAL_NET_AMOUNT  END,0)) AS S1213 FROM PRODUCTION.FELT_INVOICE_DATA GROUP BY PARTY_CODE) AS INV ON INV.PARTY_CODE = PM.PARTY_CODE) AS A1 LEFT JOIN (SELECT * FROM PRODUCTION.FELT_TARGET_DATA WHERE TGT_FROM_DATE  >='2011-04-01' AND TGT_TO_DATE <='2012-03-31') AS A2 ON A1.PARTY_CODE = A2.PARTY_CODE LEFT JOIN (SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS STOCKORDER  FROM (SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,EXCISE,WPSC,DISBASAMT,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, (DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT FROM (SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT A.PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PIECE_NO,E.PARTY_CODE AS PARTY_CD,PRODUCT_CD AS PRODUCT_CODE,RCVD_MTR AS LNGTH,RECD_WDTH AS WIDTH,RECD_KG AS WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,CASE WHEN SQM_IND =1 THEN RCVD_MTR *RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_PIECE_REGISTER E,PRODUCTION.FELT_RATE_MASTER F,DINESHMILLS.D_SAL_PARTY_MASTER G WHERE E.PRODUCT_CD = F.ITEM_CODE  AND E.WH_CD !=2 AND E.PARTY_CODE = G.PARTY_CODE ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D GROUP BY PARTY_CD ) AS A3 ON A1.PARTY_CODE=A3.PARTY_CD ) AS B1 LEFT JOIN (SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS PENDING_ORDER  FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, EXCISE,WPSC,DISBASAMT, CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, (DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER, BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT, CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE  AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D GROUP BY PARTY_CD  ) AS C1 ON B1.PARTY_CODE = C1.PARTY_CD) AS TARGET WHERE (S1213+TARGET+STOCK+PENDING) !=0 ORDER BY ZONE,TARGET DESC,NAME"; 
+           // strSQL+= "SELECT ZONE,PARTY_CODE,NAME,COALESCE(ROUND(S1112/100000,2)) AS S1112,COALESCE(ROUND(S1213/100000,2)) AS S1213,COALESCE(ROUND(S12131/100000,2)) AS S12131,COALESCE(ROUND(S12132/100000,2)) AS S12132,COALESCE(ROUND(S12133/100000,2)) AS S12133,COALESCE(ROUND(S12134/100000,2)) AS S12134,COALESCE(ROUND(STOCK/100000,2)) AS STOCK,COALESCE(ROUND(PENDING/100000,2)) AS PENDING,COALESCE(ROUND((S1213+ STOCK + PENDING)/100000,2)) AS TOTAL ,COALESCE(ROUND(TARGET/100000,2)) AS TARGET, COALESCE(ROUND((((S1213+ STOCK + PENDING)-TARGET )/TARGET) *100,1),0) AS PER,COALESCE(ROUND((S1213/TARGET) *100,1),0) AS SALPER,COALESCE(ROUND((S12131/TARGETQ1) *100,1),0) AS PERQ1,COALESCE(ROUND((S12132/TARGETQ2) *100,1),0) AS PERQ2,COALESCE(ROUND(((S12131+S12132) / (TARGETQ1+TARGETQ2)) *100,1),0) AS PERQ1Q2,COALESCE(ROUND((S12133/TARGETQ3) *100,1),0) AS PERQ3,COALESCE(ROUND(((S12131+S12132+S12133) / (TARGETQ1+TARGETQ2+TARGETQ3)) *100,1),0) AS PERQ1Q2Q3,COALESCE(ROUND((S12134/TARGETQ4) *100,1),0) AS PERQ4 FROM (SELECT ZONE,B1.PARTY_CODE,NAME,S1112,S1213,S12131,S12132,S12133,S12134,TARGET,TARGETQ1,TARGETQ2,TARGETQ3,TARGETQ4,STOCK,COALESCE(PENDING_ORDER,0) AS PENDING FROM (SELECT ZONE,A1.PARTY_CODE,NAME,S1112,S1213,S12131,S12132,S12133,S12134,COALESCE(TOTAL_TGT,0) AS TARGET,COALESCE(TGT_QTR_1,0) AS TARGETQ1,COALESCE(TGT_QTR_2,0) AS TARGETQ2,COALESCE(TGT_QTR_3,0) AS TARGETQ3,COALESCE(TGT_QTR_4,0) AS TARGETQ4,COALESCE(STOCKORDER,0) AS STOCK FROM (SELECT ZONE,PM.PARTY_CODE,NAME,COALESCE(S1112,0) AS S1112,COALESCE(S1213,0) AS S1213,COALESCE(S12131,0) AS S12131,COALESCE(S12132,0) AS S12132,COALESCE(S12133,0) AS S12133,COALESCE(S12134,0) AS S12134 FROM (SELECT ZONE,PARTY_CODE,NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER ) AS PM LEFT JOIN (SELECT PARTY_CODE,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2011-04-01' AND INVOICE_DATE <='2012-03-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S1112,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-04-01' AND FELT_INVOICE_DATA.INVOICE_DATE <=NOW() THEN TOTAL_NET_AMOUNT  END,0)) AS S1213,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-04-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-06-30' THEN TOTAL_NET_AMOUNT  END,0)) AS S12131,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-07-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-09-30' THEN TOTAL_NET_AMOUNT  END,0)) AS S12132,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-10-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-12-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S12133 ,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2013-01-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2013-03-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S12134 FROM PRODUCTION.FELT_INVOICE_DATA GROUP BY PARTY_CODE) AS INV ON INV.PARTY_CODE = PM.PARTY_CODE) AS A1 LEFT JOIN (SELECT * FROM PRODUCTION.FELT_TARGET_DATA WHERE TGT_FROM_DATE  >='2011-04-01' AND TGT_TO_DATE <='2012-03-31') AS A2 ON A1.PARTY_CODE = A2.PARTY_CODE LEFT JOIN (SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS STOCKORDER  FROM (SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,EXCISE,WPSC,DISBASAMT,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, (DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT FROM (SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT A.PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PIECE_NO,E.PARTY_CODE AS PARTY_CD,PRODUCT_CD AS PRODUCT_CODE,RCVD_MTR AS LNGTH,RECD_WDTH AS WIDTH,RECD_KG AS WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,CASE WHEN SQM_IND =1 THEN RCVD_MTR *RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_PIECE_REGISTER E,PRODUCTION.FELT_RATE_MASTER F,DINESHMILLS.D_SAL_PARTY_MASTER G WHERE E.PRODUCT_CD = F.ITEM_CODE  AND E.WH_CD !=2 AND E.PARTY_CODE = G.PARTY_CODE ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D GROUP BY PARTY_CD ) AS A3 ON A1.PARTY_CODE=A3.PARTY_CD ) AS B1 LEFT JOIN (SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS PENDING_ORDER  FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, EXCISE,WPSC,DISBASAMT, CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, (DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER, BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT, CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE  AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D GROUP BY PARTY_CD  ) AS C1 ON B1.PARTY_CODE = C1.PARTY_CD) AS TARGET WHERE (S1213+TARGET+STOCK+PENDING) !=0 ORDER BY ZONE,TARGET DESC,NAME ";
+          strSQL+= "SELECT ZONE,PARTY_CODE,NAME,COALESCE(ROUND(S1112/100000,2)) AS S1112,COALESCE(ROUND(S1213/100000,2)) AS S1213,COALESCE(ROUND(S12131/100000,2)) AS S12131,COALESCE(ROUND(S12132/100000,2)) AS S12132,COALESCE(ROUND(S12133/100000,2)) AS S12133,COALESCE(ROUND(S12134/100000,2)) AS S12134,COALESCE(ROUND(STOCK/100000,2)) AS STOCK,COALESCE(ROUND(PENDING/100000,2)) AS PENDING,COALESCE(ROUND((S1213+ STOCK + PENDING)/100000,2)) AS TOTAL ,COALESCE(ROUND(TARGET/100000,2)) AS TARGET, COALESCE(ROUND((((S1213+ STOCK + PENDING)-TARGET )/TARGET) *100,1),0) AS PER,COALESCE(ROUND(((S1213-TARGET)/TARGET) *100,1),0) AS SALPER,COALESCE(ROUND(((S12131-TARGETQ1)/TARGETQ1) *100,1),0) AS PERQ1,COALESCE(ROUND(((S12132-TARGETQ2)/TARGETQ2) *100,1),0) AS PERQ2,COALESCE(ROUND(((S12131+S12132-TARGETQ1-TARGETQ2) / (TARGETQ1+TARGETQ2)) *100,1),0) AS PERQ1Q2,COALESCE(ROUND(((S12133-TARGETQ3)/TARGETQ3) *100,1),0) AS PERQ3,COALESCE(ROUND(((S12131+S12132+S12133-TARGETQ1-TARGETQ2-TARGETQ3) / (TARGETQ1+TARGETQ2+TARGETQ3)) *100,1),0) AS PERQ1Q2Q3,COALESCE(ROUND(((S12134-TARGETQ4)/TARGETQ4) *100,1),0) AS PERQ4 FROM (SELECT ZONE,B1.PARTY_CODE,NAME,S1112,S1213,S12131,S12132,S12133,S12134,TARGET,TARGETQ1,TARGETQ2,TARGETQ3,TARGETQ4,STOCK,COALESCE(PENDING_ORDER,0) AS PENDING FROM (SELECT ZONE,A1.PARTY_CODE,NAME,S1112,S1213,S12131,S12132,S12133,S12134,COALESCE(TOTAL_TGT,0) AS TARGET,COALESCE(TGT_QTR_1,0) AS TARGETQ1,COALESCE(TGT_QTR_2,0) AS TARGETQ2,COALESCE(TGT_QTR_3,0) AS TARGETQ3,COALESCE(TGT_QTR_4,0) AS TARGETQ4,COALESCE(STOCKORDER,0) AS STOCK FROM (SELECT ZONE,PM.PARTY_CODE,NAME,COALESCE(S1112,0) AS S1112,COALESCE(S1213,0) AS S1213,COALESCE(S12131,0) AS S12131,COALESCE(S12132,0) AS S12132,COALESCE(S12133,0) AS S12133,COALESCE(S12134,0) AS S12134 FROM (SELECT ZONE,PARTY_CODE,NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER ) AS PM LEFT JOIN (SELECT PARTY_CODE,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2011-04-01' AND INVOICE_DATE <='2012-03-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S1112,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-04-01' AND FELT_INVOICE_DATA.INVOICE_DATE <=NOW() THEN TOTAL_NET_AMOUNT  END,0)) AS S1213,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-04-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-06-30' THEN TOTAL_NET_AMOUNT  END,0)) AS S12131,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-07-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-09-30' THEN TOTAL_NET_AMOUNT  END,0)) AS S12132,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-10-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-12-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S12133 ,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2013-01-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2013-03-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S12134 FROM PRODUCTION.FELT_INVOICE_DATA GROUP BY PARTY_CODE) AS INV ON INV.PARTY_CODE = PM.PARTY_CODE) AS A1 LEFT JOIN (SELECT * FROM PRODUCTION.FELT_TARGET_DATA WHERE TGT_FROM_DATE  >='2011-04-01' AND TGT_TO_DATE <='2012-03-31') AS A2 ON A1.PARTY_CODE = A2.PARTY_CODE LEFT JOIN (SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS STOCKORDER  FROM (SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,EXCISE,WPSC,DISBASAMT,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, (DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT FROM (SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT A.PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PIECE_NO,E.PARTY_CODE AS PARTY_CD,PRODUCT_CD AS PRODUCT_CODE,RCVD_MTR AS LNGTH,RECD_WDTH AS WIDTH,RECD_KG AS WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,CASE WHEN SQM_IND =1 THEN RCVD_MTR *RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_PIECE_REGISTER E,PRODUCTION.FELT_RATE_MASTER F,DINESHMILLS.D_SAL_PARTY_MASTER G WHERE E.PRODUCT_CD = F.ITEM_CODE  AND E.WH_CD !=2 AND E.PARTY_CODE = G.PARTY_CODE ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D GROUP BY PARTY_CD ) AS A3 ON A1.PARTY_CODE=A3.PARTY_CD ) AS B1 LEFT JOIN (SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS PENDING_ORDER  FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, EXCISE,WPSC,DISBASAMT, CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, (DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER, BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT, CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE  AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D GROUP BY PARTY_CD  ) AS C1 ON B1.PARTY_CODE = C1.PARTY_CD) AS TARGET WHERE (S1213+TARGET+STOCK+PENDING) !=0 ORDER BY ";  //ZONE,TARGET DESC,NAME,";
+         }*/  /*       
+          //strSQL+="SELECT ZONE,PARTY_CODE,NAME,COALESCE(ROUND(S1112/100000,2)) AS S1112,COALESCE(ROUND(S1213/100000,2)) S1213,COALESCE(ROUND(S12131/100000,2)) S12131,COALESCE(ROUND(S12132/100000,2)) AS S12132,COALESCE(ROUND(S12133/100000,2)) AS S12133,COALESCE(ROUND(S12134/100000,2)) AS S12134,COALESCE(ROUND(STOCK/100000,2)) AS STOCK,COALESCE(ROUND(PENDING/100000,2)) AS PENDING,COALESCE(ROUND((S1213+ STOCK + PENDING)/100000,2)) AS TOTAL ,COALESCE(ROUND(TARGET/100000,2)) AS TARGET, COALESCE(ROUND((((S1213+ STOCK + PENDING)-TARGET )/TARGET) *100,1),0) AS PER,COALESCE(ROUND(((S1213-TARGET)/TARGET) *100,1),0) AS SALPER,COALESCE(ROUND(((S12131-TARGETQ1)/TARGETQ1) *100,1),0) AS PERQ1,COALESCE(ROUND(((S12132-TARGETQ2)/TARGETQ2) *100,1),0) AS PERQ2,COALESCE(ROUND(((S12131+S12132-TARGETQ1-TARGETQ2) / (TARGETQ1+TARGETQ2)) *100,1),0) AS PERQ1Q2,COALESCE(ROUND((S12133-TARGETQ3/TARGETQ3) *100,1),0) AS PERQ3,COALESCE(ROUND(((S12131+S12132+S12133-TARGETQ1-TARGETQ2-TARGETQ3) / (TARGETQ1+TARGETQ2+TARGETQ3)) *100,1),0) AS PERQ1Q2Q3,COALESCE(ROUND(((S12134-TARGETQ4)/TARGETQ4) *100,1),0) AS PERQ4 FROM (SELECT ZONE,B1.PARTY_CODE,NAME,S1112,S1213,S12131,S12132,S12133,S12134,TARGET,TARGETQ1,TARGETQ2,TARGETQ3,TARGETQ4,STOCK,COALESCE(PENDING_ORDER,0) AS PENDING FROM ";
+          //strSQL+="(SELECT ZONE,A1.PARTY_CODE,NAME,S1112,S1213,S12131,S12132,S12133,S12134,COALESCE(TOTAL_TGT,0) AS TARGET,COALESCE(TGT_QTR_1,0) AS TARGETQ1,COALESCE(TGT_QTR_2,0) AS TARGETQ2,COALESCE(TGT_QTR_3,0) AS TARGETQ3,COALESCE(TGT_QTR_4,0) AS TARGETQ4,COALESCE(STOCKORDER,0) AS STOCK FROM ";
+          //strSQL+="(SELECT ZONE,PM.PARTY_CODE,NAME,COALESCE(S1112,0) AS S1112,COALESCE(S1213,0) AS S1213,COALESCE(S12131,0) AS S12131,COALESCE(S12132,0) AS S12132,COALESCE(S12133,0) AS S12133,COALESCE(S12134,0) AS S12134 FROM ";
+          //strSQL+="(SELECT ZONE,PARTY_CODE,NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER";
+          strSQL+="SELECT ZONE,PARTY_CODE,PARTY_NAME,S1112,COALESCE(ROUND(S1213/100000,2)) S1213,COALESCE(ROUND(S12131/100000,2)) S12131,S12132,S12133,S12134,STOCK,PENDING,TOTAL,TARGET,PER,SALPER,PERQ1,PERQ2,PERQ1Q2,PERQ3,PERQ1Q2Q3,PERQ4,INCHARGE_NAME FROM ";
+          strSQL+="(SELECT INCHARGE_CD,ZONE,PARTY_CODE,PARTY_NAME,COALESCE(ROUND(S1112/100000,2)) AS S1112,COALESCE(ROUND(S1213/100000,2)) S1213,COALESCE(ROUND(S12131/100000,2)) S12131,COALESCE(ROUND(S12132/100000,2)) AS S12132,COALESCE(ROUND(S12133/100000,2)) AS S12133,COALESCE(ROUND(S12134/100000,2)) AS S12134,COALESCE(ROUND(STOCK/100000,2)) AS STOCK,COALESCE(ROUND(PENDING/100000,2)) AS PENDING,COALESCE(ROUND((S1213+ STOCK + PENDING)/100000,2)) AS TOTAL ,COALESCE(ROUND(TARGET/100000,2)) AS TARGET, COALESCE(ROUND((((S1213+ STOCK + PENDING)-TARGET )/TARGET) *100,1),0) AS PER,COALESCE(ROUND(((S1213-TARGET)/TARGET) *100,1),0) AS SALPER,COALESCE(ROUND(((S12131-TARGETQ1)/TARGETQ1) *100,1),0) AS PERQ1,COALESCE(ROUND(((S12132-TARGETQ2)/TARGETQ2) *100,1),0) AS PERQ2,COALESCE(ROUND(((S12131+S12132-TARGETQ1-TARGETQ2) / (TARGETQ1+TARGETQ2)) *100,1),0) AS PERQ1Q2,COALESCE(ROUND((S12133-TARGETQ3/TARGETQ3) *100,1),0) AS PERQ3,COALESCE(ROUND(((S12131+S12132+S12133-TARGETQ1-TARGETQ2-TARGETQ3) / (TARGETQ1+TARGETQ2+TARGETQ3)) *100,1),0) AS PERQ1Q2Q3,COALESCE(ROUND(((S12134-TARGETQ4)/TARGETQ4) *100,1),0) AS PERQ4 FROM (SELECT INCHARGE_CD,ZONE,B1.PARTY_CODE,PARTY_NAME,S1112,S1213,S12131,S12132,S12133,S12134,TARGET,TARGETQ1,TARGETQ2,TARGETQ3,TARGETQ4,STOCK,COALESCE(PENDING_ORDER,0) AS PENDING FROM ";
+          strSQL+="(SELECT INCHARGE_CD,ZONE,A1.PARTY_CODE,PARTY_NAME,S1112,S1213,S12131,S12132,S12133,S12134,COALESCE(TOTAL_TGT,0) AS TARGET,COALESCE(TGT_QTR_1,0) AS TARGETQ1,COALESCE(TGT_QTR_2,0) AS TARGETQ2,COALESCE(TGT_QTR_3,0) AS TARGETQ3,COALESCE(TGT_QTR_4,0) AS TARGETQ4,COALESCE(STOCKORDER,0) AS STOCK FROM ";
+          strSQL+="(SELECT INCHARGE_CD,ZONE,PM.PARTY_CODE,PARTY_NAME,COALESCE(S1112,0) AS S1112,COALESCE(S1213,0) AS S1213,COALESCE(S12131,0) AS S12131,COALESCE(S12132,0) AS S12132,COALESCE(S12133,0) AS S12133,COALESCE(S12134,0) AS S12134 FROM ";
+          strSQL+="(SELECT INCHARGE_CD,ZONE,PARTY_CODE,PARTY_NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER ";
+          strSQL+=" WHERE ";
+          if(!txtzone.getText().equals("")){
+              strSQL+=" ZONE = '"+strZone+"' AND";
+          }
+          strSQL+=" MAIN_ACCOUNT_CODE='210010') AS PM LEFT JOIN ";
+          strSQL+="(SELECT PARTY_CODE,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2011-04-01' AND INVOICE_DATE <='2012-03-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S1112,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-04-01' AND FELT_INVOICE_DATA.INVOICE_DATE <=NOW() THEN TOTAL_NET_AMOUNT  END,0)) AS S1213,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-04-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-06-30' THEN TOTAL_NET_AMOUNT  END,0)) AS S12131,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-07-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-09-30' THEN TOTAL_NET_AMOUNT  END,0)) AS S12132,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2012-10-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2012-12-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S12133 ,SUM(COALESCE(CASE WHEN INVOICE_DATE >='2013-01-01' AND FELT_INVOICE_DATA.INVOICE_DATE <='2013-03-31' THEN TOTAL_NET_AMOUNT  END,0)) AS S12134 FROM PRODUCTION.FELT_INVOICE_DATA ";
+          strSQL+="WHERE ";
+          if(!txtpartycode.getText().equals("")){
+              strSQL+="PARTY_CODE = "+SelUserID+" AND ";
+          }
+         // if(!txtzone.getText().equals("")){
+         //     strSQL+="ZONE1 = '"+strZone+"' AND ";
+         // }
+          strSQL+="PARTY_CODE= PARTY_CODE GROUP BY PARTY_CODE) AS INV ON INV.PARTY_CODE = PM.PARTY_CODE) AS A1 ";
+          strSQL+="LEFT JOIN ";
+          strSQL+="(SELECT * FROM PRODUCTION.FELT_TARGET_DATA ";
+          strSQL+="WHERE ";
+          if(!txtpartycode.getText().equals("")){
+              strSQL+="PARTY_CODE = "+SelUserID+" AND ";
+          }
+          strSQL+="TGT_FROM_DATE >='2011-04-01' AND TGT_TO_DATE <='2012-03-31') AS A2 ON A1.PARTY_CODE = A2.PARTY_CODE ";
+          strSQL+="LEFT JOIN ";
+          strSQL+="(SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS STOCKORDER FROM (SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,EXCISE,WPSC,DISBASAMT,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,(DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT ";
+          strSQL+="FROM ";
+          strSQL+="(SELECT PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE ";
+          strSQL+="FROM ";
+          strSQL+="(SELECT A.PIECE_NO,PARTY_CD,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT ";
+          strSQL+="FROM ";
+          strSQL+="(SELECT PIECE_NO,E.PARTY_CODE AS PARTY_CD,PRODUCT_CD AS PRODUCT_CODE,RCVD_MTR AS LNGTH,RECD_WDTH AS WIDTH,RECD_KG AS WEIGHT,SQM_RATE,WT_RATE,SQM_IND,INSURANCE_CODE,CASE WHEN SQM_IND =1 THEN RCVD_MTR *RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_PIECE_REGISTER E,PRODUCTION.FELT_RATE_MASTER F,DINESHMILLS.D_SAL_PARTY_MASTER G ";
+          strSQL+="WHERE ";
+          if(!txtpartycode.getText().equals("")){
+              strSQL+="E.PARTY_CODE = "+SelUserID+" AND ";
+          }
+         // if(!txtzone.getText().equals("")){
+           // strSQL+="ZONE = '"+strZone+"' AND ";
+         // }
+          strSQL+="E.PRODUCT_CD = F.ITEM_CODE AND E.WH_CD !=2 AND E.PARTY_CODE = G.PARTY_CODE ) AS A ";
+          strSQL+="LEFT JOIN ";
+          strSQL+="(SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D GROUP BY PARTY_CD ) AS A3 ON A1.PARTY_CODE=A3.PARTY_CD ) AS B1 LEFT JOIN (SELECT PARTY_CD,ROUND(SUM(INV_AMT),2) AS PENDING_ORDER  FROM (SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, EXCISE,WPSC,DISBASAMT, CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, (DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END)  AS INV_AMT ";
+          strSQL+="FROM ";
+          strSQL+="(SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC, ((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE ";
+          strSQL+="FROM ";
+          strSQL+="(SELECT A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER, BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT ";
+          strSQL+="FROM ";
+          strSQL+="(SELECT PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE, CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT, CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC ";
+          strSQL+="FROM ";
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER,DINESHMILLS.D_SAL_PARTY_MASTER ";
+          strSQL+="WHERE ";
+          if(!txtpartycode.getText().equals("")){
+              strSQL+="PARTY_CODE = "+SelUserID+" AND ";
+          }
+          //if(!txtzone.getText().equals("")){
+          //  strSQL+="ZONE = '"+strZone+"' AND ";
+          //}
+          strSQL+="PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A ";
+          strSQL+="LEFT JOIN ";
+          strSQL+="(SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO WHERE ";
+          if(!txtpartycode.getText().equals(" ")){
+              strSQL+=" PARTY_CODE = '"+SelUserID+"' AND ";
+          }
+          strSQL+=" PARTY_CODE=PARTY_CODE) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE ) AS B ) AS C ) AS D GROUP BY PARTY_CD ) AS C1 ON B1.PARTY_CODE = C1.PARTY_CD) AS TARGET WHERE (S1213+TARGET+STOCK+PENDING) !=0) AS ABCD ";//ORDER BY ";
+          strSQL+=" LEFT JOIN (SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE) AS FI ON FI.INCHARGE_CD=ABCD.INCHARGE_CD ";
+          int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+="WHERE FI.INCHARGE_CD=1";    
+        }         
+        if(inchargeby==2){
+          strSQL+="WHERE FI.INCHARGE_CD=2";    
+        }
+        if(inchargeby==3){
+          strSQL+="WHERE FI.INCHARGE_CD=3";    
+        }
+        if(inchargeby==4){
+          strSQL+="WHERE FI.INCHARGE_CD=4";    
+        }
+        if(inchargeby==5){
+          strSQL+="WHERE FI.INCHARGE_CD=5";    
+        }
+        if(inchargeby==6){
+          strSQL+="WHERE FI.INCHARGE_CD=6";    
+        }
+        if(inchargeby==7){
+          strSQL+="WHERE ABCD.INCHARGE_CD IS NULL";    
+        }
+        int Orderby=EITLERPGLOBAL.getComboCode(cmbTarget);
+            
+        if(Orderby==1) {
+                strSQL+=" ORDER BY PERQ1 DESC ";
+            }       
+        if(Orderby==2) {
+                strSQL+=" ORDER BY PERQ2 DESC ";
+            }
+        if(Orderby==3) {
+                strSQL+=" ORDER BY PERQ3 DESC ";
+            }
+        if(Orderby==4) {
+                strSQL+=" ORDER BY PERQ4 DESC ";
+            }
+        if(Orderby==5) {
+                strSQL+=" ORDER BY PERQ1Q2 DESC ";
+            }
+        if(Orderby==6) {
+                strSQL+=" ORDER BY PERQ1Q2Q3 DESC ";
+            }
+        if(Orderby==7) {
+                strSQL+=" ORDER BY PER DESC ";
+            }
+         System.out.println(strSQL);
+         rsTmp=data.getResult(strSQL);
+         rsTmp.first();
+         if(rsTmp.getRow()>0) {
+                int cnt=0;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++; 
+                    txttargettotal1.setText(Integer.toString(cnt));                    
+                 Object[] rowData=new Object[23];
+                    rowData[0]=Integer.toString(cnt);
+                    rowData[1]=rsTmp.getString("ZONE");
+                    rowData[2]=rsTmp.getString("PARTY_CODE");
+                    rowData[3]=rsTmp.getString("PARTY_NAME");                  
+                    rowData[4]=rsTmp.getString("S1112");
+                    rowData[5]=rsTmp.getString("S1213");
+                    rowData[6]=rsTmp.getString("S12131");
+                    rowData[7]=rsTmp.getString("S12132");
+                    rowData[8]=rsTmp.getString("S12133");
+                    rowData[9]=rsTmp.getString("S12134");
+                    rowData[10]=rsTmp.getString("STOCK");
+                    rowData[11]=rsTmp.getString("PENDING");
+                    rowData[12]=rsTmp.getString("TOTAL");
+                    rowData[13]=rsTmp.getString("TARGET");
+                    rowData[14]=rsTmp.getString("PER");
+                    rowData[15]=rsTmp.getString("SALPER");
+                    rowData[16]=rsTmp.getString("PERQ1");
+                    rowData[17]=rsTmp.getString("PERQ2");
+                    rowData[18]=rsTmp.getString("PERQ1Q2");
+                    rowData[19]=rsTmp.getString("PERQ3");
+                    rowData[20]=rsTmp.getString("PERQ1Q2Q3");
+                    rowData[21]=rsTmp.getString("PERQ4");
+                    rowData[22]=rsTmp.getString("INCHARGE_NAME");
+                    DataModelTargetA.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }
+    }  
+    */
+    private void GenerateAgeingDetail(){
+     
+     try{
+          FormatGridAgeing();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          strSQL= "";
+          strSQL+="SELECT SUBSTRING(PRODUCT_CD,1,6) AS PRODUCT_CD,ITEM_DESC,COALESCE(COUNT(CASE WHEN DAYS <= 45 THEN RECD_KG END),0) AS 'COUNT<=45',COALESCE(SUM(CASE WHEN DAYS <= 45 THEN RECD_KG END),0) AS 'QTY<=45',COALESCE(SUM(CASE WHEN DAYS <= 45 THEN INV_AMT END),0) AS 'AMT<=45',COALESCE(COUNT(CASE WHEN DAYS > 45 AND DAYS <= 90 THEN RECD_KG END),0) AS 'COUNT>45<=90',COALESCE(SUM(CASE WHEN DAYS > 45 AND DAYS <= 90 THEN RECD_KG END),0) AS 'QTY>45<=90',COALESCE(SUM(CASE WHEN DAYS > 45 AND DAYS <= 90 THEN INV_AMT END),0) AS 'AMT>45<=90',COALESCE(COUNT(CASE WHEN DAYS > 90 AND DAYS <= 180 THEN RECD_KG END),0) AS 'COUNT>90<=180',COALESCE(SUM(CASE WHEN DAYS > 90 AND DAYS <= 180 THEN RECD_KG END),0) AS 'QTY>90<=180',COALESCE(SUM(CASE WHEN DAYS > 90 AND DAYS <= 180 THEN INV_AMT END),0) AS 'AMT>90<=180',COALESCE(COUNT(CASE WHEN DAYS > 180 AND DAYS <= 365 THEN RECD_KG END),0) AS 'COUNT>180<=365',COALESCE(SUM(CASE WHEN DAYS > 180 AND DAYS <= 365 THEN RECD_KG END),0) AS 'QTY>180<=365',COALESCE(SUM(CASE WHEN DAYS > 180 AND DAYS <= 365 THEN INV_AMT END),0) AS 'AMT>180<=365',COALESCE(COUNT(CASE WHEN DAYS > 365 AND DAYS <= 730 THEN RECD_KG END),0) AS 'COUNT>365<=730',COALESCE(SUM(CASE WHEN DAYS > 365 AND DAYS <= 730 THEN RECD_KG END),0) AS 'QTY>365<=730',COALESCE(SUM(CASE WHEN DAYS > 365 AND DAYS <= 730 THEN INV_AMT END),0) AS 'AMT>365<=730',COALESCE(COUNT(CASE WHEN DAYS > 730  THEN RECD_KG END),0) AS 'COUNT>730',COALESCE(SUM(CASE WHEN DAYS > 730  THEN RECD_KG END),0) AS 'QTY>730',COALESCE(SUM(CASE WHEN DAYS > 730  THEN INV_AMT END),0) AS 'AMT>730',COALESCE(COUNT(RECD_KG ),0) AS 'TOTAL_COUNT',COALESCE(SUM(RECD_KG ),0) AS 'TOTAL_QTY',COALESCE(SUM(INV_AMT),0) AS 'TOTAL_AMT' FROM (SELECT PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR ,WIDTH AS WIDTH_ORDER,RECD_WDTH,WEIGHT AS KG_CALC,RECD_KG ,SQM_RATE,WT_RATE,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,GSQ,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,REF_NO,CONF_NO,MACHINE_NO,POSITION,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,INSURANCE_CODE,DATEDIFF(NOW(),RCVD_DATE) AS DAYS FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,GSQ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,GSQ,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(PARTY_NAME)),'PARTY DELETED IN COBOL') AS PARTY_NAME,COALESCE(DISPATCH_STATION,'Z STATION PARTY DELETED') AS DISPATCH_STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0) AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, GSQ,BAS_AMT,WPSC, ST_FLAG_1 FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE ,COMM_DATE, GSQ,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H WHERE A.PRODUCT_CD = H.ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO ) AS FA LEFT JOIN (SELECT * FROM DINESHMILLS.D_SAL_PARTY_MASTER WHERE MAIN_ACCOUNT_CODE='210010' ) AS FP ON FA.PARTY_CD = FP.PARTY_CODE) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C) AS D GROUP BY PRODUCT_CD,ITEM_DESC ";      
+          System.out.println(strSQL);
+          rsTmp=data.getResult(strSQL);
+        rsTmp.first();
+        if(rsTmp.getRow()>0) {
+                int cnt=0;
+                double less45countsum =0.00;
+                double less90countsum =0.00;
+                double less180countsum =0.00;
+                double less365countsum =0.00;
+                double less730countsum =0.00;
+                double more730countsum =0.00;
+                double totalcountsum =0.00;
+                
+                double less45qtysum =0.00;
+                double less90qtysum =0.00;
+                double less180qtysum =0.00;
+                double less365qtysum =0.00;
+                double less730qtysum =0.00;
+                double more730qtysum =0.00;
+                double totalqtysum =0.00;
+                
+                double less45amtsum =0.00;
+                double less90amtsum =0.00;
+                double less180amtsum =0.00;
+                double less365amtsum =0.00;
+                double less730amtsum =0.00;
+                double more730amtsum =0.00;
+                double totalamtsum =0.00;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++;
+                    txtageingtotal.setText(Integer.toString(cnt));
+                    less45countsum += Double.parseDouble(rsTmp.getString("COUNT<=45"));
+                    less90countsum +=Double.parseDouble(rsTmp.getString("COUNT>45<=90"));
+                    less180countsum +=Double.parseDouble(rsTmp.getString("COUNT>90<=180"));
+                    less365countsum +=Double.parseDouble(rsTmp.getString("COUNT>180<=365"));
+                    less730countsum +=Double.parseDouble(rsTmp.getString("COUNT>365<=730"));
+                    more730countsum +=Double.parseDouble(rsTmp.getString("COUNT>730"));
+                    totalcountsum +=Double.parseDouble(rsTmp.getString("TOTAL_COUNT"));
+                    
+                    less45qtysum += Double.parseDouble(rsTmp.getString("QTY<=45"));
+                    less90qtysum +=Double.parseDouble(rsTmp.getString("QTY>45<=90"));
+                    less180qtysum +=Double.parseDouble(rsTmp.getString("QTY>90<=180"));
+                    less365qtysum +=Double.parseDouble(rsTmp.getString("QTY>180<=365"));
+                    less730qtysum +=Double.parseDouble(rsTmp.getString("QTY>365<=730"));
+                    more730qtysum +=Double.parseDouble(rsTmp.getString("QTY>730"));
+                    totalqtysum +=Double.parseDouble(rsTmp.getString("TOTAL_QTY"));
+                    
+                    less45amtsum += Double.parseDouble(rsTmp.getString("AMT<=45"));
+                    less90amtsum +=Double.parseDouble(rsTmp.getString("AMT>45<=90"));
+                    less180amtsum +=Double.parseDouble(rsTmp.getString("AMT>90<=180"));
+                    less365amtsum +=Double.parseDouble(rsTmp.getString("AMT>180<=365"));
+                    less730amtsum +=Double.parseDouble(rsTmp.getString("AMT>365<=730"));
+                    more730amtsum +=Double.parseDouble(rsTmp.getString("AMT>730"));
+                    totalamtsum +=Double.parseDouble(rsTmp.getString("TOTAL_AMT"));
+                  
+                   DecimalFormat df = new DecimalFormat("###.##");
+                   txtless45counttotal.setText(df.format(less45countsum));
+                   txtless90counttotal.setText(df.format(less90countsum));
+                   txtless180counttotal.setText(df.format(less180countsum));
+                   txtless365counttotal.setText(df.format(less365countsum));
+                   txtless730counttotal.setText(df.format(less730countsum));
+                   txtmore730counttotal.setText(df.format(more730countsum));
+                   txtlesscounttotal.setText(df.format(totalcountsum));
+                   
+                   txtless45qtytotal.setText(df.format(less45qtysum));
+                   txtless90qtytotal.setText(df.format(less90qtysum));
+                   txtless180qtytotal.setText(df.format(less180qtysum));
+                   txtless365qtytotal.setText(df.format(less365qtysum));
+                   txtless730qtytotal.setText(df.format(less730qtysum));
+                   txtmore730qtytotal.setText(df.format(more730qtysum));
+                   txtlessqtytotal.setText(df.format(totalqtysum));
+
+                   txtless45amttotal.setText(df.format(less45amtsum));
+                   txtless90amttotal.setText(df.format(less90amtsum));
+                   txtless180amttotal.setText(df.format(less180amtsum));
+                   txtless365amttotal.setText(df.format(less365amtsum));
+                   txtless730amttotal.setText(df.format(less730amtsum));
+                   txtmore730amttotal.setText(df.format(more730amtsum));
+                   txtlessamttotal.setText(df.format(totalamtsum));
+                   
+                 Object[] rowData=new Object[24];
+                    rowData[0]=Integer.toString(cnt);
+                    rowData[1]=rsTmp.getString("PRODUCT_CD");
+                    rowData[2]=rsTmp.getString("ITEM_DESC");
+                    rowData[3]=rsTmp.getString("COUNT<=45");
+                    rowData[4]=rsTmp.getString("QTY<=45");
+                    rowData[5]=rsTmp.getString("AMT<=45");
+                    rowData[6]=rsTmp.getString("COUNT>45<=90");
+                    rowData[7]=rsTmp.getString("QTY>45<=90");
+                    rowData[8]=rsTmp.getString("AMT>45<=90");
+                    rowData[9]=rsTmp.getString("COUNT>90<=180");
+                    rowData[10]=rsTmp.getString("QTY>90<=180");
+                    rowData[11]=rsTmp.getString("AMT>90<=180");                  
+                    rowData[12]=rsTmp.getString("COUNT>180<=365");                  
+                    rowData[13]=rsTmp.getString("QTY>180<=365");                  
+                    rowData[14]=rsTmp.getString("AMT>180<=365");                  
+                    rowData[15]=rsTmp.getString("COUNT>365<=730");                  
+                    rowData[16]=rsTmp.getString("QTY>365<=730");
+                    rowData[17]=rsTmp.getString("AMT>365<=730");
+                    rowData[18]=rsTmp.getString("COUNT>730");
+                    rowData[19]=rsTmp.getString("QTY>730");                  
+                    rowData[20]=rsTmp.getString("AMT>730");                  
+                    rowData[21]=rsTmp.getString("TOTAL_COUNT");                  
+                    rowData[22]=rsTmp.getString("TOTAL_QTY");                  
+                    rowData[23]=rsTmp.getString("TOTAL_AMT");                  
+                    
+                    DataModelAgeing.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }        
+        
+    }
+    
+    private void GenerateMISAgeingDetail(){
+        
+     try{
+          FormatGridMISAgeing();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strProductCode = txtproductcode.getText().toString();
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          strSQL= "";
+        
+        strSQL+="SELECT FINYR,SUBSTRING(PRODUCT_CD,1,6) AS PRODUCT_CD,ITEM_DESC,COALESCE(COUNT(RECD_KG ),0) AS 'TOTAL_COUNT',COALESCE(SUM(RECD_KG ),0) AS 'TOTAL_QTY',COALESCE(SUM(INV_AMT),0) AS 'TOTAL_AMT' FROM (SELECT PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR ,WIDTH AS WIDTH_ORDER,RECD_WDTH,WEIGHT AS KG_CALC,RECD_KG ,SQM_RATE,WT_RATE,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,GSQ,CASE WHEN EXTRACT(MONTH FROM RCVD_DATE) IN (4,5,6,7,8,9,10,11,12)  THEN CONCAT_WS('-',EXTRACT(YEAR FROM RCVD_DATE),EXTRACT(YEAR FROM DATE_ADD(RCVD_DATE,INTERVAL 1 YEAR)))  WHEN EXTRACT(MONTH FROM RCVD_DATE) IN (1,2,3)  THEN CONCAT_WS('-',EXTRACT(YEAR FROM DATE_SUB(RCVD_DATE,INTERVAL 1 YEAR)),EXTRACT(YEAR FROM RCVD_DATE))  END AS FINYR,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG, CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,REF_NO,CONF_NO,MACHINE_NO,POSITION,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,INSURANCE_CODE,DATEDIFF(NOW(),RCVD_DATE) AS DAYS FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,GSQ, ((DISBASAMT+COALESCE(WPSC,0)) *.12+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,GSQ,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(PARTY_NAME)),'PARTY DELETED IN COBOL') AS PARTY_NAME,COALESCE(DISPATCH_STATION,'Z STATION PARTY DELETED') AS DISPATCH_STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0) AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, GSQ,BAS_AMT,WPSC, ST_FLAG_1 FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE ,COMM_DATE, GSQ,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H WHERE ";
+        if(!txtproductcode.getText().equals("")){
+            strSQL+=" SUBSTRING(A.PRODUCT_CD,1,6) = '"+strProductCode+"' AND ";
+        }
+        strSQL+="A.PRODUCT_CD = H.ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO) AS FA LEFT JOIN (SELECT * FROM DINESHMILLS.D_SAL_PARTY_MASTER WHERE MAIN_ACCOUNT_CODE='210010') AS FP ON FA.PARTY_CD = FP.PARTY_CODE ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C) AS D GROUP BY FINYR,PRODUCT_CD,ITEM_DESC ORDER BY PRODUCT_CD,FINYR DESC,ITEM_DESC";
+        System.out.println(strSQL);
+        rsTmp=data.getResult(strSQL);
+        rsTmp.first();
+        if(rsTmp.getRow()>0) {
+                int cnt=0;
+                double countsum=0.00;
+                double qtysum=0.00;
+                double amtsum=0.00;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++;
+                    txtmisageingtotal.setText(Integer.toString(cnt));
+                    countsum += Double.parseDouble(rsTmp.getString("TOTAL_COUNT"));
+                    qtysum += Double.parseDouble(rsTmp.getString("TOTAL_QTY"));
+                    amtsum += Double.parseDouble(rsTmp.getString("TOTAL_AMT"));
+                   DecimalFormat df = new DecimalFormat("###.##");
+                   txtcounttotal.setText(df.format(countsum));
+                   txtqtytotal.setText(df.format(qtysum));
+                   txtamttotal.setText(df.format(amtsum));
+                   
+                    Object[] rowData=new Object[7];
+                    rowData[0]=Integer.toString(cnt);
+                    rowData[1]=rsTmp.getString("FINYR");
+                    rowData[2]=rsTmp.getString("PRODUCT_CD");
+                    rowData[3]=rsTmp.getString("ITEM_DESC");
+                    rowData[4]=rsTmp.getString("TOTAL_COUNT");
+                    rowData[5]=rsTmp.getString("TOTAL_QTY");
+                    rowData[6]=rsTmp.getString("TOTAL_AMT");
+                    
+                    DataModelMISAgeing.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }        
+    }
+    
+    private void GenerateMISAgeingDetail1(){
+        
+          try{
+          FormatGridMISAgeing1();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strProductCode = txtproductcode.getText().toString();
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          strSQL= "";
+        
+        strSQL+="SELECT FINYR,SUBSTRING(PRODUCT_CD,1,6) AS PRODUCT_CD,ITEM_DESC,COALESCE(COUNT(RECD_KG ),0) AS 'TOTAL_COUNT',COALESCE(SUM(RECD_KG ),0) AS 'TOTAL_QTY',COALESCE(SUM(INV_AMT),0) AS 'TOTAL_AMT' FROM (SELECT PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR ,WIDTH AS WIDTH_ORDER,RECD_WDTH,WEIGHT AS KG_CALC,RECD_KG ,SQM_RATE,WT_RATE,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,GSQ,CASE WHEN EXTRACT(MONTH FROM RCVD_DATE) IN (4,5,6,7,8,9,10,11,12)  THEN CONCAT_WS('-',EXTRACT(YEAR FROM RCVD_DATE),EXTRACT(YEAR FROM DATE_ADD(RCVD_DATE,INTERVAL 1 YEAR)))  WHEN EXTRACT(MONTH FROM RCVD_DATE) IN (1,2,3)  THEN CONCAT_WS('-',EXTRACT(YEAR FROM DATE_SUB(RCVD_DATE,INTERVAL 1 YEAR)),EXTRACT(YEAR FROM RCVD_DATE))  END AS FINYR,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG, CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT, ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,REF_NO,CONF_NO,MACHINE_NO,POSITION,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,INSURANCE_CODE,DATEDIFF(NOW(),RCVD_DATE) AS DAYS FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,GSQ, ((DISBASAMT+COALESCE(WPSC,0)) *.12+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,GSQ,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(PARTY_NAME)),'PARTY DELETED IN COBOL') AS PARTY_NAME,COALESCE(DISPATCH_STATION,'Z STATION PARTY DELETED') AS DISPATCH_STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0) AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, GSQ,BAS_AMT,WPSC, ST_FLAG_1 FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE ,COMM_DATE, GSQ,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H WHERE ";
+        //if(!txtproductcode.getText().equals("")){
+         //   strSQL+=" SUBSTRING(A.PRODUCT_CD,1,6) = '"+strProductCode+"' AND ";
+       // }
+        strSQL+="A.PRODUCT_CD = H.ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO) AS FA LEFT JOIN (SELECT * FROM DINESHMILLS.D_SAL_PARTY_MASTER WHERE MAIN_ACCOUNT_CODE='210010' ) AS FP ON FA.PARTY_CD = FP.PARTY_CODE ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C) AS D GROUP BY FINYR ORDER BY FINYR DESC";
+        System.out.println(strSQL);
+          rsTmp=data.getResult(strSQL);
+        rsTmp.first();
+        if(rsTmp.getRow()>0) {
+                int cnt=0;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++;
+                    txtmisageingtotal1.setText(Integer.toString(cnt));
+                    
+                    Object[] rowData=new Object[5];
+                    rowData[0]=Integer.toString(cnt);
+                    rowData[1]=rsTmp.getString("FINYR");
+                    rowData[2]=rsTmp.getString("TOTAL_COUNT");
+                    rowData[3]=rsTmp.getString("TOTAL_QTY");
+                    rowData[4]=rsTmp.getString("TOTAL_AMT");
+                    
+                    DataModelMISAgeing1.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }       
+        
+    }
+    
+    private void GeneratePackedNotDespatchedDetail(){
+     String strReceivedDateFrom = "";
+     String strReceivedDateTo = "";
+        try{
+          FormatGridPackedNotDespatched();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strLengthFrom = txtlengthfrom.getText().toString();
+          strLengthTo = txtlengthto.getText().toString();
+          strWidthFrom = txtwidthfrom.getText().toString();
+          strWidthTo = txtwidthto.getText().toString();
+          strGSQFrom = txtgsqfrom.getText().toString();
+          strGSQTo = txtgsqto.getText().toString();
+          strReceivedDateFrom = EITLERPGLOBAL.formatDateDB(txtdatefrom.getText());
+          strReceivedDateTo = EITLERPGLOBAL.formatDateDB(txtdateto.getText());
+          strPieceNo = txtpieceno.getText().toString();
+          strProductCode = txtproductcode.getText().toString();
+          strZone = txtzone.getText().toString();
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          strSQL= "";
+        //strSQL="SELECT PIECE_NO,RCVD_DATE,RCVD_MTR,RECD_KG,RECD_WDTH FROM PRODUCTION.FELT_PIECE_REGISTER WHERE PARTY_CODE NOT IN ('812096','811026','832437') AND INVOICE_NO='0' AND BALE_NO !='000000' AND WH_CD='2' AND PARTY_CODE NOT LIKE ('89%')";           
+        //strSQL+="SELECT PARTY_CD,NAME,CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,STATION,ZONE,INSURANCE_CODE FROM (SELECT PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(NAME)),'PARTY DELETED IN COBOL') AS NAME,COALESCE(STATION,'Z STATION PARTY DELETED') AS STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1 FROM (SELECT PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+        //strSQL+="SELECT PARTY_CD,NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,STATION,ZONE,INSURANCE_CODE FROM (SELECT PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(NAME)),'PARTY DELETED IN COBOL') AS NAME,COALESCE(STATION,'Z STATION PARTY DELETED') AS STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1 FROM (SELECT PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+        //strSQL+="SELECT PARTY_CD,NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,STATION,ZONE,INSURANCE_CODE FROM (SELECT PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE FROM (SELECT PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(NAME)),'PARTY DELETED IN COBOL') AS NAME,COALESCE(STATION,'Z STATION PARTY DELETED') AS STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1 FROM (SELECT PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA1.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,WPSC, ST_FLAG_1 FROM  (SELECT PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1 FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";
+        strSQL+="SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE,COMM_DATE,PRODUCT_CD,ITEM_DESC,STYLE,MTRS_ORDER,MTRS_RCVD ,WIDTH_ORDER,WIDTH_RCVD,GSQ,KG_CALC,KG_RCVD,RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,INCHARGE_NAME,BALE_NO,PACK_DATE FROM (SELECT PARTY_CD,PARTY_NAME,PRIORITY_DESC,PIECE_NO,ORDER_DATE,RCVD_DATE,DELIV_DATE ,COMM_DATE, PRODUCT_CODE AS PRODUCT_CD,ITEM AS ITEM_DESC,STYLE,LNGTH AS MTRS_ORDER,RCVD_MTR AS MTRS_RCVD ,WIDTH AS WIDTH_ORDER,RECD_WDTH AS WIDTH_RCVD,GSQ,WEIGHT AS KG_CALC,RECD_KG AS KG_RCVD,(SQM_RATE+WT_RATE) AS RATE,ROUND(BAS_AMT,2) AS BAS_AMT,MEMO_DATE,DISC_PER,ROUND(DISAMT,0) AS DISAMT,ROUND(DISBASAMT,0) AS DISBASAMT,ROUND(EXCISE,2) AS EXCISE,ROUND(WPSC,2) AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  + (CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,DATEDIFF(NOW(),RCVD_DATE) AS DAYS,REF_NO,CONF_NO,MACHINE_NO,POSITION,DISPATCH_STATION,ZONE,INSURANCE_CODE,INCHARGE_CD,BALE_NO,PACK_DATE FROM (SELECT PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,INCHARGE_CD,BALE_NO,PACK_DATE FROM (SELECT PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,DISPATCH_STATION,ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,INCHARGE_CD,BALE_NO,PACK_DATE FROM (SELECT PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA.PIECE_NO,PARTY_CD,COALESCE(LTRIM(RTRIM(PARTY_NAME)),'PARTY DELETED IN COBOL') AS PARTY_NAME,COALESCE(DISPATCH_STATION,'Z STATION PARTY DELETED') AS DISPATCH_STATION,COALESCE(ZONE,' ZERO ')AS ZONE,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,COALESCE(INSURANCE_CODE,0)AS INSURANCE_CODE,DELIV_DATE ,COMM_DATE, BAS_AMT,WPSC, ST_FLAG_1,INCHARGE_CD,BALE_NO,PACK_DATE FROM (SELECT PRIORITY_DESC,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,FA1.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,WPSC, ST_FLAG_1,BALE_NO,PACK_DATE FROM (SELECT PRIORITY,GSQ,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CD AS PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,RCVD_DATE,LNGTH,RCVD_MTR,WIDTH,RECD_WDTH,WEIGHT,RECD_KG,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN RCVD_MTR * RECD_WDTH*SQM_RATE WHEN SQM_IND =0 THEN RECD_KG * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN RECD_KG*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+ CASE WHEN PIN_IND=1 THEN  RECD_WDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+ CASE WHEN SPR_IND=1 THEN  RECD_WDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC, ST_FLAG_1,A.BALE_NO,A.PACK_DATE FROM PRODUCTION.FELT_PIECE_REGISTER A,PRODUCTION.FELT_ORDER_MASTER B,PRODUCTION.FELT_RATE_MASTER H ";     
+        strSQL+="WHERE ";
+        if(!txtpartycode.getText().equals("")){
+            strSQL+="B.PARTY_CD = "+SelUserID+" AND ";
+        }
+      
+       /* if(!txtproductcode.getText().equals("")){
+            strSQL+="B.PRODUCT_CODE = "+strProductCode+" AND ";
+        }*/
+        /*if(!txtpieceno.getText().equals("")){
+            strSQL+="B.PIECE_NO = "+strPieceNo+" AND ";
+        }*/
+        if(!txtproductcode.getText().equals("")){
+            strSQL+="SUBSTRING(A.PRODUCT_CD,1,6) IN ("+strProductCode+") AND ";
+        }
+        if(!txtpieceno.getText().equals("")){
+            strSQL+="A.PIECE_NO IN ("+strPieceNo+") AND ";
+        }
+        if(!txtlengthfrom.getText().equals("")){
+            strSQL+="A.RCVD_MTR >= "+strLengthFrom+" AND ";
+        }
+        if(!txtlengthto.getText().equals("")){
+            strSQL+="A.RCVD_MTR <= "+strLengthTo+" AND ";
+        }
+        if(!txtwidthfrom.getText().equals("")){
+            strSQL+="A.RECD_WDTH >= "+strWidthFrom+" AND ";
+        }
+        if(!txtwidthto.getText().equals("")){
+            strSQL+="A.RECD_WDTH <= "+strWidthTo+" AND ";
+        }
+        if(!txtgsqfrom.getText().equals("")){
+            strSQL+="B.GSQ >= "+strGSQFrom+" AND ";
+        }
+        if(!txtgsqto.getText().equals("")){
+            strSQL+="B.GSQ <= "+strGSQTo+" AND ";
+        }
+        if(!txtdatefrom.getText().trim().equals("")){
+           strSQL+= "RCVD_DATE >= '"+strReceivedDateFrom+"' AND ";
+        }
+        if(!txtdateto.getText().trim().equals("")){
+            strSQL+= "RCVD_DATE <= '"+strReceivedDateTo+"' AND ";
+        }
+        
+        //strSQL+="PRODUCT_CODE*10 = ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO AND B.PARTY_CD = D.PARTY_CODE ) AS A  LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";    
+        //strSQL+="PRODUCT_CD = ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO AND B.PARTY_CD = D.PARTY_CODE ) AS FA LEFT JOIN (SELECT * FROM DINESHMILLS.D_SAL_PARTY_MASTER ) AS FP ON FA.PARTY_CD = FP.PARTY_CODE ) AS A  LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";
+        //last update as below
+        //strSQL+="A.PRODUCT_CD = H.ITEM_CODE AND ( A.WH_CD =0  OR (A.WH_CD =2 AND ST_FLAG_1 !='P')) AND A.ORDER_NO = B.PIECE_NO ) AS FA LEFT JOIN ";
+        //strSQL+="A.PRODUCT_CD = H.ITEM_CODE AND A.ORDER_NO = B.PIECE_NO AND A.PARTY_CODE NOT IN ('812096','811026','832437') AND A.INVOICE_NO='0' AND A.BALE_NO !='000000' AND A.WH_CD='2' AND A.PARTY_CODE NOT LIKE ('89%')) AS FA LEFT JOIN ";
+        strSQL+="A.PRODUCT_CD = H.ITEM_CODE AND A.ORDER_NO = B.PIECE_NO AND A.PARTY_CODE NOT IN ('812096','811026','832437') AND A.INVOICE_NO='0' AND A.BALE_NO !='000000' AND A.WH_CD='2' AND A.PARTY_CODE NOT LIKE ('89%')) AS FA1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON FA1.PRIORITY=P1.PRIORITY_ID ) AS FA LEFT JOIN";
+        strSQL+="(SELECT * FROM DINESHMILLS.D_SAL_PARTY_MASTER WHERE MAIN_ACCOUNT_CODE='210010') AS FP ON FA.PARTY_CD = FP.PARTY_CODE";
+        if(!txtzone.getText().equals("")){
+         strSQL+= " WHERE ZONE = '"+strZone+"'";
+        } 
+        //strSQL+=") AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ";
+        strSQL+=") AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(SUBSTRING(M.PIECE_NO,2,5),M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C ) AS D LEFT JOIN (SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE) AS FI ON FI.INCHARGE_CD=D.INCHARGE_CD ";
+        int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+="WHERE FI.INCHARGE_CD=1";    
+        }         
+        if(inchargeby==2){
+          strSQL+="WHERE FI.INCHARGE_CD=2";    
+        }
+        if(inchargeby==3){
+          strSQL+="WHERE FI.INCHARGE_CD=3";    
+        }
+        if(inchargeby==4){
+          strSQL+="WHERE FI.INCHARGE_CD=4";    
+        }
+        if(inchargeby==5){
+          strSQL+="WHERE FI.INCHARGE_CD=5";    
+        }
+        if(inchargeby==6){
+          strSQL+="WHERE FI.INCHARGE_CD=6";    
+        }
+        if(inchargeby==7){
+          strSQL+="WHERE D.INCHARGE_CD IS NULL";    
+        }
+        System.out.println("packed nt dis :"+strSQL);
+        rsTmp=data.getResult(strSQL);
+        rsTmp.first();
+        if(rsTmp.getRow()>0) {
+                int cnt=0;
+                double sum=0.00;
+                double invsum = 0.00;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++;
+                    
+                    txtpackednotdespatchedtotal.setText(Integer.toString(cnt));  
+                  sum += Double.parseDouble(rsTmp.getString("KG_RCVD")); 
+                 
+                   invsum += Double.parseDouble(rsTmp.getString("INV_AMT"));
+                   DecimalFormat df = new DecimalFormat("###.##");
+                   txtpackednotdespatchedkgtotal.setText(df.format(sum));
+                   txtpackednotdespatchedamttotal.setText(df.format(invsum));
+                                      
+                    Object[] rowData=new Object[40];
+                    rowData[0]=Integer.toString(cnt);
+                    rowData[1]=rsTmp.getString("PARTY_CD");
+                    rowData[2]=rsTmp.getString("PARTY_NAME");
+                    //rowData[3]=rsTmp.getString("PRIOR");
+                    rowData[3]=rsTmp.getString("PRIORITY_DESC");
+                    rowData[4]=rsTmp.getString("PIECE_NO");
+                    rowData[5]=EITLERPGLOBAL.formatDate(rsTmp.getString("ORDER_DATE"));
+                    rowData[6]=EITLERPGLOBAL.formatDate(rsTmp.getString("RCVD_DATE"));
+                    rowData[7]=EITLERPGLOBAL.formatDate(rsTmp.getString("DELIV_DATE"));
+                    //rowData[3]=rsTmp.getString("ORDER_DATE");
+                    rowData[8]=EITLERPGLOBAL.formatDate(rsTmp.getString("COMM_DATE"));
+                    //rowData[9]=rsTmp.getString("PRODUCT_CODE");
+                    rowData[9]=rsTmp.getString("PRODUCT_CD");
+                    //rowData[10]=rsTmp.getString("ITEM");
+                    rowData[10]=rsTmp.getString("ITEM_DESC");
+                    rowData[11]=rsTmp.getString("STYLE");
+                    rowData[12]=rsTmp.getString("MTRS_ORDER");
+                    rowData[13]=rsTmp.getString("MTRS_RCVD");
+                    rowData[14]=rsTmp.getString("WIDTH_ORDER");
+                    rowData[15]=rsTmp.getString("WIDTH_RCVD");
+                    rowData[16]=rsTmp.getString("GSQ");
+                    rowData[17]=rsTmp.getString("KG_CALC");
+                    rowData[18]=rsTmp.getString("KG_RCVD");
+                    rowData[19]=rsTmp.getString("RATE");
+                    rowData[20]=rsTmp.getString("BAS_AMT");
+                    rowData[21]=rsTmp.getString("MEMO_DATE");
+                    rowData[22]=rsTmp.getString("DISC_PER");
+                    rowData[23]=rsTmp.getString("DISAMT");
+                    rowData[24]=rsTmp.getString("DISBASAMT");
+                    rowData[25]=rsTmp.getString("EXCISE");
+                    rowData[26]=rsTmp.getString("SEAM_CHG");
+                    rowData[27]=rsTmp.getString("INSACC_AMT");
+                    rowData[28]=rsTmp.getString("INV_AMT");
+                    rowData[29]=rsTmp.getString("DAYS");
+                    rowData[30]=rsTmp.getString("REF_NO");
+                    rowData[31]=rsTmp.getString("CONF_NO");
+                    rowData[32]=rsTmp.getString("MACHINE_NO");
+                    rowData[33]=rsTmp.getString("POSITION");
+                    rowData[34]=rsTmp.getString("DISPATCH_STATION");
+                    rowData[35]=rsTmp.getString("ZONE");
+                    rowData[36]=rsTmp.getString("INSURANCE_CODE");
+                    rowData[37]=rsTmp.getString("INCHARGE_NAME");
+                    rowData[38] = rsTmp.getString("BALE_NO");
+                    rowData[39] = EITLERPGLOBAL.formatDate(rsTmp.getString("PACK_DATE"));
+                                
+                    DataModelPackedNotDespatched.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+        /* else{
+             //JOptionPane.showMessageDialog(this,"","Message",JOptionPane.ERROR_MESSAGE);
+             if(!txtpieceno.getText().equals("")){
+            JOptionPane.showMessageDialog(this,"Search Piece No in Production Process/Stock Available/Diverted/Despatched");
+        }
+                    
+         }*/
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }       
+    }
+    
+    private void GenerateContacts(){        
+     try{
+          FormatGridContacts();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strProductCode = txtproductcode.getText().toString();
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          strSQL= "";        
+        //strSQL+="SELECT A.PARTY_CODE,NAME,AD1,AD2,STATION,ZONE,CONTACT_PERSON,MOBILE,LANDLINE,EMAIL,FAX,OFFICE_ADD,WORK_ADD,CASE WHEN SUBSTRING(A.PARTY_CODE,1,3) IN (821,824,826) THEN 'GURDIP RAWAT'  WHEN   SUBSTRING(A.PARTY_CODE,1,3) IN (811,825,827,828,829,832) THEN 'NITESH JHANWAR'  WHEN   SUBSTRING(A.PARTY_CODE,1,3) IN (822,823,831,833,834) THEN 'NARESH DHYANI'  WHEN   SUBSTRING(A.PARTY_CODE,1,3) IN (812,813,814,815) THEN 'V.G.MUTTINAMUDI'  END AS SR FROM ";
+        //strSQL+="SELECT PARTY_COD,NAME,AD1,AD2,STATION,ZONE,CONTACT_PERSON,MOBILE,LANDLINE,EMAIL,FAX,OFFICE_ADD,WORK_ADD,SR,INCHARGE_NAME FROM (SELECT A.PARTY_CODE AS PARTY_COD,NAME,AD1,AD2,STATION,ZONE,CONTACT_PERSON,MOBILE,LANDLINE,EMAIL,FAX,OFFICE_ADD,WORK_ADD,CASE WHEN SUBSTRING(A.PARTY_CODE,1,3) IN (821,824,826) THEN 'GURDIP RAWAT'  WHEN   SUBSTRING(A.PARTY_CODE,1,3) IN (811,825,827,828,829,832) THEN 'NITESH JHANWAR'  WHEN   SUBSTRING(A.PARTY_CODE,1,3) IN (822,823,831,833,834) THEN 'NARESH DHYANI'  WHEN   SUBSTRING(A.PARTY_CODE,1,3) IN (812,813,814,815) THEN 'V.G.MUTTINAMUDI'  END AS SR,REGION FROM ";
+        strSQL+="SELECT PARTY_COD,PARTY_NAME,ADDRESS1,ADDRESS2,DISPATCH_STATION,ZONE,CONTACT_PERSON,MOBILE,LANDLINE,EMAIL,FAX,OFFICE_ADD,WORK_ADD,SR,INCHARGE_NAME FROM (SELECT A.PARTY_CODE AS PARTY_COD,PARTY_NAME,ADDRESS1,ADDRESS2,DISPATCH_STATION,ZONE,CONTACT_PERSON,MOBILE,LANDLINE,EMAIL,FAX,OFFICE_ADD,WORK_ADD,CASE WHEN SUBSTRING(A.PARTY_CODE,1,3) IN (821,824,826) THEN 'GURDIP RAWAT'  WHEN   SUBSTRING(A.PARTY_CODE,1,3) IN (811,825,827,828,829,832) THEN 'NITESH JHANWAR'  WHEN   SUBSTRING(A.PARTY_CODE,1,3) IN (822,823,831,833,834) THEN 'NARESH DHYANI'  WHEN   SUBSTRING(A.PARTY_CODE,1,3) IN (812,813,814,815) THEN 'V.G.MUTTINAMUDI' END AS SR,INCHARGE_CD FROM ";
+          //strSQL+="(SELECT * FROM DINESHMILLS.D_SAL_PARTY_MASTER ";
+        //strSQL+="(SELECT * FROM DINESHMILLS.D_SAL_PARTY_MASTER "; 
+        strSQL+="(SELECT PARTY_CODE,PARTY_NAME,ADDRESS1,ADDRESS2,DISPATCH_STATION,ZONE,INCHARGE_CD,MAIN_ACCOUNT_CODE FROM DINESHMILLS.D_SAL_PARTY_MASTER WHERE"; 
+        if(!txtpartycode.getText().equals("")){
+         strSQL+= " PARTY_CODE = "+SelUserID+" AND ";
+        } 
+        //strSQL+=") AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_PARTY_EXTRA_INFO) AS B ON A.PARTY_CODE = B.PARTY_CODE"; 
+        strSQL+=" MAIN_ACCOUNT_CODE='210010') AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_PARTY_EXTRA_INFO) AS B ON A.PARTY_CODE = B.PARTY_CODE) AS C LEFT JOIN (SELECT INCHARGE_CD,INCHARGE_NAME FROM PRODUCTION.FELT_INCHARGE) AS FI ON FI.INCHARGE_CD=C.INCHARGE_CD ";
+        int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+="WHERE FI.INCHARGE_CD=1";    
+        }         
+        if(inchargeby==2){
+          strSQL+="WHERE FI.INCHARGE_CD=2";    
+        }
+        if(inchargeby==3){
+          strSQL+="WHERE FI.INCHARGE_CD=3";    
+        }
+        if(inchargeby==4){
+          strSQL+="WHERE FI.INCHARGE_CD=4";    
+        }
+        if(inchargeby==5){
+          strSQL+="WHERE FI.INCHARGE_CD=5";    
+        }
+        if(inchargeby==6){
+          strSQL+="WHERE FI.INCHARGE_CD=6";    
+        }  
+        if(inchargeby==7){
+          strSQL+="WHERE C.INCHARGE_CD IS NULL";    
+        }
+        System.out.println(strSQL);
+        rsTmp=data.getResult(strSQL);
+        rsTmp.first();
+        if(rsTmp.getRow()>0) {
+                int cnt=0;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++;
+                    txtcontactstotal.setText(Integer.toString(cnt));
+                                       
+                    Object[] rowData=new Object[15];
+                    rowData[0]=Integer.toString(cnt);
+                    //rowData[1]=rsTmp.getString("PARTY_CODE");
+                    rowData[1]=rsTmp.getString("PARTY_COD");
+                    rowData[2]=rsTmp.getString("PARTY_NAME");
+                    rowData[3]=rsTmp.getString("ADDRESS1");
+                    rowData[4]=rsTmp.getString("ADDRESS2");
+                    rowData[5]=rsTmp.getString("DISPATCH_STATION");
+                    rowData[6]=rsTmp.getString("ZONE");
+                    rowData[7]=rsTmp.getString("CONTACT_PERSON");
+                    rowData[8]=rsTmp.getString("MOBILE");
+                    rowData[9]=rsTmp.getString("LANDLINE");
+                    rowData[10]=rsTmp.getString("EMAIL");
+                    rowData[11]=rsTmp.getString("FAX");
+                    rowData[12]=rsTmp.getString("OFFICE_ADD");
+                    rowData[13]=rsTmp.getString("WORK_ADD");
+                    //rowData[14]=rsTmp.getString("SR");
+                    rowData[14]=rsTmp.getString("INCHARGE_NAME");                    
+                    
+                    DataModelContacts.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }        
+    }
+    
+    private void GenerateHold(){
+      String strOrderDateFrom ="";
+       String strOrderDateTo = "";
+        try{
+          FormatGridHold(); //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strLengthFrom = txtlengthfrom.getText().toString();
+          strLengthTo = txtlengthto.getText().toString();
+          strWidthFrom = txtwidthfrom.getText().toString();
+          strWidthTo = txtwidthto.getText().toString();
+          strGSQFrom = txtgsqfrom.getText().toString();
+          strGSQTo = txtgsqto.getText().toString();
+          strPieceNo = txtpieceno.getText().toString();
+          strProductCode = txtproductcode.getText().toString();
+          strZone = txtzone.getText().toString();
+          strOrderDateFrom = EITLERPGLOBAL.formatDateDB(txtdatefrom.getText());
+          strOrderDateTo = EITLERPGLOBAL.formatDateDB(txtdateto.getText());
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          //rsTmp=data.getResult("SELECT PIECE_NO FROM FELT_ORDER_MASTER WHERE PARTY_CD="+SelUserID+"");
+        strSQL="";
+        //strSQL+="SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE, INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE    FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = "+SelUserID+" AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";
+        /*if(!txtpartycode.getText().equals("")){
+            strSQL+="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE, INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = "+SelUserID+" AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";
+        }
+        else{
+            strSQL+="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE, INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";
+        }
+          */ 
+        //strSQL+="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        //strSQL+="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM1' WHEN PRIORITY=3 THEN 'MEDIUM2' WHEN PRIORITY=4 THEN 'HIGH' END AS PRIOR,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        //strSQL+="SELECT PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        //strSQL+="SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT - (BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,WPSC,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        strSQL+="SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,RATE,DELIV_DATE,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,ZONE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME FROM (SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT - (BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,WPSC,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,INCHARGE_CD FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        strSQL+="WHERE ";
+        if(!txtpartycode.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PARTY_CD = "+SelUserID+" AND ";    
+        }
+        if(!txtzone.getText().toString().equals("")){
+         strSQL+= "DINESHMILLS.D_SAL_PARTY_MASTER.ZONE = '"+strZone+"' AND ";
+        }
+        /*if(!txtpieceno.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PIECE_NO = "+strPieceNo+" AND ";    
+        }*/
+        if(!txtpieceno.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PIECE_NO IN ("+strPieceNo+") AND ";    
+        }
+       /* if(!txtproductcode.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PRODUCT_CODE = "+strProductCode+" AND ";    
+        }*/    
+        if(!txtproductcode.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PRODUCT_CODE IN ("+strProductCode+") AND ";    
+        }  
+        if(!txtlengthfrom.getText().equals("")){
+        strSQL+="PRODUCTION.FELT_ORDER_MASTER.LNGTH >="+strLengthFrom+" AND ";    
+        }
+        if(!txtlengthto.getText().equals("")){
+        strSQL+="PRODUCTION.FELT_ORDER_MASTER.LNGTH <= "+strLengthTo+" AND ";   
+        }
+        if(!txtwidthfrom.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.WIDTH >= "+strWidthFrom+" AND ";  
+        }
+        if(!txtwidthto.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.WIDTH <= "+strWidthTo+" AND ";
+        }
+        if(!txtgsqfrom.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.GSQ >= "+strGSQFrom+" AND ";  
+        }
+        if(!txtgsqto.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.GSQ <= "+strGSQTo+" AND ";
+        }
+        if(!txtdatefrom.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.ORDER_DATE >= '"+strOrderDateFrom+"' AND ";  
+        }
+        if(!txtdateto.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.ORDER_DATE <= '"+strOrderDateTo+"' AND ";
+        }         
+        //strSQL+=" PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON A1.PRIORITY=P1.PRIORITY_ID) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD=PARTY_CODE) AS B) AS C";
+        //strSQL+=" PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') AND PRIORITY IN (6,7,8) ) AS A1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON A1.PRIORITY=P1.PRIORITY_ID) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD=PARTY_CODE) AS B) AS C";         
+        strSQL+="PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') AND PRIORITY IN (6,7,8,10,11,12) AND MAIN_ACCOUNT_CODE='210010') AS A1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON A1.PRIORITY=P1.PRIORITY_ID) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD=PARTY_CODE) AS B) AS C )  AS D LEFT JOIN (SELECT * FROM PRODUCTION.FELT_INCHARGE) AS FI ON FI.INCHARGE_CD=D.INCHARGE_CD ";
+        int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+="WHERE FI.INCHARGE_CD=1";    
+        }         
+        if(inchargeby==2){
+          strSQL+="WHERE FI.INCHARGE_CD=2";    
+        }
+        if(inchargeby==3){
+          strSQL+="WHERE FI.INCHARGE_CD=3";    
+        }
+        if(inchargeby==4){
+          strSQL+="WHERE FI.INCHARGE_CD=4";    
+        }
+        if(inchargeby==5){
+          strSQL+="WHERE FI.INCHARGE_CD=5";    
+        }
+        if(inchargeby==6){
+          strSQL+="WHERE FI.INCHARGE_CD=6";    
+        }
+        if(inchargeby==7){
+          strSQL+="WHERE D.INCHARGE_CD IS NULL";    
+        }
+        int Orderby=EITLERPGLOBAL.getComboCode(cmbHold);            
+            if(Orderby==1) {
+                strSQL+=" ORDER BY REF_NO ";
+            }            
+            if(Orderby==2) {
+                strSQL+=" ORDER BY CONF_NO ";
+            }
+            
+            if(Orderby==3) {
+                strSQL+=" ORDER BY MACHINE_NO ";
+            }
+         
+            if(Orderby==4){
+                strSQL+=" ORDER BY POSITION ";
+            }
+         
+            if(Orderby==5){
+                strSQL+=" ORDER BY ORDER_DATE DESC ";
+            }
+         
+            if(Orderby==6){
+                strSQL+=" ORDER BY PIECE_NO ";
+            }
+            if(Orderby==7){
+                strSQL+=" ORDER BY PRIORITY_DESC DESC ";
+            }
+            if(Orderby==8){
+                strSQL+=" ORDER BY LNGTH DESC ";
+            }
+         
+            if(Orderby==9){
+                strSQL+=" ORDER BY WIDTH DESC ";
+            }
+         
+            if(Orderby==10){
+                strSQL+=" ORDER BY GSQ DESC ";
+            }
+           if(Orderby==11){
+                strSQL+=" ORDER BY PRODUCT_CODE DESC ";
+            }
+           if(Orderby==12){
+                strSQL+=" ORDER BY ZONE DESC ";
+            }
+        if(Orderby==13){
+                strSQL+=" ORDER BY WVG_DATE DESC ";
+            }
+           if(Orderby==14){
+                strSQL+=" ORDER BY MND_DATE DESC ";
+            }
+           if(Orderby==15){
+                strSQL+=" ORDER BY NDL_DATE DESC ";
+            }
+
+           if(Orderby==16){
+                strSQL+=" ORDER BY PRIORITY_DATE DESC ";
+            }
+         System.out.println(strSQL);
+         rsTmp=data.getResult(strSQL);
+         rsTmp.first();
+         if(rsTmp.getRow()>0) {
+                int cnt=0;
+                double kgsum = 0.00;
+                double invsum = 0.00;
+                while(!rsTmp.isAfterLast()) {
+                
+   
+                    cnt++; 
+                   txtHoldtotal.setText(Integer.toString(cnt));  
+                   
+                  kgsum += Double.parseDouble(rsTmp.getString("WEIGHT"));
+                  invsum += Double.parseDouble(rsTmp.getString("INV_AMT"));
+                  //txttotal.setText(Double.toString(Math.round(sum)));
+                  //txttotal.setText(Double.toString(sum));
+                   DecimalFormat df = new DecimalFormat("##.##");
+                   txtHoldkgtotal.setText(df.format(kgsum));
+                   txtHoldinvtotal.setText(df.format(invsum));
+                   
+                 Object[] rowData=new Object[36];
+                    rowData[0]=Integer.toString(cnt);
+                   // rowData[1]=rsTmp.getString("PRIOR");
+                    rowData[1]=rsTmp.getString("PRIORITY_DESC");
+                    rowData[2]=EITLERPGLOBAL.formatDate(rsTmp.getString("PRIORITY_DATE"));
+                    rowData[3]=rsTmp.getString("REF_NO");
+                    rowData[4]=rsTmp.getString("CONF_NO");
+                    rowData[5]=rsTmp.getString("MACHINE_NO");
+                    rowData[6]=rsTmp.getString("POSITION");
+                    rowData[7]=rsTmp.getString("PIECE_NO");
+                    rowData[8]=rsTmp.getString("PARTY_CD");
+                    rowData[9]=rsTmp.getString("PARTY_NAME");
+                    rowData[10]=EITLERPGLOBAL.formatDate(rsTmp.getString("ORDER_DATE"));
+                    rowData[11]=rsTmp.getString("PRODUCT_CODE");
+                    rowData[12]=rsTmp.getString("ITEM");
+                    rowData[13]=rsTmp.getString("STYLE");
+                    rowData[14]=rsTmp.getString("LNGTH");
+                    rowData[15]=rsTmp.getString("WIDTH");
+                    rowData[16]=rsTmp.getString("GSQ");
+                    rowData[17]=rsTmp.getString("WEIGHT");
+                    rowData[18]=rsTmp.getString("RATE");
+                    rowData[19]=EITLERPGLOBAL.formatDate(rsTmp.getString("DELIV_DATE"));
+                    rowData[20]=EITLERPGLOBAL.formatDate(rsTmp.getString("COMM_DATE"));
+                    rowData[21]=EITLERPGLOBAL.formatDate(rsTmp.getString("WVG_DATE"));
+                    rowData[22]=EITLERPGLOBAL.formatDate(rsTmp.getString("MND_DATE"));
+                    rowData[23]=EITLERPGLOBAL.formatDate(rsTmp.getString("NDL_DATE"));
+                    rowData[24]=rsTmp.getString("INSURANCE_CODE");
+                    rowData[25]=rsTmp.getString("BAS_AMT");
+                    rowData[26]=EITLERPGLOBAL.formatDate(rsTmp.getString("MEMO_DATE"));
+                    rowData[27]=rsTmp.getString("DISC_PER");
+                    rowData[28]=rsTmp.getString("DISAMT");
+                    rowData[29]=rsTmp.getString("DISBASAMT");
+                    rowData[30]=rsTmp.getString("EXCISE");
+                    rowData[31]=rsTmp.getString("SEAM_CHG");
+                    rowData[32]=rsTmp.getString("INSACC_AMT");
+                    rowData[33]=rsTmp.getString("INV_AMT");
+                    rowData[34]=rsTmp.getString("ZONE");
+                    //rowData[35]=EITLERPGLOBAL.formatDate(rsTmp.getString("PRIORITY_DATE"));
+                    rowData[35]=rsTmp.getString("INCHARGE_NAME");
+                    //rowData[5]=EITLERPGLOBAL.formatDate(rsTmp.getString("ORDER_DATE"));
+                    //rowData[10]=rsTmp.getString("GSQ");
+                    //rowData[7]=rsTmp.getString("BALNK");
+                    DataModelHold.addRow(rowData);
+              //   System.out.println("rsTmp.getString('PIECE_NO')");
+                    rsTmp.next();
+                }
+         }
+        /* else{
+             //JOptionPane.showMessageDialog(this,"","Message",JOptionPane.ERROR_MESSAGE);
+             if(!txtpieceno.getText().equals("")){
+            JOptionPane.showMessageDialog(this,"Search Piece No in Stock Available/Packed Not Despatched/Diverted/Despatched");
+            }
+         }*/
+       }
+      catch(Exception e){
+         e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage()); 
+      }   
+    }
+    
+    private void GenerateCancelled(){
+       String strOrderDateFrom ="";
+       String strOrderDateTo = "";
+        try{
+          FormatGridCancelled(); //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strLengthFrom = txtlengthfrom.getText().toString();
+          strLengthTo = txtlengthto.getText().toString();
+          strWidthFrom = txtwidthfrom.getText().toString();
+          strWidthTo = txtwidthto.getText().toString();
+          strGSQFrom = txtgsqfrom.getText().toString();
+          strGSQTo = txtgsqto.getText().toString();
+          strPieceNo = txtpieceno.getText().toString();
+          strProductCode = txtproductcode.getText().toString();
+          strZone = txtzone.getText().toString();
+          strOrderDateFrom = EITLERPGLOBAL.formatDateDB(txtdatefrom.getText());
+          strOrderDateTo = EITLERPGLOBAL.formatDateDB(txtdateto.getText());
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          //rsTmp=data.getResult("SELECT PIECE_NO FROM FELT_ORDER_MASTER WHERE PARTY_CD="+SelUserID+"");
+        strSQL="";
+        //strSQL+="SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE, INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE    FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = "+SelUserID+" AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";
+        /*if(!txtpartycode.getText().equals("")){
+            strSQL+="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE, INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = "+SelUserID+" AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";
+        }
+        else{
+            strSQL+="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE, INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY FROM (SELECT REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER WHERE PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD =PARTY_CODE  ) AS B ) AS C";
+        }
+          */ 
+        //strSQL+="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM' WHEN PRIORITY=3 THEN 'HIGH' END AS PRIOR,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        //strSQL+="SELECT CASE WHEN PRIORITY=1 THEN 'LOW' WHEN PRIORITY=2 THEN 'MEDIUM1' WHEN PRIORITY=3 THEN 'MEDIUM2' WHEN PRIORITY=4 THEN 'HIGH' END AS PRIOR,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        //strSQL+="SELECT PRIORITY,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE ,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE ,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE ,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT -  (BAS_AMT* (COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE ,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        //strSQL+="SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT - (BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,WPSC,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        strSQL+="SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,RATE,DELIV_DATE,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,EXCISE,SEAM_CHG,INSACC_AMT,INV_AMT,ZONE,PRIORITY_DATE,PRIORITY,INCHARGE_NAME FROM (SELECT PRIORITY_DESC,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,GSQ,WEIGHT,(SQM_RATE+WT_RATE) AS RATE,DELIV_DATE,COMM_DATE,WVG_DATE,MND_DATE,NDL_DATE,INSURANCE_CODE,BAS_AMT,MEMO_DATE,DISC_PER,DISAMT,DISBASAMT,ROUND(EXCISE,2) AS EXCISE,WPSC AS SEAM_CHG,CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END  AS INSACC_AMT,ROUND((DISBASAMT+EXCISE+WPSC)  +(CASE WHEN INSURANCE_CODE =1 THEN ROUND((ROUND(DISBASAMT+EXCISE+WPSC,0) +(ROUND(DISBASAMT+EXCISE+WPSC,0)*.10) )*.0039,0) WHEN INSURANCE_CODE !=1 THEN 0  END) ,2) AS INV_AMT,ZONE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DISBASAMT,WPSC,DISC_PER,MEMO_DATE,DISAMT,BAS_AMT,DELIV_DATE,COMM_DATE ,((DISBASAMT+COALESCE(WPSC,0)) *.12+ ((DISBASAMT+COALESCE(WPSC,0)) *.12)*.01+((DISBASAMT+COALESCE(WPSC,0)) *.12)*.02) AS EXCISE,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,A.PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,MEMO_DATE,DELIV_DATE,COMM_DATE,BAS_AMT,WPSC,COALESCE(DISC_PER,0) AS DISC_PER,(BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISAMT,BAS_AMT - (BAS_AMT*(COALESCE(DISC_PER,0)/100) ) AS DISBASAMT,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,ITEM,STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,WPSC,PRIORITY_DESC,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,PRIORITY,INCHARGE_CD FROM (SELECT ZONE,REF_NO,CONF_NO,MACHINE_NO,POSITION,PIECE_NO,PARTY_CD,PARTY_NAME,ORDER_DATE,PRODUCT_CODE,H.GRUP AS ITEM,REPLACE(BALNK,' ','') AS STYLE,LNGTH,WIDTH,WEIGHT,SQM_RATE,WT_RATE,SQM_IND,PROD_IND_A,INSURANCE_CODE,DELIV_DATE,COMM_DATE,CASE WHEN SQM_IND =1 THEN LNGTH * WIDTH*SQM_RATE WHEN SQM_IND =0 THEN WEIGHT * WT_RATE END AS BAS_AMT,CASE WHEN CHEM_TRT_IN=1 THEN WEIGHT*CHARGES WHEN CHEM_TRT_IN =0  THEN 0 END+CASE WHEN PIN_IND=1 THEN WIDTH * CHARGES WHEN PIN_IND =0  THEN 0 END+CASE WHEN SPR_IND=1 THEN WIDTH* CHARGES WHEN SPR_IND =0  THEN 0 END AS WPSC,PRIORITY,GSQ,WVG_DATE,MND_DATE,NDL_DATE,PRIORITY_DATE,INCHARGE_CD FROM PRODUCTION.FELT_ORDER_MASTER,PRODUCTION.FELT_RATE_MASTER H,DINESHMILLS.D_SAL_PARTY_MASTER ";
+        strSQL+="WHERE ";
+        if(!txtpartycode.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PARTY_CD = "+SelUserID+" AND ";    
+        }
+        if(!txtzone.getText().toString().equals("")){
+         strSQL+= "DINESHMILLS.D_SAL_PARTY_MASTER.ZONE = '"+strZone+"' AND ";
+        }
+        /*if(!txtpieceno.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PIECE_NO = "+strPieceNo+" AND ";    
+        }*/
+        if(!txtpieceno.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PIECE_NO IN ("+strPieceNo+") AND ";    
+        }
+       /* if(!txtproductcode.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PRODUCT_CODE = "+strProductCode+" AND ";    
+        }*/    
+        if(!txtproductcode.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PRODUCT_CODE IN ("+strProductCode+") AND ";    
+        }  
+        if(!txtlengthfrom.getText().equals("")){
+        strSQL+="PRODUCTION.FELT_ORDER_MASTER.LNGTH >="+strLengthFrom+" AND ";    
+        }
+        if(!txtlengthto.getText().equals("")){
+        strSQL+="PRODUCTION.FELT_ORDER_MASTER.LNGTH <= "+strLengthTo+" AND ";   
+        }
+        if(!txtwidthfrom.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.WIDTH >= "+strWidthFrom+" AND ";  
+        }
+        if(!txtwidthto.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.WIDTH <= "+strWidthTo+" AND ";
+        }
+        if(!txtgsqfrom.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.GSQ >= "+strGSQFrom+" AND ";  
+        }
+        if(!txtgsqto.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.GSQ <= "+strGSQTo+" AND ";
+        }
+        if(!txtdatefrom.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.ORDER_DATE >= '"+strOrderDateFrom+"' AND ";  
+        }
+        if(!txtdateto.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.ORDER_DATE <= '"+strOrderDateTo+"' AND ";
+        }         
+        //strSQL+=" PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON A1.PRIORITY=P1.PRIORITY_ID) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD=PARTY_CODE) AS B) AS C";
+        //strSQL+=" PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') AND PRIORITY IN (9) ) AS A1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON A1.PRIORITY=P1.PRIORITY_ID) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD=PARTY_CODE) AS B) AS C";        
+        strSQL+="PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') AND PRIORITY IN (9) AND MAIN_ACCOUNT_CODE='210010' ) AS A1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON A1.PRIORITY=P1.PRIORITY_ID) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD=PARTY_CODE) AS B) AS C )  AS D LEFT JOIN (SELECT * FROM PRODUCTION.FELT_INCHARGE) AS FI ON FI.INCHARGE_CD=D.INCHARGE_CD ";
+        int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+="WHERE FI.INCHARGE_CD=1";    
+        }         
+        if(inchargeby==2){
+          strSQL+="WHERE FI.INCHARGE_CD=2";    
+        }
+        if(inchargeby==3){
+          strSQL+="WHERE FI.INCHARGE_CD=3";    
+        }
+        if(inchargeby==4){
+          strSQL+="WHERE FI.INCHARGE_CD=4";    
+        }
+        if(inchargeby==5){
+          strSQL+="WHERE FI.INCHARGE_CD=5";    
+        }
+        if(inchargeby==6){
+          strSQL+="WHERE FI.INCHARGE_CD=6";    
+        }
+        if(inchargeby==7){
+          strSQL+="WHERE D.INCHARGE_CD IS NULL";    
+        }
+        int Orderby=EITLERPGLOBAL.getComboCode(cmbCancelled);            
+            if(Orderby==1) {
+                strSQL+=" ORDER BY REF_NO ";
+            }            
+            if(Orderby==2) {
+                strSQL+=" ORDER BY CONF_NO ";
+            }
+            
+            if(Orderby==3) {
+                strSQL+=" ORDER BY MACHINE_NO ";
+            }
+         
+            if(Orderby==4){
+                strSQL+=" ORDER BY POSITION ";
+            }
+         
+            if(Orderby==5){
+                strSQL+=" ORDER BY ORDER_DATE DESC ";
+            }
+         
+            if(Orderby==6){
+                strSQL+=" ORDER BY PIECE_NO ";
+            }
+            if(Orderby==7){
+                strSQL+=" ORDER BY PRIORITY_DESC DESC ";
+            }
+            if(Orderby==8){
+                strSQL+=" ORDER BY LNGTH DESC ";
+            }         
+            if(Orderby==9){
+                strSQL+=" ORDER BY WIDTH DESC ";
+            }
+         
+            if(Orderby==10){
+                strSQL+=" ORDER BY GSQ DESC ";
+            }
+           if(Orderby==11){
+                strSQL+=" ORDER BY PRODUCT_CODE DESC ";
+            }
+           if(Orderby==12){
+                strSQL+=" ORDER BY ZONE DESC ";
+            }
+           if(Orderby==13){
+                strSQL+=" ORDER BY WVG_DATE DESC ";
+            }
+           if(Orderby==14){
+                strSQL+=" ORDER BY MND_DATE DESC ";
+            }
+           if(Orderby==15){
+                strSQL+=" ORDER BY NDL_DATE DESC ";
+            }
+
+           if(Orderby==16){
+                strSQL+=" ORDER BY PRIORITY_DATE DESC ";
+            }
+         System.out.println(strSQL);
+         rsTmp=data.getResult(strSQL);
+         rsTmp.first();
+         if(rsTmp.getRow()>0) {
+                int cnt=0;
+                double kgsum = 0.00;
+                double invsum = 0.00;
+                while(!rsTmp.isAfterLast()) {
+                
+                    cnt++; 
+                   txtCancelledtotal.setText(Integer.toString(cnt));  
+                   
+                  kgsum += Double.parseDouble(rsTmp.getString("WEIGHT"));
+                  invsum += Double.parseDouble(rsTmp.getString("INV_AMT"));
+                  //txttotal.setText(Double.toString(Math.round(sum)));
+                  //txttotal.setText(Double.toString(sum));
+                   DecimalFormat df = new DecimalFormat("##.##");
+                   txtCancelledkgtotal.setText(df.format(kgsum));
+                   txtCancelledinvtotal.setText(df.format(invsum));
+                   
+                 Object[] rowData=new Object[36];
+                    rowData[0]=Integer.toString(cnt);
+                   // rowData[1]=rsTmp.getString("PRIOR");
+                    rowData[1]=rsTmp.getString("PRIORITY_DESC");
+                    rowData[2]=EITLERPGLOBAL.formatDate(rsTmp.getString("PRIORITY_DATE"));
+                    rowData[3]=rsTmp.getString("REF_NO");
+                    rowData[4]=rsTmp.getString("CONF_NO");
+                    rowData[5]=rsTmp.getString("MACHINE_NO");
+                    rowData[6]=rsTmp.getString("POSITION");
+                    rowData[7]=rsTmp.getString("PIECE_NO");
+                    rowData[8]=rsTmp.getString("PARTY_CD");
+                    rowData[9]=rsTmp.getString("PARTY_NAME");
+                    rowData[10]=EITLERPGLOBAL.formatDate(rsTmp.getString("ORDER_DATE"));
+                    rowData[11]=rsTmp.getString("PRODUCT_CODE");
+                    rowData[12]=rsTmp.getString("ITEM");
+                    rowData[13]=rsTmp.getString("STYLE");
+                    rowData[14]=rsTmp.getString("LNGTH");
+                    rowData[15]=rsTmp.getString("WIDTH");
+                    rowData[16]=rsTmp.getString("GSQ");
+                    rowData[17]=rsTmp.getString("WEIGHT");
+                    rowData[18]=rsTmp.getString("RATE");
+                    rowData[19]=EITLERPGLOBAL.formatDate(rsTmp.getString("DELIV_DATE"));
+                    rowData[20]=EITLERPGLOBAL.formatDate(rsTmp.getString("COMM_DATE"));
+                    rowData[21]=EITLERPGLOBAL.formatDate(rsTmp.getString("WVG_DATE"));
+                    rowData[22]=EITLERPGLOBAL.formatDate(rsTmp.getString("MND_DATE"));
+                    rowData[23]=EITLERPGLOBAL.formatDate(rsTmp.getString("NDL_DATE"));
+                    rowData[24]=rsTmp.getString("INSURANCE_CODE");
+                    rowData[25]=rsTmp.getString("BAS_AMT");
+                    rowData[26]=EITLERPGLOBAL.formatDate(rsTmp.getString("MEMO_DATE"));
+                    rowData[27]=rsTmp.getString("DISC_PER");
+                    rowData[28]=rsTmp.getString("DISAMT");
+                    rowData[29]=rsTmp.getString("DISBASAMT");
+                    rowData[30]=rsTmp.getString("EXCISE");
+                    rowData[31]=rsTmp.getString("SEAM_CHG");
+                    rowData[32]=rsTmp.getString("INSACC_AMT");
+                    rowData[33]=rsTmp.getString("INV_AMT");
+                    rowData[34]=rsTmp.getString("ZONE");
+                    //rowData[35]=EITLERPGLOBAL.formatDate(rsTmp.getString("PRIORITY_DATE"));
+                    rowData[35]=rsTmp.getString("INCHARGE_NAME");
+                    //rowData[5]=EITLERPGLOBAL.formatDate(rsTmp.getString("ORDER_DATE"));
+                    //rowData[10]=rsTmp.getString("GSQ");
+                    //rowData[7]=rsTmp.getString("BALNK");
+                    DataModelCancelled.addRow(rowData);
+              //   System.out.println("rsTmp.getString('PIECE_NO')");
+                    rsTmp.next();
+                }
+         }
+        /* else{
+             //JOptionPane.showMessageDialog(this,"","Message",JOptionPane.ERROR_MESSAGE);
+             if(!txtpieceno.getText().equals("")){
+            JOptionPane.showMessageDialog(this,"Search Piece No in Stock Available/Packed Not Despatched/Diverted/Despatched");
+            }
+         }*/
+       }
+      catch(Exception e){
+         e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage()); 
+      }   
+        
+    }
+   //Machine 
+    private void GenerateMachine(){
+      String cndtn="";
+      try{
+          FormatGridMachine(); //clear existing content of table
+          String PartyCode = txtpartycode.getText().toString();
+          String ItemCode = txtproductcode.getText().toString();
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          
+          if(!txtpartycode.getText().equals("")){
+            cndtn+=" AND D.MM_PARTY_CODE= '"+PartyCode+"'";    
+          }
+          if(!txtproductcode.getText().equals("")){
+            cndtn+=" AND D.MM_ITEM_CODE LIKE '"+ItemCode+"%'";    
+          }
+          
+        strSQL="";
+        
+	//strSQL="SELECT MM_DOC_NO,MM_PARTY_CODE,PARTY_NAME,MM_INCHARGE_NAME,MM_STATION,MM_MACHINE_NO,MM_MACHINE_TYPE_FORMING,MM_PAPER_GRADE,MM_MACHINE_SPEED_RANGE,MM_PAPER_GSM_RANGE,MM_MACHINE_TYPE_PRESSING,MM_FURNISH,MM_TYPE_OF_FILLER,MM_WIRE_DETAIL_1,MM_WIRE_DETAIL_2,MM_WIRE_DETAIL_3,MM_WIRE_DETAIL_4,MM_PAPER_DECKLE_AFTER_WIRE,MM_PAPER_DECKLE_AFTER_PRESS,MM_PAPER_DECKLE_AT_POPE_REEL,MM_DRYER_SECTION,MM_ZONE,MM_CAPACITY,MM_MACHINE_STATUS,MM_ZONE_REPRESENTATIVE,MM_DATE_OF_UPDATE,MM_TOTAL_DRYER_GROUP,MM_UNIRUM_GROUP,MM_CONVENTIONAL_GROUP,MM_HOOD_TYPE,MM_SIZE_PRESS,MM_SIZE_PRESS_POSITION,MM_SHEET_DRYNESS_SIZE_PRESS,MM_MACHINE_NO,MM_MACHINE_POSITION,MM_MACHINE_POSITION_DESC,MM_COMBINATION_CODE,MM_PRESS_TYPE,MM_PRESS_ROLL_DAI_MM,MM_PRESS_ROLL_FACE_TOTAL_MM,MM_PRESS_ROLL_FACE_NET_MM,MM_FELT_ROLL_WIDTH_MM,MM_PRESS_LOAD,MM_VACCUM_CAPACITY,MM_UHLE_BOX,MM_HP_SHOWER,MM_LP_SHOWER,MM_FELT_LENGTH,MM_FELT_WIDTH,MM_FELT_GSM,MM_FELT_WEIGHT,MM_FELT_TYPE,MM_FELT_STYLE,MM_AVG_LIFE,MM_AVG_PRODUCTION,MM_FELT_CONSUMPTION,MM_DINESH_SHARE,MM_REMARK_DESIGN,MM_REMARK_GENERAL,MM_NO_DRYER_CYLINDER,MM_CYLINDER_DIA_MM,MM_CYLINDER_FACE_NET_MM,MM_DRIVE_TYPE,MM_GUIDE_TYPE,MM_GUIDE_PAM_TYPE,MM_VENTILATION_TYPE,MM_FABRIC_LENGTH,MM_FABRIC_WIDTH,MM_SIZE_M2,MM_SCREEN_TYPE,MM_STYLE_DRY,MM_CFM_DRY,MM_AVG_LIFE_DRY,MM_CONSUMPTION_DRY,MM_DINESH_SHARE_DRY,MM_REMARK_DRY,MM_ITEM_CODE,MM_GRUP,NOW() FROM (SELECT H.MM_DOC_NO,H.MM_PARTY_CODE,MM_PARTY_NAME,MM_INCHARGE_NAME,MM_STATION,H.MM_MACHINE_NO,MM_MACHINE_TYPE_FORMING,MM_PAPER_GRADE,MM_MACHINE_SPEED_RANGE,MM_PAPER_GSM_RANGE,MM_MACHINE_TYPE_PRESSING,MM_FURNISH,MM_TYPE_OF_FILLER,MM_WIRE_DETAIL_1,MM_WIRE_DETAIL_2,MM_WIRE_DETAIL_3,MM_WIRE_DETAIL_4,MM_PAPER_DECKLE_AFTER_WIRE,MM_PAPER_DECKLE_AFTER_PRESS,MM_PAPER_DECKLE_AT_POPE_REEL,MM_DRYER_SECTION,MM_ZONE,MM_CAPACITY,MM_MACHINE_STATUS,MM_ZONE_REPRESENTATIVE,MM_DATE_OF_UPDATE,MM_TOTAL_DRYER_GROUP,MM_UNIRUM_GROUP,MM_CONVENTIONAL_GROUP,MM_HOOD_TYPE,MM_SIZE_PRESS,MM_SIZE_PRESS_POSITION,MM_SHEET_DRYNESS_SIZE_PRESS,MM_MACHINE_POSITION,MM_MACHINE_POSITION_DESC,MM_COMBINATION_CODE,MM_PRESS_TYPE,MM_PRESS_ROLL_DAI_MM,MM_PRESS_ROLL_FACE_TOTAL_MM,MM_PRESS_ROLL_FACE_NET_MM,MM_FELT_ROLL_WIDTH_MM,MM_PRESS_LOAD,MM_VACCUM_CAPACITY,MM_UHLE_BOX,MM_HP_SHOWER,MM_LP_SHOWER,MM_FELT_LENGTH,MM_FELT_WIDTH,MM_FELT_GSM,MM_FELT_WEIGHT,MM_FELT_TYPE,MM_FELT_STYLE,MM_AVG_LIFE,MM_AVG_PRODUCTION,MM_FELT_CONSUMPTION,MM_DINESH_SHARE,MM_REMARK_DESIGN,MM_REMARK_GENERAL,MM_NO_DRYER_CYLINDER,MM_CYLINDER_DIA_MM,MM_CYLINDER_FACE_NET_MM,MM_DRIVE_TYPE,MM_GUIDE_TYPE,MM_GUIDE_PAM_TYPE,MM_VENTILATION_TYPE,MM_FABRIC_LENGTH,MM_FABRIC_WIDTH,MM_SIZE_M2,MM_SCREEN_TYPE,MM_STYLE_DRY,MM_CFM_DRY,MM_AVG_LIFE_DRY,MM_CONSUMPTION_DRY,MM_DINESH_SHARE_DRY,MM_REMARK_DRY,MM_ITEM_CODE,MM_GRUP FROM PRODUCTION.FELT_MACHINE_MASTER_DETAIL D  ,PRODUCTION.FELT_MACHINE_MASTER_HEADER H WHERE D.MM_DOC_NO = H.MM_DOC_NO  AND APPROVED = 1 AND CANCELED =0 AND D.MM_PARTY_CODE=811026 AND D.MM_ITEM_CODE LIKE '%')  AS MM LEFT JOIN (SELECT PARTY_CODE,CONCAT(PARTY_NAME,',',CITY_ID) AS PARTY_NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER WHERE MAIN_ACCOUNT_CODE = 210010 ) AS PM ON PM.PARTY_CODE = MM.MM_PARTY_CODE ORDER BY MM.MM_PARTY_CODE,MM.MM_DOC_NO,MM_MACHINE_POSITION LIMIT 1000000000";
+        strSQL="SELECT MM_DOC_NO,MM_PARTY_CODE,MM_PARTY_NAME,MM_INCHARGE_NAME,MM_STATION,MM_MACHINE_NO,MM_MACHINE_TYPE_FORMING,MM_PAPER_GRADE,MM_MACHINE_SPEED_RANGE,MM_PAPER_GSM_RANGE,MM_MACHINE_TYPE_PRESSING,MM_FURNISH,MM_TYPE_OF_FILLER,MM_WIRE_DETAIL_1,MM_WIRE_DETAIL_2,MM_WIRE_DETAIL_3,MM_WIRE_DETAIL_4,MM_PAPER_DECKLE_AFTER_WIRE,MM_PAPER_DECKLE_AFTER_PRESS,MM_PAPER_DECKLE_AT_POPE_REEL,MM_DRYER_SECTION,MM_ZONE,MM_CAPACITY,MM_MACHINE_STATUS,MM_ZONE_REPRESENTATIVE,MM_DATE_OF_UPDATE,MM_TOTAL_DRYER_GROUP,MM_UNIRUM_GROUP,MM_CONVENTIONAL_GROUP,MM_HOOD_TYPE,MM_SIZE_PRESS,MM_SIZE_PRESS_POSITION,MM_SHEET_DRYNESS_SIZE_PRESS,MM_MACHINE_NO,MM_MACHINE_POSITION,MM_MACHINE_POSITION_DESC,MM_COMBINATION_CODE,MM_PRESS_TYPE,MM_PRESS_ROLL_DAI_MM,MM_PRESS_ROLL_FACE_TOTAL_MM,MM_PRESS_ROLL_FACE_NET_MM,MM_FELT_ROLL_WIDTH_MM,MM_PRESS_LOAD,MM_VACCUM_CAPACITY,MM_UHLE_BOX,MM_HP_SHOWER,MM_LP_SHOWER,MM_FELT_LENGTH,MM_FELT_WIDTH,MM_FELT_GSM,MM_FELT_WEIGHT,MM_FELT_TYPE,MM_FELT_STYLE,MM_AVG_LIFE,MM_AVG_PRODUCTION,MM_FELT_CONSUMPTION,MM_DINESH_SHARE,MM_REMARK_DESIGN,MM_REMARK_GENERAL,MM_NO_DRYER_CYLINDER,MM_CYLINDER_DIA_MM,MM_CYLINDER_FACE_NET_MM,MM_DRIVE_TYPE,MM_GUIDE_TYPE,MM_GUIDE_PAM_TYPE,MM_VENTILATION_TYPE,MM_FABRIC_LENGTH,MM_FABRIC_WIDTH,MM_SIZE_M2,MM_SCREEN_TYPE,MM_STYLE_DRY,MM_CFM_DRY,MM_AVG_LIFE_DRY,MM_CONSUMPTION_DRY,MM_DINESH_SHARE_DRY,MM_REMARK_DRY,MM_ITEM_CODE,MM_GRUP,NOW() FROM (SELECT H.MM_DOC_NO,H.MM_PARTY_CODE,MM_PARTY_NAME,MM_INCHARGE_NAME,MM_STATION,H.MM_MACHINE_NO,MM_MACHINE_TYPE_FORMING,MM_PAPER_GRADE,MM_MACHINE_SPEED_RANGE,MM_PAPER_GSM_RANGE,MM_MACHINE_TYPE_PRESSING,MM_FURNISH,MM_TYPE_OF_FILLER,MM_WIRE_DETAIL_1,MM_WIRE_DETAIL_2,MM_WIRE_DETAIL_3,MM_WIRE_DETAIL_4,MM_PAPER_DECKLE_AFTER_WIRE,MM_PAPER_DECKLE_AFTER_PRESS,MM_PAPER_DECKLE_AT_POPE_REEL,MM_DRYER_SECTION,MM_ZONE,MM_CAPACITY,MM_MACHINE_STATUS,MM_ZONE_REPRESENTATIVE,MM_DATE_OF_UPDATE,MM_TOTAL_DRYER_GROUP,MM_UNIRUM_GROUP,MM_CONVENTIONAL_GROUP,MM_HOOD_TYPE,MM_SIZE_PRESS,MM_SIZE_PRESS_POSITION,MM_SHEET_DRYNESS_SIZE_PRESS,MM_MACHINE_POSITION,MM_MACHINE_POSITION_DESC,MM_COMBINATION_CODE,MM_PRESS_TYPE,MM_PRESS_ROLL_DAI_MM,MM_PRESS_ROLL_FACE_TOTAL_MM,MM_PRESS_ROLL_FACE_NET_MM,MM_FELT_ROLL_WIDTH_MM,MM_PRESS_LOAD,MM_VACCUM_CAPACITY,MM_UHLE_BOX,MM_HP_SHOWER,MM_LP_SHOWER,MM_FELT_LENGTH,MM_FELT_WIDTH,MM_FELT_GSM,MM_FELT_WEIGHT,MM_FELT_TYPE,MM_FELT_STYLE,MM_AVG_LIFE,MM_AVG_PRODUCTION,MM_FELT_CONSUMPTION,MM_DINESH_SHARE,MM_REMARK_DESIGN,MM_REMARK_GENERAL,MM_NO_DRYER_CYLINDER,MM_CYLINDER_DIA_MM,MM_CYLINDER_FACE_NET_MM,MM_DRIVE_TYPE,MM_GUIDE_TYPE,MM_GUIDE_PAM_TYPE,MM_VENTILATION_TYPE,MM_FABRIC_LENGTH,MM_FABRIC_WIDTH,MM_SIZE_M2,MM_SCREEN_TYPE,MM_STYLE_DRY,MM_CFM_DRY,MM_AVG_LIFE_DRY,MM_CONSUMPTION_DRY,MM_DINESH_SHARE_DRY,MM_REMARK_DRY,MM_ITEM_CODE,MM_GRUP FROM PRODUCTION.FELT_MACHINE_MASTER_DETAIL D  ,PRODUCTION.FELT_MACHINE_MASTER_HEADER H WHERE D.MM_DOC_NO = H.MM_DOC_NO  AND APPROVED = 1 AND CANCELED =0 " + cndtn + ")  AS MM LEFT JOIN (SELECT PARTY_CODE,CONCAT(PARTY_NAME,',',CITY_ID) AS PARTY_NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER WHERE MAIN_ACCOUNT_CODE = 210010 ) AS PM ON PM.PARTY_CODE = MM.MM_PARTY_CODE ";
+        
+        
+        
+        
+        
+        //strSQL+="SELECT PARTY_CODE,SURVEY_DATE,TECH_REP,MACHINE_NO,TYPE,SPEED,WIRE_LENGTH,WIRE_WIDTH,WIRE_TYPE,PAPERGRADE,GSM_RANGE,FURNISH,TYPE_OF_FILLER,PAPER_DECKLE,PRESS_TYPE,LINEAR_NIP_LOAD,POSITION,MIN_FELT_LENGTH,MAX_FELT_LENGTH,ORDER_SIZE,POSITION_DESC FROM PRODUCTION.FELT_MACHINE_SURVEY ";
+//        strSQL+="SELECT PARTY_CODE,SURVEY_DATE,TECH_REP,MACHINE_NO,TYPE,SPEED,WIRE_LENGTH,WIRE_WIDTH,WIRE_TYPE,PAPERGRADE,GSM_RANGE,FURNISH,TYPE_OF_FILLER,PAPER_DECKLE,PRESS_TYPE,LINEAR_NIP_LOAD,POSITION,MIN_FELT_LENGTH,MAX_FELT_LENGTH,ORDER_SIZE,POSITION_DESC FROM (SELECT * FROM PRODUCTION.FELT_MACHINE_SURVEY ";
+//        if(!txtpartycode.getText().equals("")){
+//         strSQL+="WHERE PRODUCTION.FELT_MACHINE_SURVEY.PARTY_CODE = "+SelUserID+"";    
+//        }
+//        strSQL+=") AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_MACHINE_POSITION_MST) AS B ON A.POSITION = B.POSITION_NO";
+       /*
+        if(!txtzone.getText().toString().equals("")){
+         strSQL+= "DINESHMILLS.D_SAL_PARTY_MASTER.ZONE = '"+strZone+"' AND ";
+        }
+        /*if(!txtpieceno.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PIECE_NO = "+strPieceNo+" AND ";    
+        }*/
+       /* if(!txtpieceno.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PIECE_NO IN ("+strPieceNo+") AND ";    
+        }
+       /* if(!txtproductcode.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PRODUCT_CODE = "+strProductCode+" AND ";    
+        }*/    
+        /*
+        if(!txtproductcode.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PRODUCT_CODE IN ("+strProductCode+") AND ";    
+        }  
+        if(!txtlengthfrom.getText().equals("")){
+        strSQL+="PRODUCTION.FELT_ORDER_MASTER.LNGTH >="+strLengthFrom+" AND ";    
+        }
+        if(!txtlengthto.getText().equals("")){
+        strSQL+="PRODUCTION.FELT_ORDER_MASTER.LNGTH <= "+strLengthTo+" AND ";   
+        }
+        if(!txtwidthfrom.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.WIDTH >= "+strWidthFrom+" AND ";  
+        }
+        if(!txtwidthto.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.WIDTH <= "+strWidthTo+" AND ";
+        }
+        if(!txtgsqfrom.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.GSQ >= "+strGSQFrom+" AND ";  
+        }
+        if(!txtgsqto.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.GSQ <= "+strGSQTo+" AND ";
+        }
+        if(!txtdatefrom.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.ORDER_DATE >= '"+strOrderDateFrom+"' AND ";  
+        }
+        if(!txtdateto.getText().equals("")){
+          strSQL+="PRODUCTION.FELT_ORDER_MASTER.ORDER_DATE <= '"+strOrderDateTo+"' AND ";
+        }         
+        //strSQL+=" PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') ) AS A1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON A1.PRIORITY=P1.PRIORITY_ID) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD=PARTY_CODE) AS B) AS C";
+        //strSQL+=" PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') AND PRIORITY IN (9) ) AS A1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON A1.PRIORITY=P1.PRIORITY_ID) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD=PARTY_CODE) AS B) AS C";        
+        strSQL+="PRODUCT_CODE*10 = ITEM_CODE AND PARTY_CD = PARTY_CODE AND PROD_IND_A IN ('') AND PRIORITY IN (9) ) AS A1 LEFT JOIN (SELECT PRIORITY_ID,PRIORITY_DESC FROM PRODUCTION.FELT_PRIORITY_MASTER) AS P1 ON A1.PRIORITY=P1.PRIORITY_ID) AS A LEFT JOIN (SELECT * FROM PRODUCTION.FELT_DISCOUNT_MEMO) AS M ON A.PIECE_NO = CONCAT(M.PIECE_NO,M.PIECE_EXT) AND PARTY_CD=PARTY_CODE) AS B) AS C )  AS D LEFT JOIN (SELECT * FROM PRODUCTION.FELT_INCHARGE) AS FI ON FI.INCHARGE_CD=D.REGION ";
+        int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+="WHERE INCHARGE_CD=1";    
+        }         
+        if(inchargeby==2){
+          strSQL+="WHERE INCHARGE_CD=2";    
+        }
+        if(inchargeby==3){
+          strSQL+="WHERE INCHARGE_CD=3";    
+        }
+        if(inchargeby==4){
+          strSQL+="WHERE INCHARGE_CD=4";    
+        }
+        if(inchargeby==5){
+          strSQL+="WHERE INCHARGE_CD=5";    
+        }
+        if(inchargeby==6){
+          strSQL+="WHERE INCHARGE_CD=6";    
+        }
+         */
+        int Orderby=EITLERPGLOBAL.getComboCode(cmbMachine);            
+            if(Orderby==1) {
+                //strSQL+=" ORDER BY MACHINE_NO ";
+                strSQL+=" ORDER BY MM.MM_PARTY_CODE,MM.MM_DOC_NO,MM_MACHINE_NO ";
+            }            
+            if(Orderby==2) {
+                //strSQL+=" ORDER BY POSITION ";
+                strSQL+=" ORDER BY MM.MM_PARTY_CODE,MM.MM_DOC_NO,MM_MACHINE_POSITION ";
+            }
+           /* 
+            if(Orderby==3) {
+                strSQL+=" ORDER BY MACHINE_NO ";
+            }
+         
+            if(Orderby==4){
+                strSQL+=" ORDER BY POSITION ";
+            }
+         
+            if(Orderby==5){
+                strSQL+=" ORDER BY ORDER_DATE DESC ";
+            }
+         
+            if(Orderby==6){
+                strSQL+=" ORDER BY PIECE_NO ";
+            }
+            if(Orderby==7){
+                strSQL+=" ORDER BY PRIORITY_DESC DESC ";
+            }
+            if(Orderby==8){
+                strSQL+=" ORDER BY LNGTH DESC ";
+            }         
+            if(Orderby==9){
+                strSQL+=" ORDER BY WIDTH DESC ";
+            }
+         
+            if(Orderby==10){
+                strSQL+=" ORDER BY GSQ DESC ";
+            }
+           if(Orderby==11){
+                strSQL+=" ORDER BY PRODUCT_CODE DESC ";
+            }
+           if(Orderby==12){
+                strSQL+=" ORDER BY ZONE DESC ";
+            }
+           if(Orderby==13){
+                strSQL+=" ORDER BY WVG_DATE DESC ";
+            }
+           if(Orderby==14){
+                strSQL+=" ORDER BY MND_DATE DESC ";
+            }
+           if(Orderby==15){
+                strSQL+=" ORDER BY NDL_DATE DESC ";
+            }
+
+           if(Orderby==16){
+                strSQL+=" ORDER BY PRIORITY_DATE DESC ";
+            }
+        */
+         System.out.println(strSQL);
+         rsTmp=data.getResult(strSQL);
+         rsTmp.first();
+         if(rsTmp.getRow()>0) {
+               int cnt=0;
+          //      double kgsum = 0.00;
+          //      double invsum = 0.00;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++; 
+                txtMachineTotal.setText(Integer.toString(cnt));  
+               /*    
+                  kgsum += Double.parseDouble(rsTmp.getString("WEIGHT"));
+                  invsum += Double.parseDouble(rsTmp.getString("INV_AMT"));
+                  //txttotal.setText(Double.toString(Math.round(sum)));
+                  //txttotal.setText(Double.toString(sum));
+                   DecimalFormat df = new DecimalFormat("##.##");
+                   txtCancelledkgtotal.setText(df.format(kgsum));
+                   txtCancelledinvtotal.setText(df.format(invsum));
+              */     
+                 Object[] rowData=new Object[100];
+//                    rowData[0]=Integer.toString(cnt);
+//                    rowData[1]=rsTmp.getString("PARTY_CODE");
+//                    rowData[2]=rsTmp.getString("MACHINE_NO");
+//                    rowData[3]=rsTmp.getString("POSITION");
+//                    rowData[4]=rsTmp.getString("POSITION_DESC");
+//                    rowData[5]=rsTmp.getString("ORDER_SIZE");
+//                    rowData[6]=rsTmp.getString("PRESS_TYPE");
+//                    rowData[7]=rsTmp.getString("GSM_RANGE");
+//                    rowData[8]=rsTmp.getString("MAX_FELT_LENGTH");
+//                    rowData[9]=rsTmp.getString("MIN_FELT_LENGTH");
+//                    rowData[10]=rsTmp.getString("LINEAR_NIP_LOAD");
+//                    rowData[11]=rsTmp.getString("PAPERGRADE");
+//                    rowData[12]=rsTmp.getString("FURNISH");
+//                    rowData[13]=rsTmp.getString("TYPE");
+//                    rowData[14]=rsTmp.getString("SPEED");
+//                    rowData[15]=EITLERPGLOBAL.formatDate(rsTmp.getString("SURVEY_DATE"));
+//                    rowData[16]=rsTmp.getString("WIRE_LENGTH");
+//                    rowData[17]=rsTmp.getString("WIRE_WIDTH");
+//                    rowData[18]=rsTmp.getString("WIRE_TYPE");
+//                    rowData[19]=rsTmp.getString("TECH_REP");
+//                    rowData[20]=rsTmp.getString("TYPE_OF_FILLER");
+//                    rowData[21]=rsTmp.getString("PAPER_DECKLE");
+                 
+                    rowData[0]=Integer.toString(cnt);
+                    rowData[1]=rsTmp.getString("MM_DOC_NO");
+                    rowData[2]=rsTmp.getString("MM_PARTY_CODE");
+                    rowData[3]=rsTmp.getString("MM_PARTY_NAME");
+                    rowData[4]=rsTmp.getString("MM_INCHARGE_NAME");
+                    rowData[5]=rsTmp.getString("MM_STATION");
+                    rowData[6]=rsTmp.getString("MM_MACHINE_NO");
+                    rowData[7]=rsTmp.getString("MM_MACHINE_TYPE_FORMING");
+                    rowData[8]=rsTmp.getString("MM_PAPER_GRADE");
+                    rowData[9]=rsTmp.getString("MM_MACHINE_SPEED_RANGE");
+                    rowData[10]=rsTmp.getString("MM_PAPER_GSM_RANGE");
+                    rowData[11]=rsTmp.getString("MM_MACHINE_TYPE_PRESSING");
+                    rowData[12]=rsTmp.getString("MM_FURNISH");
+                    rowData[13]=rsTmp.getString("MM_TYPE_OF_FILLER");
+                    rowData[14]=rsTmp.getString("MM_WIRE_DETAIL_1");
+                    rowData[15]=rsTmp.getString("MM_WIRE_DETAIL_2");
+                    rowData[16]=rsTmp.getString("MM_WIRE_DETAIL_3");
+                    rowData[17]=rsTmp.getString("MM_WIRE_DETAIL_4");
+                    rowData[18]=rsTmp.getString("MM_PAPER_DECKLE_AFTER_WIRE");
+                    rowData[19]=rsTmp.getString("MM_PAPER_DECKLE_AFTER_PRESS");
+                    rowData[20]=rsTmp.getString("MM_PAPER_DECKLE_AT_POPE_REEL");
+                    rowData[21]=rsTmp.getString("MM_DRYER_SECTION");
+                    rowData[22]=rsTmp.getString("MM_ZONE");
+                    rowData[23]=rsTmp.getString("MM_CAPACITY");
+                    rowData[24]=rsTmp.getString("MM_MACHINE_STATUS");
+                    rowData[25]=rsTmp.getString("MM_ZONE_REPRESENTATIVE");
+                    rowData[26]=rsTmp.getString("MM_DATE_OF_UPDATE");
+                    rowData[27]=rsTmp.getString("MM_TOTAL_DRYER_GROUP");
+                    rowData[28]=rsTmp.getString("MM_UNIRUM_GROUP");
+                    rowData[29]=rsTmp.getString("MM_CONVENTIONAL_GROUP");
+                    rowData[30]=rsTmp.getString("MM_HOOD_TYPE");
+                    rowData[31]=rsTmp.getString("MM_SIZE_PRESS");
+                    rowData[32]=rsTmp.getString("MM_SIZE_PRESS_POSITION");
+                    rowData[33]=rsTmp.getString("MM_SHEET_DRYNESS_SIZE_PRESS");
+                    rowData[34]=rsTmp.getString("MM_MACHINE_POSITION");
+                    rowData[35]=rsTmp.getString("MM_MACHINE_POSITION_DESC");
+                    rowData[36]=rsTmp.getString("MM_COMBINATION_CODE");
+                    rowData[37]=rsTmp.getString("MM_PRESS_TYPE");
+                    rowData[38]=rsTmp.getString("MM_PRESS_ROLL_DAI_MM");
+                    rowData[39]=rsTmp.getString("MM_PRESS_ROLL_FACE_TOTAL_MM");
+                    rowData[40]=rsTmp.getString("MM_PRESS_ROLL_FACE_NET_MM");
+                    rowData[41]=rsTmp.getString("MM_FELT_ROLL_WIDTH_MM");
+                    rowData[42]=rsTmp.getString("MM_PRESS_LOAD");
+                    rowData[43]=rsTmp.getString("MM_VACCUM_CAPACITY");
+                    rowData[44]=rsTmp.getString("MM_UHLE_BOX");
+                    rowData[45]=rsTmp.getString("MM_HP_SHOWER");
+                    rowData[46]=rsTmp.getString("MM_LP_SHOWER");
+                    rowData[47]=rsTmp.getString("MM_FELT_LENGTH");
+                    rowData[48]=rsTmp.getString("MM_FELT_WIDTH");
+                    rowData[49]=rsTmp.getString("MM_FELT_GSM");
+                    rowData[50]=rsTmp.getString("MM_FELT_WEIGHT");
+                    rowData[51]=rsTmp.getString("MM_FELT_TYPE");
+                    rowData[52]=rsTmp.getString("MM_FELT_STYLE");
+                    rowData[53]=rsTmp.getString("MM_AVG_LIFE");
+                    rowData[54]=rsTmp.getString("MM_AVG_PRODUCTION");
+                    rowData[55]=rsTmp.getString("MM_FELT_CONSUMPTION");
+                    rowData[56]=rsTmp.getString("MM_DINESH_SHARE");
+                    rowData[57]=rsTmp.getString("MM_REMARK_DESIGN");
+                    rowData[58]=rsTmp.getString("MM_REMARK_GENERAL");
+                    rowData[59]=rsTmp.getString("MM_NO_DRYER_CYLINDER");
+                    rowData[60]=rsTmp.getString("MM_CYLINDER_DIA_MM");
+                    rowData[61]=rsTmp.getString("MM_CYLINDER_FACE_NET_MM");
+                    rowData[62]=rsTmp.getString("MM_DRIVE_TYPE");
+                    rowData[63]=rsTmp.getString("MM_GUIDE_TYPE");
+                    rowData[64]=rsTmp.getString("MM_GUIDE_PAM_TYPE");
+                    rowData[65]=rsTmp.getString("MM_VENTILATION_TYPE");
+                    rowData[66]=rsTmp.getString("MM_FABRIC_LENGTH");
+                    rowData[67]=rsTmp.getString("MM_FABRIC_WIDTH");
+                    rowData[68]=rsTmp.getString("MM_SIZE_M2");
+                    rowData[69]=rsTmp.getString("MM_SCREEN_TYPE");
+                    rowData[70]=rsTmp.getString("MM_STYLE_DRY");
+                    rowData[71]=rsTmp.getString("MM_CFM_DRY");
+                    rowData[72]=rsTmp.getString("MM_AVG_LIFE_DRY");
+                    rowData[73]=rsTmp.getString("MM_CONSUMPTION_DRY");
+                    rowData[74]=rsTmp.getString("MM_DINESH_SHARE_DRY");
+                    rowData[75]=rsTmp.getString("MM_REMARK_DRY");
+                    rowData[76]=rsTmp.getString("MM_ITEM_CODE");
+                    rowData[77]=rsTmp.getString("MM_GRUP");
+                    
+                    
+                    DataModelMachine.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+        /* else{
+             //JOptionPane.showMessageDialog(this,"","Message",JOptionPane.ERROR_MESSAGE);
+             if(!txtpieceno.getText().equals("")){
+            JOptionPane.showMessageDialog(this,"Search Piece No in Stock Available/Packed Not Despatched/Diverted/Despatched");
+            }
+         }*/
+       }
+      catch(Exception e){
+         e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage()); 
+      }     
+    }
+    
+    private void GenerateComplaint(){        
+     try{
+          FormatGridComplaint();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strLengthFrom = txtlengthfrom.getText().toString();
+          strLengthTo = txtlengthto.getText().toString();
+          strWidthFrom = txtwidthfrom.getText().toString();
+          strWidthTo = txtwidthto.getText().toString();
+          strGSQFrom = txtgsqfrom.getText().toString();
+          strGSQTo = txtgsqto.getText().toString();
+          strPieceNo = txtpieceno.getText().toString();
+          strProductCode = txtproductcode.getText().toString();
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          strSQL= "";                
+          strSQL+="SELECT CPNT_NO,CPNT_DATE,CPNT_NATURE,CPNT_RESOLUTION,CPNT_ATTENDED_ON,CPNT_CLOSE_DATE,CPNT_REMARKS,CPNT_PARTYCODE,CPNT_INVOICE_NO,CPNT_INVOICE_DATE,CPNT_INVOICE_AMOUNT,CPNT_PC_NO,CPNT_MC_NO,CPNT_POSITION,CPNT_SIZE_LENGTH,CPNT_SIZE_WIDTH,CPNT_GSM,CPNT_ACTION_DATE1,CPNT_ACTION_REMARK1,CPNT_ACTION_DATE2,CPNT_ACTION_REMARK2,CPNT_ACTION_DATE3,CPNT_ACTION_REMARK3,CPNT_ACTION_DATE4,CPNT_ACTION_REMARK4,CPNT_ACTION_DATE5,CPNT_ACTION_REMARK5,CPNT_ACTION_DATE6,CPNT_ACTION_REMARK6,CPNT_ACTION_DATE7,CPNT_ACTION_REMARK7,CPNT_ACTION_DATE8,CPNT_ACTION_REMARK8,CPNT_ACTION_DATE9,CPNT_ACTION_REMARK9,CPNT_ACTION_DATE10,CPNT_ACTION_REMARK10,CREATED_BY FROM PRODUCTION.FELT_COMPLAINTS ";           
+          strSQL+="WHERE ";
+          
+        if(!txtpartycode.getText().equals("")){
+         strSQL+=" CPNT_PARTYCODE = "+SelUserID+" AND ";    
+        }
+        if(!txtpieceno.getText().equals("")){
+         strSQL+="CPNT_PC_NO IN ("+strPieceNo+") AND ";    
+        }       
+        /*if(!txtproductcode.getText().equals("")){
+         strSQL+="PRODUCTION.FELT_ORDER_MASTER.PRODUCT_CODE IN ("+strProductCode+") AND ";    
+        } 
+         */ 
+        if(!txtlengthfrom.getText().equals("")){
+        strSQL+="CPNT_SIZE_LENGTH >="+strLengthFrom+" AND ";    
+        }
+        if(!txtlengthto.getText().equals("")){
+        strSQL+="CPNT_SIZE_LENGTH <= "+strLengthTo+" AND ";   
+        }
+        if(!txtwidthfrom.getText().equals("")){
+          strSQL+="CPNT_SIZE_WIDTH >= "+strWidthFrom+" AND ";  
+        }
+        if(!txtwidthto.getText().equals("")){
+          strSQL+="CPNT_SIZE_WIDTH <= "+strWidthTo+" AND ";
+        }
+        if(!txtgsqfrom.getText().equals("")){
+          strSQL+="CPNT_GSM >= "+strGSQFrom+" AND ";  
+        }
+        if(!txtgsqto.getText().equals("")){
+          strSQL+="CPNT_GSM <= "+strGSQTo+" AND ";
+        }
+        strSQL+=" CPNT_NO=CPNT_NO";
+          
+        
+        int Orderby=EITLERPGLOBAL.getComboCode(cmbComplaint);            
+            if(Orderby==1) {
+                strSQL+=" ORDER BY CPNT_NATURE ";
+            }            
+            if(Orderby==2) {
+                strSQL+=" ORDER BY CPNT_PARTYCODE";
+            }
+          
+        System.out.println(strSQL);
+        rsTmp=data.getResult(strSQL);
+        rsTmp.first();
+        if(rsTmp.getRow()>0) {
+                int cnt=0;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++;
+                   
+                                       
+                    Object[] rowData=new Object[40];
+                    rowData[0]=Integer.toString(cnt);
+                    //rowData[1]=rsTmp.getString("PARTY_CODE");
+                    rowData[1]=rsTmp.getString("CPNT_NO");
+                    rowData[2]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_DATE"));
+                    rowData[3]=rsTmp.getString("CPNT_NATURE");
+                    rowData[4]=rsTmp.getString("CPNT_RESOLUTION");
+                    rowData[5]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_ATTENDED_ON"));
+                    rowData[6]=rsTmp.getString("CREATED_BY");
+                    rowData[7]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_CLOSE_DATE"));
+                    rowData[8]=rsTmp.getString("CPNT_REMARKS");
+                    rowData[9]=rsTmp.getString("CPNT_PARTYCODE");
+                    rowData[10]=rsTmp.getString("CPNT_INVOICE_NO");
+                    rowData[11]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_INVOICE_DATE"));
+                    rowData[12]=rsTmp.getString("CPNT_INVOICE_AMOUNT");
+                    rowData[13]=rsTmp.getString("CPNT_PC_NO");
+                    rowData[14]=rsTmp.getString("CPNT_MC_NO");
+                    rowData[15]=rsTmp.getString("CPNT_POSITION");
+                    rowData[16]=rsTmp.getString("CPNT_SIZE_LENGTH");
+                    rowData[17]=rsTmp.getString("CPNT_SIZE_WIDTH");                    
+                    rowData[18]=rsTmp.getString("CPNT_GSM");
+                    rowData[19]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_ACTION_DATE1"));
+                    rowData[20]=rsTmp.getString("CPNT_ACTION_REMARK1");
+                    rowData[21]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_ACTION_DATE2"));
+                    rowData[22]=rsTmp.getString("CPNT_ACTION_REMARK2");
+                    rowData[23]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_ACTION_DATE3"));
+                    rowData[24]=rsTmp.getString("CPNT_ACTION_REMARK3");
+                    rowData[25]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_ACTION_DATE4"));
+                    rowData[26]=rsTmp.getString("CPNT_ACTION_REMARK4");
+                    rowData[27]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_ACTION_DATE5"));
+                    rowData[28]=rsTmp.getString("CPNT_ACTION_REMARK5");
+                    rowData[29]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_ACTION_DATE6"));
+                    rowData[30]=rsTmp.getString("CPNT_ACTION_REMARK6");
+                    rowData[31]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_ACTION_DATE7"));
+                    rowData[32]=rsTmp.getString("CPNT_ACTION_REMARK7");
+                    rowData[33]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_ACTION_DATE8"));
+                    rowData[34]=rsTmp.getString("CPNT_ACTION_REMARK8");
+                    rowData[35]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_ACTION_DATE9"));
+                    rowData[36]=rsTmp.getString("CPNT_ACTION_REMARK9");
+                    rowData[37]=EITLERPGLOBAL.formatDate(rsTmp.getString("CPNT_ACTION_DATE10"));
+                    rowData[38]=rsTmp.getString("CPNT_ACTION_REMARK10");
+                                      DataModelComplaint.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }        
+    }
+   
+    
+    
+        private void GenerateAgreedDate(){        
+     try{
+          FormatGridAgreedDate();  //clear existing content of table
+          SelUserID = txtpartycode.getText().toString();
+          strLengthFrom = txtlengthfrom.getText().toString();
+          strLengthTo = txtlengthto.getText().toString();
+          strWidthFrom = txtwidthfrom.getText().toString();
+          strWidthTo = txtwidthto.getText().toString();
+          strGSQFrom = txtgsqfrom.getText().toString();
+          strGSQTo = txtgsqto.getText().toString();
+          strPieceNo = txtpieceno.getText().toString();
+          strProductCode = txtproductcode.getText().toString();
+          strAgreedDateFrom = EITLERPGLOBAL.formatDateDB(txtdatefrom.getText());
+          strAgreedDateTo = EITLERPGLOBAL.formatDateDB(txtdateto.getText());
+          ResultSet rsTmp,rsBuyer,rsIndent,rsRIA;
+          strSQL= "";                
+          strSQL+="SELECT A.*,FI.INCHARGE_CD FROM PRODUCTION.FLT_AGREED_STATUS_REPORT A,DINESHMILLS.D_SAL_PARTY_MASTER FI WHERE A.AD_PARTY_CODE = FI.PARTY_CODE  ";           
+       //   strSQL+=" AND ";
+          
+        if(!txtpartycode.getText().equals("")){
+         strSQL+=" AND AD_PARTY_CODE = "+SelUserID+" ";    
+        }
+        if(!txtpieceno.getText().equals("")){
+         strSQL+=" AND AD_PIECE_NO IN ("+strPieceNo+") ";    
+        }       
+        if(!txtproductcode.getText().equals("")){
+         strSQL+=" AND AD_PRODUCT_CODE IN ("+strProductCode+") ";    
+        }       
+        if(!txtdatefrom.getText().equals("")){
+          strSQL+="AND AD_AGREED_DATE >= '"+strAgreedDateFrom+"' ";  
+        }
+        if(!txtdateto.getText().equals("")){
+          strSQL+="AND AD_AGREED_DATE <= '"+strAgreedDateTo+"' ";
+        }         
+        if(!txtlengthfrom.getText().equals("")){
+        strSQL+="AND AD_ORDER_MTR >="+strLengthFrom+" ";    
+        }
+        if(!txtlengthto.getText().equals("")){
+        strSQL+="AND AD_ORDER_MTR <= "+strLengthTo+" ";   
+        }
+        if(!txtwidthfrom.getText().equals("")){
+          strSQL+="AND AD_ORDER_WIDTH >= "+strWidthFrom+" ";  
+        }
+        if(!txtwidthto.getText().equals("")){
+          strSQL+="AND AD_ORDER_WIDTH <= "+strWidthTo+" ";
+        }
+        if(!txtgsqfrom.getText().equals("")){
+          strSQL+="AND AD_GSM >= "+strGSQFrom+" ";  
+        }
+        if(!txtgsqto.getText().equals("")){
+          strSQL+="AND AD_GSM <= "+strGSQTo+" ";
+        }
+       if(txtAgreedNature.getText().equals("0")){
+           strSQL+=" ";
+        }
+      if(txtAgreedNature.getText().equals("1")){
+           strSQL+="AND AD_NATURE ='LOCKED' ";
+        }
+
+       if(txtAgreedNature.getText().equals("2")){
+           strSQL+=" AND AD_NATURE ='EVALUATED' ";
+        }
+       if(txtAgreedNature.getText().equals("3")){
+           strSQL+="AND AD_NATURE ='PLANNING' ";
+        }
+       if(txtAgreedNature.getText().equals("4")){
+           strSQL+="AND  AD_FELT_RCVD ='3.NOT RECIEVED' ";
+        }
+       if(txtAgreedNature.getText().equals("5")){
+           strSQL+="AND  AD_FELT_RCVD ='1.EARLY' ";
+        }
+       if(txtAgreedNature.getText().equals("6")){
+           strSQL+="AND  AD_FELT_RCVD ='2.DELAYED' ";
+        }
+        if(txtAgreedNature.getText().equals("7")){
+           strSQL+="AND  AD_FELT_INVOICED ='1.RCVD EARLY,INVOICED EARLY' ";
+        }
+          
+          if(txtAgreedNature.getText().equals("8")){
+           strSQL+="AND AD_FELT_INVOICED ='2.RCVD EARLY INVOICED DELAY' ";
+        }
+
+               if(txtAgreedNature.getText().equals("9")){
+           strSQL+="AND  AD_FELT_INVOICED ='3.RCVD EARLY NOT INVOICED' ";
+       }
+          
+        if(txtAgreedNature.getText().equals("10")){
+           strSQL+="AND  AD_FELT_INVOICED ='4.RCVD DELAY INVOICED<= 5 DAYS' ";
+       }
+       if(txtAgreedNature.getText().equals("11")){
+           strSQL+="AND  AD_FELT_INVOICED ='5.RCVD DELAY INVOICED > 5 DAYS' ";
+       }
+   
+       if(txtAgreedNature.getText().equals("12")){
+           strSQL+="AND  AD_FELT_INVOICED ='5.RCVD DELAY NOT INVOICED' ";
+       }
+       if(txtAgreedNature.getText().equals("13")){
+           strSQL+="AND  AD_RCVD_DATE !='0000-00-00' ";
+       }
+       if(txtAgreedNature.getText().equals("14")){
+           strSQL+="AND  AD_INVOICE_DATE !='0000-00-00' ";
+       }
+          
+          
+          
+          
+              int inchargeby=EITLERPGLOBAL.getComboCode(cmbIncharge);
+        if(inchargeby==0){
+          strSQL+="";    
+        }
+        if(inchargeby==1){
+          strSQL+=" AND FI.INCHARGE_CD=1";    
+        }         
+        if(inchargeby==2){
+          strSQL+=" AND FI.INCHARGE_CD=2";    
+        }
+        if(inchargeby==3){
+          strSQL+=" AND FI.INCHARGE_CD=3";    
+        }
+        if(inchargeby==4){
+          strSQL+=" AND FI.INCHARGE_CD=4";    
+        }
+        if(inchargeby==5){
+          strSQL+="  AND FI.INCHARGE_CD=5";    
+        }
+        if(inchargeby==6){
+          strSQL+=" AND  FI.INCHARGE_CD=6";    
+        }
+        if(inchargeby==7){
+          strSQL+=" AND D.INCHARGE_CD IS NULL";    
+        }   
+          
+              int Orderby=EITLERPGLOBAL.getComboCode(cmbAgreedOrder);            
+            if(Orderby==1) {
+                strSQL+=" ORDER BY AD_AGREED_DATE,PARTY_CODE,AD_PIECE_NO ";
+            }            
+            if(Orderby==2) {
+                strSQL+=" ORDER BY AD_PIECE_NO";
+            }  
+            if(Orderby==3) {
+                strSQL+=" ORDER BY AD_PARTY_CODE,AD_PIECE_NO";
+            }  
+            if(Orderby==4) {
+                strSQL+=" ORDER BY AD_ORDER_DATE DESC ,AD_PIECE_NO";
+            }  
+            if(Orderby==5) {
+                strSQL+=" ORDER BY AD_FELT_RCVD,AD_AGREED_DATE,AD_PIECE_NO";
+            }  
+            if(Orderby==6) {
+                strSQL+=" ORDER BY AD_FELT_INVOICED,AD_AGREED_DATE,AD_PIECE_NO";
+            }  
+            if(Orderby==7) {
+                strSQL+=" ORDER BY AD_RCVD_DATE DESC,AD_AGREED_DATE,AD_PIECE_NO";
+            }  
+            if(Orderby==8) {
+                strSQL+=" ORDER BY AD_INVOICE_DATE DESC,AD_AGREED_DATE,AD_PIECE_NO";
+            }  
+            if(Orderby==9) {
+                strSQL+=" ORDER BY AD_WVG_DATE DESC,AD_MND_DATE DESC,AD_NDL_DATE DESC,AD_PIECE_NO";
+            }  
+           if(Orderby==10) {
+                strSQL+=" ORDER BY AD_MND_DATE DESC,AD_NDL_DATE DESC, AD_WVG_DATE DESC ,AD_PIECE_NO";
+            }  
+               if(Orderby==11) {
+                strSQL+=" ORDER BY AD_NDL_DATE DESC,AD_MND_DATE DESC,AD_WVG_DATE DESC,AD_PIECE_NO";
+            }  
+               if(Orderby==12) {
+                strSQL+=" ORDER BY AD_RCVD_DATE DESC ,AD_NDL_DATE DESC,AD_MND_DATE DESC,AD_WVG_DATE DESC,AD_PIECE_NO";
+            }  
+          
+          
+          
+  /*        
+  
+           int natureby=EITLERPGLOBAL.getComboCode(cmbAgreedDate);            
+            if(natureby==0) {
+                strSQL+=" ";
+            }            
+            if(natureby==1) {
+                strSQL+=" AD_NATURE ='LOCKED' ";
+            }            
+            if(natureby==2) {
+              strSQL+=" AD_NATURE ='EVALUATED' ";
+            }
+            if(natureby==3) {
+              strSQL+=" AD_NATURE ='PLANNING' ";
+            }
+              
+          */
+          //      strSQL+=" NATURE =   ";
+          
+   /*     
+        int Orderby=EITLERPGLOBAL.getComboCode(cmbAgreedOrder);            
+            if(Orderby==1) {
+                strSQL+=" ORDER BY PIECE_NO ";
+            }            
+            if(Orderby==2) {
+                strSQL+=" ORDER BY PARTY_CD";
+            }
+       */   
+        System.out.println(strSQL);
+        rsTmp=data.getResult(strSQL);
+        rsTmp.first();
+        if(rsTmp.getRow()>0) {
+                int cnt=0;
+                while(!rsTmp.isAfterLast()) {
+                    cnt++;
+                   
+                    txtAgreedrecordtotal.setText(Integer.toString(cnt));                    
+                    Object[] rowData=new Object[40];
+                    rowData[0]=Integer.toString(cnt);
+                    //rowData[1]=rsTmp.getString("PARTY_CODE");
+                    rowData[1]=EITLERPGLOBAL.formatDate(rsTmp.getString("AD_AGREED_DATE"));
+                    rowData[2]=rsTmp.getString("AD_NATURE");
+                    rowData[3]=rsTmp.getString("AD_PARTY_CODE");
+                    rowData[4]=rsTmp.getString("AD_PARTY_NAME");
+                    rowData[5]=rsTmp.getString("AD_PIECE_STATUS");
+                    rowData[6]=rsTmp.getString("AD_PIECE_NO");
+                    rowData[7]=EITLERPGLOBAL.formatDate(rsTmp.getString("AD_ORDER_DATE"));
+                    rowData[8]=rsTmp.getString("AD_PRODUCT_CODE");
+                    rowData[9]=rsTmp.getString("AD_GROUP");
+                    rowData[10]=rsTmp.getString("AD_STYLE");
+                    rowData[11]=rsTmp.getString("AD_GSM");
+                    rowData[12]=EITLERPGLOBAL.formatDate(rsTmp.getString("AD_WVG_DATE"));
+                    rowData[13]=rsTmp.getString("AD_WVG_DELAY");
+                    rowData[14]=EITLERPGLOBAL.formatDate(rsTmp.getString("AD_MND_DATE"));
+                    rowData[15]=EITLERPGLOBAL.formatDate(rsTmp.getString("AD_NDL_DATE"));
+                    rowData[16]=EITLERPGLOBAL.formatDate(rsTmp.getString("AD_RCVD_DATE"));
+                    rowData[17]=rsTmp.getString("AD_ORDER_MTR");
+                    rowData[18]=rsTmp.getString("AD_RCVD_MTR");
+                    rowData[19]=rsTmp.getString("AD_ORDER_WIDTH");
+                    rowData[20]=rsTmp.getString("AD_RCVD_WIDTH");
+                    rowData[21]=rsTmp.getString("AD_TH_WIEGHT");
+                    rowData[22]=rsTmp.getString("AD_ACT_WIEGHT");
+                    rowData[23]=EITLERPGLOBAL.formatDate(rsTmp.getString("AD_INVOICE_DATE"));
+                    rowData[24]=rsTmp.getString("AD_INVOICE_NO");
+                    rowData[25]=rsTmp.getString("AD_FELT_RCVD");
+                    rowData[26]=rsTmp.getString("AD_FELT_INVOICED");
+                    rowData[27]=rsTmp.getString("AD_RCD_AD_DIFF");
+                    rowData[28]=rsTmp.getString("AD_AD_ID_DIFF");
+                    rowData[29]=rsTmp.getString("AD_RC_ID_DIFF");
+                    rowData[30]=rsTmp.getString("AD_NOT_MNF");
+                  
+                    DataModelAgreedDate.addRow(rowData);
+                    rsTmp.next();
+                }
+         }
+      }
+      catch(Exception e){
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null,e.getMessage());
+      }        
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private void DisplayIndicators() {
+        CellPainter=new EITLTableCellRenderer();
+        //CellPainter.removeBackColors();
+        //CellPainter.removeForeColors();
+        
+        //TableProductionProcess.getColumnModel().getColumn(1).setCellRenderer(CellPainter);
+        //TableProductionProcess.getColumnModel().getColumn(1).setCellRenderer(CellPainter);
+        //TableStock.getColumnModel().getColumn(5).setCellRenderer(CellPainter);
+        for(int j=0;j<TableStock.getColumnCount();j++){
+            TableStock.getColumnModel().getColumn(j).setCellRenderer(CellPainter);
+        }
+        
+        /*        
+        for(int i=0;i<TableProductionProcess.getRowCount();i++) {
+            
+            String ItemID=(String)TableProductionProcess.getValueAt(i,1);
+            //String Approval=clsItem.getItemAuthority(EITLERPGLOBAL.gCompanyID,ItemID);
+            //String Approval=clsItemCriteria.getApprovalAuthority(ItemID, EITLERPGLOBAL.getComboCode(cmbForDept));
+            
+            
+            if(ItemID.equals("HIGH")) {
+                CellPainter.setBackColor(i,1,Color.YELLOW);
+                CellPainter.setForeColor(i,1,Color.BLACK);
+            }
+        } 
+        */
+        for(int i=0;i<=TableStock.getRowCount();i++){
+            String ItemID=(String)TableStock.getValueAt(i,49);           
+             for(int j=0;j<TableStock.getColumnCount();j++){
+            if(ItemID.equals("B")){
+                //CellPainter.setBackColor(i,5,Color.RED);
+                //CellPainter.setForeColor(i,5,Color.BLACK);
+               
+                    CellPainter.setBackColor(i,j,Color.RED);
+                    CellPainter.setForeColor(i,j,Color.WHITE);
+                }
+            }
+        }
+        
+    }
+     private void processSalesTarget(){
+        try{
+            Connection conn=data.getConn();
+            Statement stmt=conn.createStatement();
+            
+            
+            stmt.execute("UPDATE PRODUCTION.FELT_PARTY_ITEM_POSITION_TARGET T, ( SELECT PARTY_CODE,QNO,SUM(COALESCE(CASE WHEN  INVOICE_DATE >= '2016-04-01' AND INVOICE_DATE <='2016-06-30'  THEN TOTAL_NET_AMOUNT END,0))  AS SQ1,SUM(COALESCE(CASE WHEN  INVOICE_DATE >= '2016-07-01' AND INVOICE_DATE <='2016-09-30'  THEN TOTAL_NET_AMOUNT END,0))  AS SQ2,SUM(COALESCE(CASE WHEN  INVOICE_DATE >= '2016-10-01' AND INVOICE_DATE <='2016-12-31'  THEN TOTAL_NET_AMOUNT END,0))  AS SQ3,SUM(COALESCE(CASE WHEN  INVOICE_DATE >= '2017-01-01' AND INVOICE_DATE <='2017-03-31'  THEN TOTAL_NET_AMOUNT END,0))  AS SQ4,SUM(COALESCE(CASE WHEN  INVOICE_DATE >= '2016-04-01' AND INVOICE_DATE <='2017-03-31'  THEN TOTAL_NET_AMOUNT END,0))  AS T_SALES  FROM (SELECT PARTY_CODE, CASE WHEN QUALITY_NO IN ( 1551000 , 2251000 , 2590000 , 2590100 ,2690000, 2690100, 7190110.7190310,7190410,7190510, 7290000 ) THEN QUALITY_NO  WHEN QUALITY_NO IN ( 6190000, 6290000,6390000 ) THEN 'ACNE'  WHEN QUALITY_NO NOT IN ( 1551000 , 2251000 , 2590000 , 2590100 ,2690000, 2690100, 6190000, 6290000,6390000,7190110 , 7190310,7190410,7190510, 7290000 )  THEN  'OTHER'   END AS QNO,TOTAL_NET_AMOUNT,INVOICE_DATE  FROM PRODUCTION.FELT_INVOICE_DATA   WHERE INVOICE_DATE >= '2016-04-01' AND INVOICE_DATE <='2017-03-31') AS Q GROUP BY PARTY_CODE,QNO) AS I SET TOTAL_SALES = T_SALES,SALES_QTR1= SQ1,SALES_QTR2= SQ2,SALES_QTR3= SQ3,SALES_QTR4= SQ4 WHERE I.PARTY_CODE = T.PARTY_CODE AND I.QNO  = T.PRODUCT_CODE");
+            
+            stmt.execute("UPDATE PRODUCTION.FELT_PARTY_ITEM_POSITION_TARGET T, ( SELECT PARTY_CODE,QNO,SUM(COALESCE(CASE WHEN  INVOICE_DATE >= '2015-04-01' AND INVOICE_DATE <='2016-03-31'  THEN TOTAL_NET_AMOUNT END,0))  AS T_SALES  FROM (SELECT PARTY_CODE, CASE WHEN QUALITY_NO IN ( 1551000 , 2251000 , 2590000 , 2590100 ,2690000, 2690100, 7190110.7190310,7190410,7190510, 7290000 )THEN QUALITY_NO  WHEN QUALITY_NO IN ( 6190000, 6290000,6390000 )THEN 'ACNE'  WHEN QUALITY_NO NOT IN ( 1551000 , 2251000 , 2590000 , 2590100 ,2690000, 2690100, 6190000, 6290000,6390000,7190110 , 7190310,7190410,7190510, 7290000 )THEN 'OTHER' END AS QNO,TOTAL_NET_AMOUNT,INVOICE_DATE  FROM PRODUCTION.FELT_INVOICE_DATA   WHERE INVOICE_DATE >= '2015-04-01' AND INVOICE_DATE <='2016-03-31' LIMIT 100000) AS Q GROUP BY PARTY_CODE,QNO) AS I SET LAST_YR_SALES = T_SALES WHERE I.PARTY_CODE = T.PARTY_CODE AND I.QNO  = T.PRODUCT_CODE");
+            
+            stmt.execute("UPDATE PRODUCTION.FELT_PARTY_ITEM_POSITION_TARGET T, (SELECT PARTY_CODE,'TOTAL' AS QNO,SUM(TOTAL_NET_AMOUNT)  AS T_SALES FROM PRODUCTION.FELT_INVOICE_DATA WHERE INVOICE_DATE >= '2015-04-01' AND INVOICE_DATE <='2016-03-31' GROUP BY PARTY_CODE) AS I SET LAST_YR_SALES = T_SALES WHERE I.PARTY_CODE = T.PARTY_CODE  AND I.QNO  = T.PRODUCT_CODE");
+            
+            stmt.execute("UPDATE PRODUCTION.FELT_PARTY_ITEM_POSITION_TARGET T, ( SELECT PARTY_CODE,'TOTAL' AS QNO,SUM(COALESCE(CASE WHEN  INVOICE_DATE >= '2016-04-01' AND INVOICE_DATE <='2016-06-30'  THEN TOTAL_NET_AMOUNT END,0))  AS SQ1,SUM(COALESCE(CASE WHEN  INVOICE_DATE >= '2016-07-01' AND INVOICE_DATE <='2016-09-30'  THEN TOTAL_NET_AMOUNT END,0))  AS SQ2,SUM(COALESCE(CASE WHEN  INVOICE_DATE >= '2016-10-01' AND INVOICE_DATE <='2016-12-31'  THEN TOTAL_NET_AMOUNT END,0))  AS SQ3,SUM(COALESCE(CASE WHEN  INVOICE_DATE >= '2017-01-01' AND INVOICE_DATE <='2017-03-31'  THEN TOTAL_NET_AMOUNT END,0))  AS SQ4,SUM(COALESCE(CASE WHEN  INVOICE_DATE >= '2016-04-01' AND INVOICE_DATE <='2017-03-31'  THEN TOTAL_NET_AMOUNT END,0))  AS T_SALES FROM PRODUCTION.FELT_INVOICE_DATA WHERE INVOICE_DATE >= '2016-04-01' AND INVOICE_DATE <='2017-03-31' GROUP BY PARTY_CODE) AS I SET TOTAL_SALES = T_SALES,SALES_QTR1= SQ1,SALES_QTR2= SQ2,SALES_QTR3= SQ3,SALES_QTR4= SQ4 WHERE I.PARTY_CODE = T.PARTY_CODE AND I.QNO  = T.PRODUCT_CODE");
+            
+            stmt.execute("UPDATE PRODUCTION.FELT_PARTY_ITEM_POSITION_TARGET SET SALES_Q1Q2 = ROUND(SALES_QTR1+ SALES_QTR2,0)");
+            
+            stmt.execute("UPDATE PRODUCTION.FELT_PARTY_ITEM_POSITION_TARGET SET SALES_Q1Q2Q3 = ROUND(SALES_QTR1+ SALES_QTR2 + SALES_QTR3,0)");
+            
+            stmt.execute("UPDATE PRODUCTION.FELT_PARTY_ITEM_POSITION_TARGET SET PER_Q1 = COALESCE(ROUND(((SALES_QTR1 - TGT_QTR_1)/TGT_QTR_1) *100,1),0),PER_Q2 = COALESCE(ROUND(((SALES_QTR2 - TGT_QTR_2)/TGT_QTR_2) *100,1),0),PER_Q3 = COALESCE(ROUND(((SALES_QTR3 - TGT_QTR_3)/TGT_QTR_3) *100,1),0),PER_Q4 = COALESCE(ROUND(((SALES_QTR4 - TGT_QTR_4)/TGT_QTR_4) *100,1),0),PER_Q1Q2 =  COALESCE(ROUND(((SALES_Q1Q2  - TOTAL_TGT)/TOTAL_TGT) *100,1),0),PER_Q1Q2Q3 =  COALESCE(ROUND(((SALES_Q1Q2Q3  - TOTAL_TGT)/TOTAL_TGT) *100,1),0),PER_YR = COALESCE(ROUND(((TOTAL_SALES - TOTAL_TGT)/TOTAL_TGT) *100,1),0),PER_LAST_YR = COALESCE(ROUND(((TOTAL_SALES - LAST_YR_SALES)/TOTAL_SALES) *100,1),0)");
+            
+   
+            
+           
+            
+        //    stmt.execute("INSERT INTO TEMP_DATABASE.TM80 SELECT CND_MAIN_ACCOUNT_CODE,CASE WHEN CND_SUB_ACCOUNT_CODE=317707 THEN 319907 ELSE CND_SUB_ACCOUNT_CODE END,SUM(CND_INVOICE_AMOUNT) AS INVAMT,0 AS B FROM SALES.D_CREDIT_NOTE_DETAIL WHERE CND_TYPE ='LCQTR'  AND CND_INVOICE_DATE >='"+EITLERPGLOBAL.formatDateDB(txtFromDate.getText())+"'  AND CND_INVOICE_DATE <='"+EITLERPGLOBAL.formatDateDB(txtToDate.getText())+"'  GROUP BY CND_MAIN_ACCOUNT_CODE,CASE WHEN CND_SUB_ACCOUNT_CODE=317707 THEN 319907 ELSE CND_SUB_ACCOUNT_CODE END UNION ALL SELECT 210027 AS A,PARTY_CODE,SUM(NET_AMOUNT) AS INVAMT,0 AS B FROM DINESHMILLS.D_SAL_INVOICE_HEADER WHERE INVOICE_TYPE =1  AND INVOICE_DATE >='"+EITLERPGLOBAL.formatDateDB(txtFromDate.getText())+"'  AND INVOICE_DATE <='"+EITLERPGLOBAL.formatDateDB(txtToDate.getText())+"'  AND PARTY_CODE IN (670201,279965,319907,619913,317707,549901,279965,739901,739990) AND SUBSTRING(PAYMENT_TERM_CODE,1,1)  IN (9) GROUP BY  PARTY_CODE");
+      
+        }catch(SQLException e){e.printStackTrace();}
+        
+    }
+    
+    private void CheckPIPiece(){
+        
+        TableStock.getColumnModel().getColumn(5).setCellRenderer(CellPaint);
+        try{
+                  for(int i=0;i<=TableStock.getRowCount();i++){
+                      String TableStockPieceno=(String)TableStock.getValueAt(i,5);
+                      System.out.println(TableStockPieceno);
+                          //if(data.getIntValueFromDB("SELECT COUNT(PIECE_NO) FROM PRODUCTION.FELT_PROFORMA_INVOICE_DETAIL WHERE PIECE_NO = "+TableStockPieceno+"")==1){
+                         if(data.getIntValueFromDB("SELECT COUNT(PIECE_NO) FROM (SELECT * FROM PRODUCTION.FELT_PROFORMA_INVOICE_HEADER WHERE APPROVED=1) AS A LEFT JOIN (SELECT PIECE_NO,PROFORMA_NO FROM PRODUCTION.FELT_PROFORMA_INVOICE_DETAIL WHERE PIECE_NO="+TableStockPieceno+") AS B ON A.PROFORMA_NO=B.PROFORMA_NO")>=1){
+                           CellPaint.setBackColor(i,5,Color.YELLOW);
+                          CellPaint.setForeColor(i,5,Color.BLACK);   
+                      }
+                      
+                      
+                        //for(int j=0;j<=rsPiece.;j++){
+          //ResultSet rsPiece;
+          //String strSQL= "";
+          //strSQL+="SELECT PIECE_NO FROM PRODUCTION.FELT_PROFORMA_INVOICE_DETAIL"; 
+          //System.out.println(strSQL);
+          //rsPiece=data.getResult(strSQL);
+          //rsPiece.first();
+          /*
+              if(rsPiece.getRow()>0) {
+          
+                          while(rsPiece.next()){                           
+         
+                         String pieceno=rsPiece.getString("PIECE_NO");
+                         System.out.println(pieceno);
+                         if(TableStockPieceno.equals(pieceno)){
+                          CellPaint.setBackColor(i,5,Color.YELLOW);
+                          CellPaint.setForeColor(i,5,Color.BLACK);   
+                         }
+                         
+                 }                
+          } 
+           */  
+        }
+        
+    }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+}

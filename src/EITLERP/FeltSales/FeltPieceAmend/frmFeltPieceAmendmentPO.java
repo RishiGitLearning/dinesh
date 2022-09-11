@@ -1,0 +1,2594 @@
+/*
+ * frmFeltPieceAmend.java
+ *
+ * Created on March 12, 2013, 3:10 PM
+ */
+package EITLERP.FeltSales.FeltPieceAmend;
+
+/**
+ *
+ * @author RISHI RAJ NEEKHRA
+ */
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.TableColumnModel;
+import javax.swing.event.TableModelListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.Action;
+import javax.swing.AbstractAction;
+import javax.swing.text.JTextComponent;
+import java.awt.event.ActionEvent;
+import java.awt.Color;
+import java.util.HashMap;
+import EITLERP.*;
+import java.net.URL;
+import EITLERP.data;
+import EITLERP.LOV;
+import EITLERP.EITLComboModel;
+import EITLERP.EITLTableModel;
+import EITLERP.EITLERPGLOBAL;
+import EITLERP.BigEdit;
+import EITLERP.clsUser;
+import EITLERP.clsDepartment;
+import EITLERP.clsHierarchy;
+import EITLERP.clsAuthority;
+import EITLERP.clsDocFlow;
+import EITLERP.ComboData;
+import EITLERP.Loader;
+import EITLERP.AppletFrame;
+import EITLERP.FeltSales.common.JavaMail;
+import EITLERP.FeltSales.common.file_management.clsDocPONoUpdation;
+import EITLERP.frmPendingApprovals;
+import EITLERP.Production.clsFeltProductionApprovalFlow;
+import EITLERP.Production.FeltUser;
+import java.awt.Component;
+import java.awt.Desktop;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.UIManager;
+import javax.swing.table.TableCellRenderer;
+
+public class frmFeltPieceAmendmentPO extends javax.swing.JApplet {
+
+    private int EditMode = 0;
+    private int SelHierarchyID = 0; //Selected Hierarchy
+    private int lnFromUserId = 0;
+    private String SelPrefix = ""; //Selected Prefix
+    private String SelSuffix = ""; //Selected Prefix
+    private int FFNo = 0;
+    public int DeptID = EITLERPGLOBAL.gUserDeptID;
+    public String finalapproved = "";
+
+    public boolean PENDING_DOCUMENT = false; //for refresh pending document module
+    private boolean DoNotEvaluate = false;
+
+    private clsFeltPieceAmendmentPO ObjFeltOrderUpd;
+
+    private EITLComboModel cmbHierarchyModel;
+    private EITLComboModel cmbSendToModel;
+    private EITLComboModel cmbAmendReasonModel;
+
+    private EITLTableModel DataModelApprovalStatus;
+    private EITLTableModel DataModelUpdateHistory;
+    private EITLTableModel DataModel;
+    private EITLTableModel DataModelDoc;
+
+    public frmPendingApprovals frmPA;
+
+    /**
+     * Creates new form frmFeltPieceAmend
+     */
+    public void init() {
+        System.gc();
+        setSize(830, 590);
+        initComponents();
+        //      txtamendreasoncode.setVisible(false);
+        txtamendreasonname.setVisible(false);
+
+        cmbAmendReason.setVisible(false);
+        txtamendreasoncode.setVisible(false);
+        txtamendreasonname.setVisible(false);
+
+        //Now show the Images
+        cmdTop.setIcon(EITLERPGLOBAL.getImage("TOP"));
+        cmdBack.setIcon(EITLERPGLOBAL.getImage("BACK"));
+        cmdNext.setIcon(EITLERPGLOBAL.getImage("NEXT"));
+        cmdLast.setIcon(EITLERPGLOBAL.getImage("LAST"));
+        cmdNew.setIcon(EITLERPGLOBAL.getImage("NEW"));
+        cmdEdit.setIcon(EITLERPGLOBAL.getImage("EDIT"));
+        cmdDelete.setIcon(EITLERPGLOBAL.getImage("DELETE"));
+        cmdSave.setIcon(EITLERPGLOBAL.getImage("SAVE"));
+        cmdCancel.setIcon(EITLERPGLOBAL.getImage("UNDO"));
+        cmdFilter.setIcon(EITLERPGLOBAL.getImage("FIND"));
+        cmdPreview.setIcon(EITLERPGLOBAL.getImage("PREVIEW"));
+        cmdPrint.setIcon(EITLERPGLOBAL.getImage("PRINT"));
+        cmdExit.setIcon(EITLERPGLOBAL.getImage("EXIT"));
+
+        DataModel = new EITLTableModel();
+        ObjFeltOrderUpd = new clsFeltPieceAmendmentPO();
+        lblTitle.setForeground(Color.WHITE);
+        //    DeptID = 40 ;
+        SetMenuForRights();
+        GenerateHierarchyCombo();
+        GenerateSendToCombo();
+        GenerateAmendReasonCombo();
+        FormatGrid();
+        cmbAmendReason.setEnabled(false);
+        if (ObjFeltOrderUpd.LoadData()) {
+            DisplayData();
+        } else {
+            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Error occured while Loading Data. Error is " + ObjFeltOrderUpd.LastError, "DATA LOADING ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+
+        cmbAmendReasonItemStateChanged(null);
+//        cmdAddPO.setEnabled(false);
+        cmdRemovePO.setEnabled(false);
+        cmdAddPO.setVisible(false);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jPopupMenu = new javax.swing.JPopupMenu();
+        jMenuItemWarping = new javax.swing.JMenuItem();
+        jMenuItemOrder = new javax.swing.JMenuItem();
+        ToolBar = new javax.swing.JToolBar();
+        cmdTop = new javax.swing.JButton();
+        cmdBack = new javax.swing.JButton();
+        cmdNext = new javax.swing.JButton();
+        cmdLast = new javax.swing.JButton();
+        cmdNew = new javax.swing.JButton();
+        cmdEdit = new javax.swing.JButton();
+        cmdDelete = new javax.swing.JButton();
+        cmdSave = new javax.swing.JButton();
+        cmdCancel = new javax.swing.JButton();
+        cmdFilter = new javax.swing.JButton();
+        cmdPreview = new javax.swing.JButton();
+        cmdPrint = new javax.swing.JButton();
+        cmdExit = new javax.swing.JButton();
+        lblTitle = new javax.swing.JLabel();
+        Tab = new javax.swing.JTabbedPane();
+        Tab1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        txtAmendDate = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Table = new javax.swing.JTable();
+        cmdAdd = new javax.swing.JButton();
+        cmdRemove = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        cmdNextToTab1 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        txtAmendID = new javax.swing.JTextField();
+        lblRevNo = new javax.swing.JLabel();
+        cmbAmendReason = new javax.swing.JComboBox();
+        txtamendreasoncode = new javax.swing.JTextField();
+        txtamendreasonname = new javax.swing.JTextField();
+        Tab2 = new javax.swing.JPanel();
+        jLabel31 = new javax.swing.JLabel();
+        cmbHierarchy = new javax.swing.JComboBox();
+        jLabel32 = new javax.swing.JLabel();
+        txtFrom = new javax.swing.JTextField();
+        jLabel35 = new javax.swing.JLabel();
+        txtFromRemarks = new javax.swing.JTextField();
+        jLabel36 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        OpgApprove = new javax.swing.JRadioButton();
+        OpgFinal = new javax.swing.JRadioButton();
+        OpgReject = new javax.swing.JRadioButton();
+        OpgHold = new javax.swing.JRadioButton();
+        jLabel33 = new javax.swing.JLabel();
+        cmbSendTo = new javax.swing.JComboBox();
+        jLabel34 = new javax.swing.JLabel();
+        txtToRemarks = new javax.swing.JTextField();
+        cmdBackToTab0 = new javax.swing.JButton();
+        cmdFromRemarksBig = new javax.swing.JButton();
+        cmdNextToTab2 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel26 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TableApprovalStatus = new javax.swing.JTable();
+        lblDocumentHistory = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        TableUpdateHistory = new javax.swing.JTable();
+        cmdBackToTab1 = new javax.swing.JButton();
+        cmdBackToNormal = new javax.swing.JButton();
+        cmdViewRevisions = new javax.swing.JButton();
+        cmdShowRemarks = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
+        cmdAddPO = new javax.swing.JButton();
+        cmdRemovePO = new javax.swing.JButton();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        DocTable = new javax.swing.JTable();
+        lblStatus = new javax.swing.JLabel();
+
+        jMenuItemWarping.setText("Warping Report");
+        jMenuItemWarping.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemWarpingActionPerformed(evt);
+            }
+        });
+        jPopupMenu.add(jMenuItemWarping);
+
+        jMenuItemOrder.setText("Order Detail");
+        jMenuItemOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemOrderActionPerformed(evt);
+            }
+        });
+        jPopupMenu.add(jMenuItemOrder);
+
+        getContentPane().setLayout(null);
+
+        ToolBar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        ToolBar.setRollover(true);
+
+        cmdTop.setToolTipText("First Record");
+        cmdTop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdTopActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdTop);
+
+        cmdBack.setToolTipText("Previous Record");
+        cmdBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdBackActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdBack);
+
+        cmdNext.setToolTipText("Next record");
+        cmdNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdNextActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdNext);
+
+        cmdLast.setToolTipText("Last Record");
+        cmdLast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdLastActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdLast);
+
+        cmdNew.setToolTipText("New Record");
+        cmdNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdNewActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdNew);
+
+        cmdEdit.setToolTipText("Edit Record");
+        cmdEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdEditActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdEdit);
+
+        cmdDelete.setToolTipText("Delete Record");
+        cmdDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdDeleteActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdDelete);
+
+        cmdSave.setToolTipText("Save");
+        cmdSave.setEnabled(false);
+        cmdSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdSaveActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdSave);
+
+        cmdCancel.setToolTipText("Cancel");
+        cmdCancel.setEnabled(false);
+        cmdCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdCancelActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdCancel);
+
+        cmdFilter.setToolTipText("Find");
+        cmdFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdFilterActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdFilter);
+
+        cmdPreview.setToolTipText("Preview");
+        cmdPreview.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdPreviewActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdPreview);
+
+        cmdPrint.setToolTipText("Print");
+        cmdPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdPrintActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdPrint);
+
+        cmdExit.setToolTipText("Exit");
+        cmdExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdExitActionPerformed(evt);
+            }
+        });
+        ToolBar.add(cmdExit);
+
+        getContentPane().add(ToolBar);
+        ToolBar.setBounds(0, 0, 830, 40);
+
+        lblTitle.setBackground(new java.awt.Color(0, 102, 153));
+        lblTitle.setText("PO No and Date Updation - ");
+        lblTitle.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        lblTitle.setOpaque(true);
+        getContentPane().add(lblTitle);
+        lblTitle.setBounds(0, 40, 830, 25);
+
+        Tab1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Tab1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                Tab1FocusGained(evt);
+            }
+        });
+        Tab1.setLayout(null);
+
+        jLabel3.setText("Doc Date");
+        Tab1.add(jLabel3);
+        jLabel3.setBounds(10, 40, 80, 20);
+
+        txtAmendDate.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txtAmendDate.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtAmendDate.setEnabled(false);
+        txtAmendDate.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtAmendDateFocusGained(evt);
+            }
+        });
+        Tab1.add(txtAmendDate);
+        txtAmendDate.setBounds(90, 40, 130, 21);
+
+        Table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        Table.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        Table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableMouseClicked(evt);
+            }
+        });
+        Table.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TableFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                TableFocusLost(evt);
+            }
+        });
+        Table.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                TableKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TableKeyReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(Table);
+
+        Tab1.add(jScrollPane1);
+        jScrollPane1.setBounds(11, 80, 760, 280);
+
+        cmdAdd.setMnemonic('A');
+        cmdAdd.setText("Add");
+        cmdAdd.setToolTipText("Add Row");
+        cmdAdd.setEnabled(false);
+        cmdAdd.setNextFocusableComponent(cmdRemove);
+        cmdAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdAddActionPerformed(evt);
+            }
+        });
+        Tab1.add(cmdAdd);
+        cmdAdd.setBounds(470, 365, 90, 25);
+
+        cmdRemove.setMnemonic('R');
+        cmdRemove.setText("Remove");
+        cmdRemove.setToolTipText("Remove Selected Row");
+        cmdRemove.setEnabled(false);
+        cmdRemove.setNextFocusableComponent(cmdNextToTab1);
+        cmdRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdRemoveActionPerformed(evt);
+            }
+        });
+        Tab1.add(cmdRemove);
+        cmdRemove.setBounds(575, 365, 90, 25);
+
+        jPanel3.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        Tab1.add(jPanel3);
+        jPanel3.setBounds(6, 70, 770, 6);
+
+        cmdNextToTab1.setMnemonic('N');
+        cmdNextToTab1.setText("Next >>");
+        cmdNextToTab1.setToolTipText("Next Tab");
+        cmdNextToTab1.setNextFocusableComponent(cmdRemove);
+        cmdNextToTab1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdNextToTab1ActionPerformed(evt);
+            }
+        });
+        Tab1.add(cmdNextToTab1);
+        cmdNextToTab1.setBounds(680, 365, 90, 25);
+
+        jLabel5.setText("Doc No");
+        Tab1.add(jLabel5);
+        jLabel5.setBounds(10, 10, 80, 20);
+
+        txtAmendID.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txtAmendID.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtAmendID.setEnabled(false);
+        Tab1.add(txtAmendID);
+        txtAmendID.setBounds(90, 10, 160, 21);
+
+        lblRevNo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblRevNo.setText("...");
+        Tab1.add(lblRevNo);
+        lblRevNo.setBounds(230, 40, 20, 30);
+
+        cmbAmendReason.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        cmbAmendReason.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbAmendReasonItemStateChanged(evt);
+            }
+        });
+        cmbAmendReason.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbAmendReasonActionPerformed(evt);
+            }
+        });
+        Tab1.add(cmbAmendReason);
+        cmbAmendReason.setBounds(380, 10, 330, 24);
+
+        txtamendreasoncode.setEnabled(false);
+        txtamendreasoncode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtamendreasoncodeActionPerformed(evt);
+            }
+        });
+        Tab1.add(txtamendreasoncode);
+        txtamendreasoncode.setBounds(720, 10, 40, 19);
+
+        txtamendreasonname.setEnabled(false);
+        Tab1.add(txtamendreasonname);
+        txtamendreasonname.setBounds(590, 40, 170, 19);
+
+        Tab.addTab("Details", Tab1);
+
+        Tab2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Tab2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                Tab2FocusGained(evt);
+            }
+        });
+        Tab2.setLayout(null);
+
+        jLabel31.setText("Hierarchy ");
+        Tab2.add(jLabel31);
+        jLabel31.setBounds(7, 23, 62, 15);
+
+        cmbHierarchy.setNextFocusableComponent(OpgApprove);
+        cmbHierarchy.setEnabled(false);
+        cmbHierarchy.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbHierarchyItemStateChanged(evt);
+            }
+        });
+        cmbHierarchy.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                cmbHierarchyFocusGained(evt);
+            }
+        });
+        Tab2.add(cmbHierarchy);
+        cmbHierarchy.setBounds(86, 20, 184, 24);
+
+        jLabel32.setText("From");
+        Tab2.add(jLabel32);
+        jLabel32.setBounds(7, 62, 33, 15);
+
+        txtFrom.setBackground(new java.awt.Color(204, 204, 204));
+        txtFrom.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txtFrom.setDisabledTextColor(new java.awt.Color(204, 204, 204));
+        Tab2.add(txtFrom);
+        txtFrom.setBounds(86, 60, 184, 21);
+
+        jLabel35.setText("Remarks");
+        Tab2.add(jLabel35);
+        jLabel35.setBounds(7, 97, 61, 15);
+
+        txtFromRemarks.setBackground(new java.awt.Color(204, 204, 204));
+        txtFromRemarks.setEnabled(false);
+        Tab2.add(txtFromRemarks);
+        txtFromRemarks.setBounds(86, 95, 630, 19);
+
+        jLabel36.setText("Your Action");
+        Tab2.add(jLabel36);
+        jLabel36.setBounds(7, 130, 73, 15);
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel6.setLayout(null);
+
+        buttonGroup1.add(OpgApprove);
+        OpgApprove.setText("Approve & Forward");
+        OpgApprove.setEnabled(false);
+        OpgApprove.setNextFocusableComponent(OpgFinal);
+        OpgApprove.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                OpgApproveFocusGained(evt);
+            }
+        });
+        OpgApprove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                OpgApproveMouseClicked(evt);
+            }
+        });
+        jPanel6.add(OpgApprove);
+        OpgApprove.setBounds(6, 6, 150, 23);
+
+        buttonGroup1.add(OpgFinal);
+        OpgFinal.setText("Final Approve");
+        OpgFinal.setEnabled(false);
+        OpgFinal.setNextFocusableComponent(OpgReject);
+        OpgFinal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                OpgFinalMouseClicked(evt);
+            }
+        });
+        OpgFinal.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                OpgFinalFocusGained(evt);
+            }
+        });
+        jPanel6.add(OpgFinal);
+        OpgFinal.setBounds(6, 32, 120, 20);
+
+        buttonGroup1.add(OpgReject);
+        OpgReject.setText("Reject");
+        OpgReject.setEnabled(false);
+        OpgReject.setNextFocusableComponent(OpgHold);
+        OpgReject.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                OpgRejectMouseClicked(evt);
+            }
+        });
+        OpgReject.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                OpgRejectFocusGained(evt);
+            }
+        });
+        jPanel6.add(OpgReject);
+        OpgReject.setBounds(6, 54, 70, 20);
+
+        buttonGroup1.add(OpgHold);
+        OpgHold.setSelected(true);
+        OpgHold.setText("Hold Document");
+        OpgHold.setEnabled(false);
+        OpgHold.setNextFocusableComponent(cmbSendTo);
+        OpgHold.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                OpgHoldFocusGained(evt);
+            }
+        });
+        OpgHold.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                OpgHoldMouseClicked(evt);
+            }
+        });
+        jPanel6.add(OpgHold);
+        OpgHold.setBounds(6, 76, 130, 20);
+
+        Tab2.add(jPanel6);
+        jPanel6.setBounds(86, 130, 184, 100);
+
+        jLabel33.setText("Send To");
+        Tab2.add(jLabel33);
+        jLabel33.setBounds(7, 249, 50, 15);
+
+        cmbSendTo.setEnabled(false);
+        cmbSendTo.setNextFocusableComponent(txtToRemarks);
+        cmbSendTo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                cmbSendToFocusGained(evt);
+            }
+        });
+        Tab2.add(cmbSendTo);
+        cmbSendTo.setBounds(86, 245, 184, 24);
+
+        jLabel34.setText("Remarks");
+        Tab2.add(jLabel34);
+        jLabel34.setBounds(7, 288, 60, 15);
+
+        txtToRemarks.setNextFocusableComponent(cmdBackToTab0);
+        txtToRemarks.setEnabled(false);
+        txtToRemarks.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtToRemarksFocusGained(evt);
+            }
+        });
+        Tab2.add(txtToRemarks);
+        txtToRemarks.setBounds(86, 286, 630, 19);
+
+        cmdBackToTab0.setMnemonic('B');
+        cmdBackToTab0.setText("<< Back");
+        cmdBackToTab0.setToolTipText("Previous Tab");
+        cmdBackToTab0.setNextFocusableComponent(cmdRemove);
+        cmdBackToTab0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdBackToTab0ActionPerformed(evt);
+            }
+        });
+        Tab2.add(cmdBackToTab0);
+        cmdBackToTab0.setBounds(500, 350, 102, 25);
+
+        cmdFromRemarksBig.setText("...");
+        cmdFromRemarksBig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdFromRemarksBigActionPerformed(evt);
+            }
+        });
+        Tab2.add(cmdFromRemarksBig);
+        cmdFromRemarksBig.setBounds(728, 94, 49, 21);
+
+        cmdNextToTab2.setMnemonic('N');
+        cmdNextToTab2.setText("Next >>");
+        cmdNextToTab2.setToolTipText("Next Tab");
+        cmdNextToTab2.setNextFocusableComponent(cmdRemove);
+        cmdNextToTab2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdNextToTab2ActionPerformed(evt);
+            }
+        });
+        Tab2.add(cmdNextToTab2);
+        cmdNextToTab2.setBounds(620, 350, 102, 25);
+
+        Tab.addTab("Approval", Tab2);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setLayout(null);
+
+        jLabel26.setText("Document Approval Status");
+        jPanel1.add(jLabel26);
+        jLabel26.setBounds(8, 5, 170, 15);
+
+        TableApprovalStatus.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        TableApprovalStatus.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jScrollPane2.setViewportView(TableApprovalStatus);
+
+        jPanel1.add(jScrollPane2);
+        jScrollPane2.setBounds(12, 24, 760, 150);
+
+        lblDocumentHistory.setText("Document Update History");
+        jPanel1.add(lblDocumentHistory);
+        lblDocumentHistory.setBounds(8, 191, 163, 15);
+
+        TableUpdateHistory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        TableUpdateHistory.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jScrollPane3.setViewportView(TableUpdateHistory);
+
+        jPanel1.add(jScrollPane3);
+        jScrollPane3.setBounds(10, 210, 640, 180);
+
+        cmdBackToTab1.setMnemonic('B');
+        cmdBackToTab1.setText("<< Back");
+        cmdBackToTab1.setToolTipText("Previous Tab");
+        cmdBackToTab1.setIconTextGap(0);
+        cmdBackToTab1.setNextFocusableComponent(cmdRemove);
+        cmdBackToTab1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdBackToTab1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cmdBackToTab1);
+        cmdBackToTab1.setBounds(662, 390, 110, 25);
+
+        cmdBackToNormal.setText("Back To Normal");
+        cmdBackToNormal.setMargin(new java.awt.Insets(2, 3, 2, 3));
+        cmdBackToNormal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdBackToNormalActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cmdBackToNormal);
+        cmdBackToNormal.setBounds(662, 240, 110, 25);
+
+        cmdViewRevisions.setText("View Revisions");
+        cmdViewRevisions.setMargin(new java.awt.Insets(2, 5, 2, 5));
+        cmdViewRevisions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdViewRevisionsActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cmdViewRevisions);
+        cmdViewRevisions.setBounds(662, 210, 110, 25);
+
+        cmdShowRemarks.setText("Show Remarks");
+        cmdShowRemarks.setMargin(new java.awt.Insets(2, 5, 2, 5));
+        cmdShowRemarks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdShowRemarksActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cmdShowRemarks);
+        cmdShowRemarks.setBounds(662, 270, 110, 25);
+
+        Tab.addTab("Status", jPanel1);
+
+        jPanel7.setLayout(null);
+
+        jPanel11.setLayout(null);
+
+        cmdAddPO.setMnemonic('A');
+        cmdAddPO.setText("Add");
+        cmdAddPO.setToolTipText("Add Row");
+        cmdAddPO.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdAddPOActionPerformed(evt);
+            }
+        });
+        jPanel11.add(cmdAddPO);
+        cmdAddPO.setBounds(10, 40, 90, 25);
+
+        cmdRemovePO.setMnemonic('R');
+        cmdRemovePO.setText("Remove");
+        cmdRemovePO.setToolTipText("Remove Selected Row");
+        cmdRemovePO.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdRemovePOActionPerformed(evt);
+            }
+        });
+        jPanel11.add(cmdRemovePO);
+        cmdRemovePO.setBounds(120, 40, 90, 25);
+
+        DocTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane8.setViewportView(DocTable);
+
+        jPanel11.add(jScrollPane8);
+        jScrollPane8.setBounds(10, 70, 760, 330);
+
+        jPanel7.add(jPanel11);
+        jPanel11.setBounds(0, 10, 780, 410);
+
+        Tab.addTab("P.O. Attachment", jPanel7);
+
+        getContentPane().add(Tab);
+        Tab.setBounds(2, 66, 790, 450);
+
+        lblStatus.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblStatus.setForeground(new java.awt.Color(51, 51, 255));
+        lblStatus.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        getContentPane().add(lblStatus);
+        lblStatus.setBounds(2, 520, 790, 22);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void TableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TableKeyPressed
+        if (EditMode == EITLERPGLOBAL.ADD || EditMode == EITLERPGLOBAL.EDIT) {
+            long tAmendCode = cmbAmendReasonModel.getCode(cmbAmendReason.getSelectedIndex());
+            if (tAmendCode == 12) {
+                if (evt.getKeyCode() == 112) //F1 Key pressed
+                {
+                    if (Table.getSelectedColumn() == 1) {
+                        LOV aList = new LOV();
+
+                        String strSQL = "SELECT  A.PR_PIECE_NO,A.PR_PARTY_CODE,B.PARTY_NAME,A.PR_PIECE_STAGE "
+                                + " FROM PRODUCTION.FELT_SALES_PIECE_REGISTER A,DINESHMILLS.D_SAL_PARTY_MASTER B "
+                                + " WHERE A.PR_PIECE_STAGE NOT IN ('CANCELED','DIVERTED','DIVIDED','EXP-INVOICE','INVOICED','OSG STOCK','RETURN') "
+                                + " AND A.PR_PARTY_CODE=B.PARTY_CODE ORDER BY PR_PIECE_NO";
+                        aList.SQL = strSQL;
+                        aList.ReturnCol = 1;
+                        aList.ShowReturnCol = true;
+                        //aList.DefaultSearchOn=2;
+                        aList.DefaultSearchOn = 1;
+
+                        if (aList.ShowLOV()) {
+                            if (Table.getCellEditor() != null) {
+                                Table.getCellEditor().stopCellEditing();
+                            }
+                            Table.setValueAt(aList.ReturnVal, Table.getSelectedRow(), 1);
+                        }
+                    }
+                }
+                if (evt.getKeyCode() == KeyEvent.VK_TAB || evt.getKeyCode() == 10 || evt.getKeyCode() == KeyEvent.VK_RIGHT || evt.getKeyCode() == KeyEvent.VK_LEFT || evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
+                    if (Table.getSelectedColumn() == 4 || Table.getSelectedColumn() == 5) {
+                        String PoNo = Table.getValueAt(Table.getSelectedRow(), 4).toString();
+                        GenerateAttachmentTab(PoNo);
+                    }
+                }
+            }
+        }// TODO add your handling code here:
+    }//GEN-LAST:event_TableKeyPressed
+
+    private void TableFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TableFocusGained
+        ReasonResetReadonly();
+    }//GEN-LAST:event_TableFocusGained
+
+    private void TableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TableKeyReleased
+
+    }//GEN-LAST:event_TableKeyReleased
+
+    private void TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TableMouseClicked
+
+    private void txtamendreasoncodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtamendreasoncodeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtamendreasoncodeActionPerformed
+
+    private void cmbAmendReasonItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbAmendReasonItemStateChanged
+        long AmendCode = 0;
+        try {
+            System.out.println("Combo Code : " + cmbAmendReasonModel.getCode(cmbAmendReason.getSelectedIndex()));
+            AmendCode = cmbAmendReasonModel.getCode(cmbAmendReason.getSelectedIndex());
+        } catch (Exception e) {
+
+        }
+
+        lblStatus.setText(Integer.toString(cmbAmendReason.getSelectedIndex()));
+        int AmdReason = cmbAmendReason.getSelectedIndex();
+//        txtamendreasoncode.setText(Integer.toString(cmbAmendReason.getSelectedIndex()));
+        txtamendreasoncode.setText(String.valueOf(AmendCode));
+        txtamendreasonname.setText((String) cmbAmendReason.getSelectedItem());
+        ReasonResetReadonly();
+        cmbAmendReason.setEnabled(false);
+    }//GEN-LAST:event_cmbAmendReasonItemStateChanged
+
+    private void cmbAmendReasonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAmendReasonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbAmendReasonActionPerformed
+
+    private void jMenuItemOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOrderActionPerformed
+
+    }//GEN-LAST:event_jMenuItemOrderActionPerformed
+
+    private void jMenuItemWarpingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemWarpingActionPerformed
+
+    }//GEN-LAST:event_jMenuItemWarpingActionPerformed
+
+    private void cmdPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdPrintActionPerformed
+        //   new TReportWriter.TReportEngine().PreviewReport("http://"+EITLERPGLOBAL.HostIP+"/EITLERP/Reports/Production/rptFeltWeaving.rpt",new HashMap(),ObjFeltOrderUpd.getReportData(EITLERPGLOBAL.formatDateDB(txtFeltProductionDate.getText().trim())));
+        //  EITLERPGLOBAL.PAGE_BREAK=true;
+    }//GEN-LAST:event_cmdPrintActionPerformed
+
+    private void cmdPreviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdPreviewActionPerformed
+//        try {
+//            URL reportFile = new URL("http://" + EITLERPGLOBAL.HostIP + "/EITLERP/Reports/Production/rptFeltWeaving.jsp?dbURL=" + EITLERPGLOBAL.DatabaseURL + "&PROD_DATE=" + EITLERPGLOBAL.formatDateDB(txtAmendDate.getText()));
+//            EITLERPGLOBAL.loginContext.showDocument(reportFile, "_blank");
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "File error " + e.getMessage(), "FILE ERROR", JOptionPane.ERROR_MESSAGE);
+//            e.printStackTrace();
+//        }
+    }//GEN-LAST:event_cmdPreviewActionPerformed
+
+    private void cmdShowRemarksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdShowRemarksActionPerformed
+        if (TableUpdateHistory.getRowCount() > 0 && TableUpdateHistory.getSelectedRow() >= 0) {
+            BigEdit bigEdit = new BigEdit();
+            bigEdit.theText.setText(TableUpdateHistory.getValueAt(TableUpdateHistory.getSelectedRow(), 4).toString());
+            bigEdit.ShowEdit();
+        } else {
+            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Select a row from Document Update History");
+        }
+    }//GEN-LAST:event_cmdShowRemarksActionPerformed
+
+    private void cmdBackToNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackToNormalActionPerformed
+        ObjFeltOrderUpd.HistoryView = false;
+        ObjFeltOrderUpd.LoadData();
+        MoveLast();
+    }//GEN-LAST:event_cmdBackToNormalActionPerformed
+
+    private void cmdViewRevisionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdViewRevisionsActionPerformed
+        ObjFeltOrderUpd.ShowHistory(EITLERPGLOBAL.formatDateDB(txtAmendDate.getText()), txtAmendID.getText());
+        MoveLast();
+    }//GEN-LAST:event_cmdViewRevisionsActionPerformed
+
+    private void cmdBackToTab1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackToTab1ActionPerformed
+        Tab.setSelectedIndex(1);
+    }//GEN-LAST:event_cmdBackToTab1ActionPerformed
+
+    private void cmdNextToTab2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdNextToTab2ActionPerformed
+        Tab.setSelectedIndex(2);
+    }//GEN-LAST:event_cmdNextToTab2ActionPerformed
+
+    private void cmdFromRemarksBigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdFromRemarksBigActionPerformed
+        BigEdit bigEdit = new BigEdit();
+        bigEdit.theText = txtFromRemarks;
+        bigEdit.ShowEdit();
+    }//GEN-LAST:event_cmdFromRemarksBigActionPerformed
+
+    private void Tab2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_Tab2FocusGained
+        cmbHierarchy.requestFocus();
+    }//GEN-LAST:event_Tab2FocusGained
+
+    private void cmdBackToTab0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackToTab0ActionPerformed
+        Tab.setSelectedIndex(0);
+    }//GEN-LAST:event_cmdBackToTab0ActionPerformed
+
+    private void cmdNextToTab1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdNextToTab1ActionPerformed
+        Tab.setSelectedIndex(1);
+    }//GEN-LAST:event_cmdNextToTab1ActionPerformed
+
+    private void Tab1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_Tab1FocusGained
+        txtAmendDate.requestFocus();
+    }//GEN-LAST:event_Tab1FocusGained
+
+    private void txtToRemarksFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtToRemarksFocusGained
+        ShowMessage("Enter the remarks for next user");
+    }//GEN-LAST:event_txtToRemarksFocusGained
+
+    private void cmbSendToFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbSendToFocusGained
+        ShowMessage("Select the user to whom document to be forwarded");
+    }//GEN-LAST:event_cmbSendToFocusGained
+
+    private void OpgHoldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_OpgHoldFocusGained
+        ShowMessage("Select the approval action");
+    }//GEN-LAST:event_OpgHoldFocusGained
+
+    private void OpgRejectFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_OpgRejectFocusGained
+        ShowMessage("Select the approval action");
+    }//GEN-LAST:event_OpgRejectFocusGained
+
+    private void OpgFinalFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_OpgFinalFocusGained
+        ShowMessage("Select the approval action");
+    }//GEN-LAST:event_OpgFinalFocusGained
+
+    private void OpgApproveFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_OpgApproveFocusGained
+        ShowMessage("Select the approval action");
+    }//GEN-LAST:event_OpgApproveFocusGained
+
+    private void cmbHierarchyFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbHierarchyFocusGained
+        ShowMessage("Select the hierarchy for approval");
+    }//GEN-LAST:event_cmbHierarchyFocusGained
+
+    private void txtAmendDateFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAmendDateFocusGained
+        ShowMessage("Enter Updation Date");
+    }//GEN-LAST:event_txtAmendDateFocusGained
+
+    private void OpgHoldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OpgHoldMouseClicked
+        finalapproved = "NO";
+        OpgHold.setSelected(true);
+        OpgFinal.setSelected(false);
+        OpgApprove.setSelected(false);
+        OpgReject.setSelected(false);
+
+        cmbSendTo.setEnabled(false);
+    }//GEN-LAST:event_OpgHoldMouseClicked
+
+    private void OpgRejectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OpgRejectMouseClicked
+        OpgReject.setSelected(true);
+        OpgFinal.setSelected(false);
+        OpgApprove.setSelected(false);
+        OpgHold.setSelected(false);
+        finalapproved = "NO";
+        GenerateRejectedSendToCombo();
+        cmbSendTo.setEnabled(true);
+    }//GEN-LAST:event_OpgRejectMouseClicked
+
+    private void OpgFinalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OpgFinalMouseClicked
+        OpgFinal.setSelected(true);
+        OpgReject.setSelected(false);
+        OpgApprove.setSelected(false);
+        OpgHold.setSelected(false);
+        finalapproved = "YES";
+        if (!OpgFinal.isEnabled()) {
+            OpgHold.setSelected(true);
+        }
+    }//GEN-LAST:event_OpgFinalMouseClicked
+
+    private void OpgApproveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OpgApproveMouseClicked
+        //SetupApproval();
+        finalapproved = "NO";
+        if (EditMode == EITLERPGLOBAL.EDIT) {
+            GenerateRejectedSendToCombo();
+            if (clsFeltProductionApprovalFlow.IsOnceRejectedDoc(632, txtAmendID.getText())) {
+                cmbSendTo.setEnabled(true);
+            } else {
+                cmbSendTo.setEnabled(false);
+            }
+        }
+
+        if (cmbSendTo.getItemCount() <= 0) {
+            GenerateSendToCombo();
+        }
+    }//GEN-LAST:event_OpgApproveMouseClicked
+
+    private void cmdExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdExitActionPerformed
+        ObjFeltOrderUpd.Close();
+        ((JFrame) getParent().getParent().getParent().getParent()).dispose();
+    }//GEN-LAST:event_cmdExitActionPerformed
+
+    private void cmdFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdFilterActionPerformed
+        Find();
+    }//GEN-LAST:event_cmdFilterActionPerformed
+
+    private void cmdCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
+        Cancel();
+    }//GEN-LAST:event_cmdCancelActionPerformed
+
+    private void cmdSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdSaveActionPerformed
+        Save();
+    }//GEN-LAST:event_cmdSaveActionPerformed
+
+    private void cmdDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdDeleteActionPerformed
+        if (JOptionPane.showConfirmDialog(frmFeltPieceAmendmentPO.this, "Are you sure want to delete this record ?", "DELETE RECORD", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            Delete();
+        }
+    }//GEN-LAST:event_cmdDeleteActionPerformed
+
+    private void cmdEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdEditActionPerformed
+        Edit();
+    }//GEN-LAST:event_cmdEditActionPerformed
+
+    private void cmdNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdNewActionPerformed
+        Add();
+    }//GEN-LAST:event_cmdNewActionPerformed
+
+    private void cmdLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLastActionPerformed
+        MoveLast();
+    }//GEN-LAST:event_cmdLastActionPerformed
+
+    private void cmdNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdNextActionPerformed
+        MoveNext();
+    }//GEN-LAST:event_cmdNextActionPerformed
+
+    private void cmdBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdBackActionPerformed
+        MovePrevious();
+    }//GEN-LAST:event_cmdBackActionPerformed
+
+    private void cmdTopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdTopActionPerformed
+        MoveFirst();
+    }//GEN-LAST:event_cmdTopActionPerformed
+
+    private void cmdRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRemoveActionPerformed
+        if (Table.getRowCount() > 0) {
+            DataModel.removeRow(Table.getSelectedRow());
+        }
+    }//GEN-LAST:event_cmdRemoveActionPerformed
+
+    private void cmdAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAddActionPerformed
+        Object[] rowData = new Object[34];
+        rowData[0] = Integer.toString(Table.getRowCount() + 1);
+        rowData[1] = "";
+        rowData[2] = "";
+        rowData[3] = "";
+        rowData[4] = "";
+        rowData[5] = "";
+        rowData[6] = "";
+        rowData[7] = "";
+        rowData[8] = "";
+        rowData[9] = "";
+        rowData[10] = "";
+        rowData[11] = "";
+        rowData[12] = "";
+        rowData[13] = "";
+        rowData[14] = "";
+        rowData[15] = "";
+        rowData[16] = "";
+        rowData[17] = "";
+        rowData[18] = "";
+        rowData[19] = "";
+        rowData[20] = "";
+        rowData[21] = "";
+        rowData[22] = "";
+        rowData[23] = "";
+        rowData[24] = "";
+        rowData[25] = "";
+        rowData[26] = "";
+        rowData[27] = "";
+        rowData[28] = "";
+        rowData[29] = "";
+        rowData[30] = "";
+        rowData[31] = "";
+        rowData[32] = "";
+        rowData[33] = "";
+
+        DataModel.addRow(rowData);
+        Table.changeSelection(Table.getRowCount() - 1, 1, false, false);
+        Table.requestFocus();
+
+        ReasonResetReadonly();
+    }//GEN-LAST:event_cmdAddActionPerformed
+
+    private void cmbHierarchyItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbHierarchyItemStateChanged
+        SelHierarchyID = EITLERPGLOBAL.getComboCode(cmbHierarchy);
+        GenerateSendToCombo();
+
+        if (clsHierarchy.CanSkip((int) EITLERPGLOBAL.gCompanyID, SelHierarchyID, (int) EITLERPGLOBAL.gNewUserID)) {
+            cmbSendTo.setEnabled(true);
+        } else {
+            cmbSendTo.setEnabled(false);
+        }
+
+        if (clsHierarchy.CanFinalApprove((int) EITLERPGLOBAL.gCompanyID, SelHierarchyID, (int) EITLERPGLOBAL.gNewUserID)) {
+            OpgFinal.setEnabled(true);
+        } else {
+            OpgFinal.setEnabled(false);
+            OpgFinal.setSelected(false);
+        }
+    }//GEN-LAST:event_cmbHierarchyItemStateChanged
+
+    private void TableFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TableFocusLost
+        // TODO add your handling code here:
+        ReasonResetReadonly();
+
+    }//GEN-LAST:event_TableFocusLost
+
+    private void cmdAddPOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAddPOActionPerformed
+        Object[] rowData = new Object[12];
+        rowData[0] = Integer.toString(DocTable.getRowCount() + 1);
+        rowData[1] = "";
+        rowData[2] = "";
+        rowData[3] = "UPLOAD";
+        rowData[4] = "VIEW";
+        rowData[5] = "";
+
+        DataModelDoc.addRow(rowData);
+        DocTable.changeSelection(DocTable.getRowCount() - 1, 1, false, false);
+        DocTable.requestFocus();
+    }//GEN-LAST:event_cmdAddPOActionPerformed
+
+    private void cmdRemovePOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRemovePOActionPerformed
+        if (DocTable.getRowCount() > 0) {
+            data.Execute("DELETE FROM DOC_MGMT.PO_NO_UPDATION "
+                    + "WHERE DOCUMENT_DOC_NO='" + txtAmendID.getText().toString().trim() + "' AND "
+                    + "DOCUMENT_SR_NO=" + DocTable.getValueAt(DocTable.getSelectedRow(), 0));
+            data.Execute("UPDATE DOC_MGMT.PO_NO_UPDATION "
+                    + "SET DOCUMENT_SR_NO=DOCUMENT_SR_NO-1"
+                    + "WHERE DOCUMENT_DOC_NO='" + txtAmendID.getText().toString().trim() + "' AND "
+                    + "DOCUMENT_SR_NO>" + DocTable.getValueAt(DocTable.getSelectedRow(), 0));
+            DataModelDoc.removeRow(DocTable.getSelectedRow());
+            RearrangeSrNo();
+        }
+    }//GEN-LAST:event_cmdRemovePOActionPerformed
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable DocTable;
+    private javax.swing.JRadioButton OpgApprove;
+    private javax.swing.JRadioButton OpgFinal;
+    private javax.swing.JRadioButton OpgHold;
+    private javax.swing.JRadioButton OpgReject;
+    private javax.swing.JTabbedPane Tab;
+    private javax.swing.JPanel Tab1;
+    private javax.swing.JPanel Tab2;
+    private javax.swing.JTable Table;
+    private javax.swing.JTable TableApprovalStatus;
+    private javax.swing.JTable TableUpdateHistory;
+    private javax.swing.JToolBar ToolBar;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox cmbAmendReason;
+    private javax.swing.JComboBox cmbHierarchy;
+    private javax.swing.JComboBox cmbSendTo;
+    private javax.swing.JButton cmdAdd;
+    private javax.swing.JButton cmdAddPO;
+    private javax.swing.JButton cmdBack;
+    private javax.swing.JButton cmdBackToNormal;
+    private javax.swing.JButton cmdBackToTab0;
+    private javax.swing.JButton cmdBackToTab1;
+    private javax.swing.JButton cmdCancel;
+    private javax.swing.JButton cmdDelete;
+    private javax.swing.JButton cmdEdit;
+    private javax.swing.JButton cmdExit;
+    private javax.swing.JButton cmdFilter;
+    private javax.swing.JButton cmdFromRemarksBig;
+    private javax.swing.JButton cmdLast;
+    private javax.swing.JButton cmdNew;
+    private javax.swing.JButton cmdNext;
+    private javax.swing.JButton cmdNextToTab1;
+    private javax.swing.JButton cmdNextToTab2;
+    private javax.swing.JButton cmdPreview;
+    private javax.swing.JButton cmdPrint;
+    private javax.swing.JButton cmdRemove;
+    private javax.swing.JButton cmdRemovePO;
+    private javax.swing.JButton cmdSave;
+    private javax.swing.JButton cmdShowRemarks;
+    private javax.swing.JButton cmdTop;
+    private javax.swing.JButton cmdViewRevisions;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JMenuItem jMenuItemOrder;
+    private javax.swing.JMenuItem jMenuItemWarping;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPopupMenu jPopupMenu;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JLabel lblDocumentHistory;
+    private javax.swing.JLabel lblRevNo;
+    private javax.swing.JLabel lblStatus;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JTextField txtAmendDate;
+    private javax.swing.JTextField txtAmendID;
+    private javax.swing.JTextField txtFrom;
+    private javax.swing.JTextField txtFromRemarks;
+    private javax.swing.JTextField txtToRemarks;
+    private javax.swing.JTextField txtamendreasoncode;
+    private javax.swing.JTextField txtamendreasonname;
+    // End of variables declaration//GEN-END:variables
+
+    //Puts toolbar in enable mode
+    private void EnableToolbar() {
+        cmdTop.setEnabled(true);
+        cmdBack.setEnabled(true);
+        cmdNext.setEnabled(true);
+        cmdLast.setEnabled(true);
+        cmdNew.setEnabled(true);
+        cmdEdit.setEnabled(true);
+        cmdDelete.setEnabled(true);
+        cmdSave.setEnabled(false);
+        cmdCancel.setEnabled(false);
+        cmdFilter.setEnabled(true);
+        cmdPreview.setEnabled(true);
+        cmdPrint.setEnabled(true);
+        cmdExit.setEnabled(true);
+    }
+
+    //Puts toolbar in disable mode
+    private void DisableToolbar() {
+        cmdTop.setEnabled(false);
+        cmdBack.setEnabled(false);
+        cmdNext.setEnabled(false);
+        cmdLast.setEnabled(false);
+        cmdNew.setEnabled(false);
+        cmdEdit.setEnabled(false);
+        cmdDelete.setEnabled(false);
+        cmdSave.setEnabled(true);
+        cmdCancel.setEnabled(true);
+        cmdFilter.setEnabled(false);
+        cmdPreview.setEnabled(false);
+        cmdPrint.setEnabled(false);
+        cmdExit.setEnabled(false);
+
+    }
+
+    private void SetFields(boolean pStat) {
+        txtAmendDate.setEnabled(false);
+        cmbAmendReason.setEnabled(false);
+//        Table.setEnabled(pStat);
+        //     txtFormNo.setEnabled(pStat);
+        cmdAdd.setEnabled(pStat);
+        cmdRemove.setEnabled(pStat);
+        cmbHierarchy.setEnabled(pStat);
+        OpgApprove.setEnabled(pStat);
+        OpgReject.setEnabled(pStat);
+        OpgFinal.setEnabled(pStat);
+        OpgHold.setEnabled(pStat);
+        cmbSendTo.setEnabled(pStat);
+
+        txtToRemarks.setEnabled(pStat);
+
+        SetupApproval();
+    }
+
+    private void ClearFields() {
+        txtAmendDate.setText(EITLERPGLOBAL.getCurrentDate());
+        // txtFormNo.setText("");
+        txtAmendID.setText("");
+        txtFromRemarks.setText("");
+        txtToRemarks.setText("");
+        FormatGrid();
+        FormatGridApprovalStatus();
+        FormatGridUpdateHistory();
+    }
+
+    //Display data on the Screen
+    private void DisplayData() {
+        //========= Authority Delegation Check =====================//
+        if (EITLERPGLOBAL.gAuthorityUserID != EITLERPGLOBAL.gUserID) {
+            if (clsAuthority.IsAuthorityGiven(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gUserID, EITLERPGLOBAL.gAuthorityUserID, 632)) {
+                EITLERPGLOBAL.gNewUserID = EITLERPGLOBAL.gAuthorityUserID;
+            } else {
+                EITLERPGLOBAL.gNewUserID = EITLERPGLOBAL.gUserID;
+            }
+        }
+        //==========================================================//
+
+        //=========== Title Bar Color Indication ===============//
+        try {
+            if (EditMode == 0) {
+                if (ObjFeltOrderUpd.getAttribute("APPROVED").getInt() == 1) {
+                    lblTitle.setBackground(Color.BLUE);
+                } else {
+                    lblTitle.setBackground(Color.GRAY);
+                }
+
+                /*if(ObjFeltOrderUpd.getAttribute("CANCELED").getInt()==1) {
+                 lblTitle.setBackground(Color.RED);
+                 }*/
+            }
+            //============================================//
+
+            String AmendDate = EITLERPGLOBAL.formatDate(ObjFeltOrderUpd.getAttribute("FELT_AMEND_DATE").getString());
+            String AmendID = ObjFeltOrderUpd.getAttribute("FELT_AMEND_ID").getString();
+//            String AmendReasoncode =  ObjFeltOrderUpd.getAttribute("FELT_AMEND_REASON").getString();
+
+            lblTitle.setText("PO No and Date Updation - " + AmendID);
+            lblRevNo.setText(Integer.toString((int) ObjFeltOrderUpd.getAttribute("REVISION_NO").getVal()));
+            //  txtMonthWeight.setText(Double.toString(EITLERPGLOBAL.round(ObjFeltOrderUpd.getAttribute("TOTAL_WEIGHT").getVal(),2)));
+            //  txtPreviousWeight.setText(Double.toString(EITLERPGLOBAL.round(ObjFeltOrderUpd.getAttribute("PREVIOUS_WEIGHT").getVal(),2)));
+            EITLERPGLOBAL.setComboIndex(cmbHierarchy, (int) ObjFeltOrderUpd.getAttribute("HIERARCHY_ID").getVal());
+            SelHierarchyID = (int) ObjFeltOrderUpd.getAttribute("HIERARCHY_ID").getVal();
+            /*          
+             // header fields setup
+             String partyDetails[]=ObjFeltPartyExtraDetail.getPartyDetails(partyCode);
+             lblPartyName.setText(partyDetails[0]);
+             EITLERPGLOBAL.setComboIndex(cmbInchargeName, (int)Integer.parseInt(partyDetails[1]));
+             EITLERPGLOBAL.setComboIndex(cmbZone, partyDetails[2]);
+             */
+            DoNotEvaluate = true;
+
+            FormatGrid();
+            txtAmendDate.setText(AmendDate);
+            txtAmendID.setText(AmendID);
+            //       txtamendreasoncode.setText(AmendReasoncode);
+
+            txtamendreasoncode.setText(ObjFeltOrderUpd.getAttribute("FELT_AMEND_REASON").getString());
+            EITLERPGLOBAL.setComboIndex(cmbAmendReason, Integer.parseInt(ObjFeltOrderUpd.getAttribute("FELT_AMEND_REASON").getString()));
+            //        System.out.println(ObjFeltOrderUpd.getAttribute("FELT_AMEND_REASON").getString());
+            // Integer.parseInt(partyDetails[1])
+            //Now Generate Table
+            for (int i = 1; i <= ObjFeltOrderUpd.hmFeltOrderUpdDetails.size(); i++) {
+                clsFeltPieceAmendDetails ObjFeltOrderUpdDetails = (clsFeltPieceAmendDetails) ObjFeltOrderUpd.hmFeltOrderUpdDetails.get(Integer.toString(i));
+
+                Object[] rowData = new Object[35];
+                rowData[0] = Integer.toString(i);
+                rowData[1] = ObjFeltOrderUpdDetails.getAttribute("FELT_AMEND_PIECE_NO").getString();
+                rowData[2] = ObjFeltOrderUpdDetails.getAttribute("FELT_AMEND_PARTY_CODE").getString();
+                rowData[3] = ObjFeltOrderUpdDetails.getAttribute("FELT_AMEND_PARTY_NAME").getString();
+                rowData[4] = ObjFeltOrderUpdDetails.getAttribute("FELT_AMEND_PO_NO").getString();
+                rowData[5] = EITLERPGLOBAL.formatDate(ObjFeltOrderUpdDetails.getAttribute("FELT_AMEND_PO_DATE").getString());
+                rowData[6] = ObjFeltOrderUpdDetails.getAttribute("FELT_AMEND_REMARK").getString();
+                rowData[7] = ObjFeltOrderUpdDetails.getAttribute("FELT_AMEND_MFG_STATUS").getString();
+                rowData[8] = ObjFeltOrderUpdDetails.getAttribute("FELT_AMEND_MATERIAL_CODE").getString();
+                DataModel.addRow(rowData);
+            }
+
+            //Added PO Attachment 
+            ResultSet tdocrs = data.getResult("SELECT * FROM DOC_MGMT.PO_NO_UPDATION WHERE DOCUMENT_DOC_NO='" + txtAmendID.getText() + "'");
+            tdocrs.first();
+            if (tdocrs.getRow() > 0) {
+                while (!tdocrs.isAfterLast()) {
+                    Object[] rowData = new Object[50];
+                    rowData[0] = tdocrs.getString("DOCUMENT_SR_NO");
+                    rowData[1] = tdocrs.getString("DOC_REMARK");
+                    rowData[2] = tdocrs.getString("DOC_TYPE");
+                    rowData[3] = "UPLOAD";
+                    rowData[4] = "VIEW";
+                    rowData[5] = tdocrs.getString("DOC_NAME");
+                    DataModelDoc.addRow(rowData);
+                    tdocrs.next();
+                }
+            }
+
+            //======== Generating Grid for Document Approval Flow ========//
+            FormatGridApprovalStatus();
+            HashMap hmList = new HashMap();
+
+            hmList = clsFeltProductionApprovalFlow.getDocumentFlow(632, AmendID);
+            for (int i = 1; i <= hmList.size(); i++) {
+                //clsDocFlow is collection class used for holding approval flow data
+                clsDocFlow ObjFlow = (clsDocFlow) hmList.get(Integer.toString(i));
+                Object[] rowData = new Object[7];
+
+                rowData[0] = Integer.toString(i);
+                rowData[1] = clsUser.getUserName(EITLERPGLOBAL.gCompanyID, (int) ObjFlow.getAttribute("USER_ID").getVal());
+                rowData[2] = clsDepartment.getDeptName(EITLERPGLOBAL.gCompanyID, clsUser.getDeptID(EITLERPGLOBAL.gCompanyID, (int) ObjFlow.getAttribute("USER_ID").getVal()));
+                rowData[3] = ObjFlow.getAttribute("STATUS").getString();
+                rowData[4] = EITLERPGLOBAL.formatDate(ObjFlow.getAttribute("RECEIVED_DATE").getString());
+                rowData[5] = EITLERPGLOBAL.formatDate(ObjFlow.getAttribute("ACTION_DATE").getString());
+                rowData[6] = ObjFlow.getAttribute("REMARKS").getString();
+
+                DataModelApprovalStatus.addRow(rowData);
+            }
+            //============================================================//
+
+            // Generating Grid for Showing Production Details Update History
+            FormatGridUpdateHistory();
+//            HashMap hmApprovalHistory=clsFeltPieceAmendmentPO.getHistoryList(ObjFeltOrderUpd.getAttribute("FELT_AMEND_ID").getString(), txtAmendID.getText());
+            HashMap hmApprovalHistory = clsFeltPieceAmendmentPO.getHistoryList(AmendDate, AmendID);
+            for (int i = 1; i <= hmApprovalHistory.size(); i++) {
+                clsFeltPieceAmendmentPO ObjFeltOrderUpd = (clsFeltPieceAmendmentPO) hmApprovalHistory.get(Integer.toString(i));
+                Object[] rowData = new Object[5];
+
+                rowData[0] = Integer.toString((int) ObjFeltOrderUpd.getAttribute("REVISION_NO").getVal());
+                rowData[1] = clsUser.getUserName(EITLERPGLOBAL.gCompanyID, (int) ObjFeltOrderUpd.getAttribute("UPDATED_BY").getVal());
+                rowData[2] = EITLERPGLOBAL.formatDate(ObjFeltOrderUpd.getAttribute("ENTRY_DATE").getString());
+
+                String ApprovalStatus = "";
+
+                if ((ObjFeltOrderUpd.getAttribute("APPROVAL_STATUS").getString()).equals("H")) {
+                    ApprovalStatus = "Hold";
+                }
+
+                if ((ObjFeltOrderUpd.getAttribute("APPROVAL_STATUS").getString()).equals("A")) {
+                    ApprovalStatus = "Approved";
+                }
+
+                if ((ObjFeltOrderUpd.getAttribute("APPROVAL_STATUS").getString()).equals("F")) {
+                    ApprovalStatus = "Final Approved";
+                }
+
+                if ((ObjFeltOrderUpd.getAttribute("APPROVAL_STATUS").getString()).equals("W")) {
+                    ApprovalStatus = "Waiting";
+                }
+
+                if ((ObjFeltOrderUpd.getAttribute("APPROVAL_STATUS").getString()).equals("R")) {
+                    ApprovalStatus = "Rejected";
+                }
+
+                if ((ObjFeltOrderUpd.getAttribute("APPROVAL_STATUS").getString()).equals("P")) {
+                    ApprovalStatus = "Pending";
+                }
+
+                if ((ObjFeltOrderUpd.getAttribute("APPROVAL_STATUS").getString()).equals("C")) {
+                    ApprovalStatus = "Skiped";
+                }
+
+                rowData[3] = ApprovalStatus;
+                rowData[4] = ObjFeltOrderUpd.getAttribute("APPROVER_REMARKS").getString();
+
+                DataModelUpdateHistory.addRow(rowData);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        DoNotEvaluate = false;
+    }
+
+    private void FormatGrid() {
+        try {
+            cmdAdd.requestFocus();
+
+            DataModel = new EITLTableModel();
+            Table.removeAll();
+
+            Table.setModel(DataModel);
+            TableColumnModel ColModel = Table.getColumnModel();
+            Table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+            //Add Columns to it
+            DataModel.addColumn("Sr. No.");//0
+            DataModel.addColumn("Piece No");//1
+            DataModel.addColumn("Party Code");//2
+            DataModel.addColumn("Party Name");//3
+            DataModel.addColumn("PO No");//4
+            DataModel.addColumn("PO Date");//5
+            DataModel.addColumn("Remark");//6
+            DataModel.addColumn("Piece Status");//7
+            DataModel.addColumn("Material Code");//8
+
+            DataModel.SetReadOnly(0);
+
+            if (EditMode != 0) {
+                //------- Install Table List Selection Listener ------//
+                Table.getColumnModel().getSelectionModel().addListSelectionListener(
+                        new ListSelectionListener() {
+                            public void valueChanged(ListSelectionEvent e) {
+                                int column = Table.getSelectedColumn();
+                                String strVar = DataModel.getVariable(column);
+                                //=============== Cell Editing Routine =======================//
+                                Table.editCellAt(Table.getSelectedRow(), column);
+                                if (Table.getEditorComponent() instanceof JTextComponent) {
+                                    ((JTextComponent) Table.getEditorComponent()).selectAll();
+                                }
+                                if (column == 1) {
+                                    ShowMessage("Press F1 for Piece No List...");
+                                }
+                                //============= Cell Editing Routine Ended =================//
+                            }
+                        });
+
+                //----- Install Table Model Event Listener For Displaying Party code and Group -------//
+                Table.getModel().addTableModelListener(new TableModelListener() {
+                    public void tableChanged(TableModelEvent e) {
+                        if (e.getType() == TableModelEvent.UPDATE) {
+                            int row = Table.getSelectedRow();
+                            int column = e.getColumn();
+
+                            //=========== Cell Update Prevention Check ===========//
+                            String curValue = ((String) Table.getValueAt(row, column)).trim();
+                            if (curValue.equals("")) {
+                                return;
+                            }
+                            //====================================================//
+                            if (DoNotEvaluate) {
+                                return;
+                            }
+
+                            //EITLERPGLOBAL.formatDate(ObjFlow.getAttribute("ACTION_DATE").getString())
+                            if (column == 1) {
+                                String pieceNo = ((String) Table.getValueAt(row, 1)).trim();
+
+                                Table.setValueAt(ObjFeltOrderUpd.getPartyCode(pieceNo), row, 2);
+                                Table.setValueAt(ObjFeltOrderUpd.getPartyName(pieceNo), row, 3);
+                                Table.setValueAt(ObjFeltOrderUpd.getPONo(pieceNo), row, 4);
+                                Table.setValueAt(EITLERPGLOBAL.formatDate(ObjFeltOrderUpd.getPODate(pieceNo)), row, 5);
+                                Table.setValueAt("PO Detail Updation", row, 6);
+                                Table.setValueAt(ObjFeltOrderUpd.getmfgstatus(pieceNo), row, 7);
+                                Table.setValueAt(ObjFeltOrderUpd.getMaterialCode(pieceNo), row, 8);
+                            }
+                        }
+                    }
+                });
+
+            }
+
+            //Added PO Attachment
+            DataModelDoc = new EITLTableModel();
+            DocTable.removeAll();
+
+            DocTable.setModel(DataModelDoc);
+            DocTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+            //Add Columns to it
+            DataModelDoc.addColumn("Sr.No.");   //0
+            DataModelDoc.addColumn("Remark");   //1     
+            DataModelDoc.addColumn("PO Number");   //2
+            DataModelDoc.addColumn("Upload");   //3
+            DataModelDoc.addColumn("View");   //4
+            DataModelDoc.addColumn("Document");   //5
+
+            int ImportCol = 4;
+            DocTable.getColumnModel().getColumn(ImportCol).setCellEditor(new ButtonEditor(new JCheckBox()));
+            DocTable.getColumnModel().getColumn(ImportCol).setCellRenderer(new ButtonRenderer());
+            ImportCol = 3;
+            DocTable.getColumnModel().getColumn(ImportCol).setCellEditor(new ButtonEditor(new JCheckBox()));
+            DocTable.getColumnModel().getColumn(ImportCol).setCellRenderer(new ButtonRenderer());
+
+            DataModelDoc.SetReadOnly(0);
+            DataModelDoc.SetReadOnly(2);
+            DataModelDoc.SetReadOnly(5);
+
+            if (EditMode == EITLERPGLOBAL.ADD || (EditMode == EITLERPGLOBAL.EDIT && clsFeltProductionApprovalFlow.IsCreator(632, txtAmendID.getText()))) {
+
+            } else {
+                DataModelDoc.SetReadOnly(1);
+                DataModelDoc.SetReadOnly(3);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Enter Correct Details in Table. Error is : " + e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    //Generates Hierarchy Combo Box
+    private void GenerateHierarchyCombo() {
+        HashMap hmHierarchyList = new HashMap();
+
+        cmbHierarchyModel = new EITLComboModel();
+        cmbHierarchy.removeAllItems();
+        cmbHierarchy.setModel(cmbHierarchyModel);
+
+        hmHierarchyList = clsHierarchy.getListEx(" WHERE D_COM_HIERARCHY.COMPANY_ID=" + EITLERPGLOBAL.gCompanyID + " AND MODULE_ID=632 ");
+
+        if (EditMode == EITLERPGLOBAL.EDIT) {
+            hmHierarchyList = clsHierarchy.getList(" WHERE COMPANY_ID=" + EITLERPGLOBAL.gCompanyID + " AND MODULE_ID=632 ");
+        }
+        for (int i = 1; i <= hmHierarchyList.size(); i++) {
+            clsHierarchy ObjHierarchy = (clsHierarchy) hmHierarchyList.get(Integer.toString(i));
+            ComboData aData = new ComboData();
+            aData.Code = (int) ObjHierarchy.getAttribute("HIERARCHY_ID").getVal();
+            aData.Text = (String) ObjHierarchy.getAttribute("HIERARCHY_NAME").getObj();
+            cmbHierarchyModel.addElement(aData);
+        }
+    }
+
+    //Generates Send To Combo Box
+    private void GenerateSendToCombo() {
+        HashMap hmSendToList = new HashMap();
+        try {
+            cmbSendToModel = new EITLComboModel();
+            cmbSendTo.removeAllItems();
+            cmbSendTo.setModel(cmbSendToModel);
+            if (EditMode == EITLERPGLOBAL.ADD) {
+                hmSendToList = clsHierarchy.getUserList((int) EITLERPGLOBAL.gCompanyID, SelHierarchyID, EITLERPGLOBAL.gNewUserID);
+                for (int i = 1; i <= hmSendToList.size(); i++) {
+                    clsUser ObjUser = (clsUser) hmSendToList.get(Integer.toString(i));
+                    ComboData aData = new ComboData();
+                    aData.Code = (int) ObjUser.getAttribute("USER_ID").getVal();
+                    aData.Text = (String) ObjUser.getAttribute("USER_NAME").getObj();
+
+                    if (ObjUser.getAttribute("USER_ID").getVal() == EITLERPGLOBAL.gNewUserID) {
+                        //Exclude Current User
+                    } else {
+                        cmbSendToModel.addElement(aData);
+                    }
+                }
+            } else {
+                hmSendToList = clsFeltProductionApprovalFlow.getRemainingUsers(632, ObjFeltOrderUpd.getAttribute("FELT_AMEND_ID").getString());
+                for (int i = 1; i <= hmSendToList.size(); i++) {
+                    clsUser ObjUser = (clsUser) hmSendToList.get(Integer.toString(i));
+                    ComboData aData = new ComboData();
+                    aData.Code = (int) ObjUser.getAttribute("USER_ID").getVal();
+                    aData.Text = (String) ObjUser.getAttribute("USER_NAME").getObj();
+                    cmbSendToModel.addElement(aData);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Generates Send To Combo Box for Rejected User
+    private void GenerateRejectedSendToCombo() {
+        HashMap hmRejectedSendToList = new HashMap();
+
+        cmbSendToModel = new EITLComboModel();
+        cmbSendTo.removeAllItems();
+        cmbSendTo.setModel(cmbSendToModel);
+
+        //Now Add other hierarchy Users
+        SelHierarchyID = EITLERPGLOBAL.getComboCode(cmbHierarchy);
+
+        hmRejectedSendToList = clsHierarchy.getUserList((int) EITLERPGLOBAL.gCompanyID, SelHierarchyID, EITLERPGLOBAL.gNewUserID, true);
+        for (int i = 1; i <= hmRejectedSendToList.size(); i++) {
+            clsUser ObjUser = (clsUser) hmRejectedSendToList.get(Integer.toString(i));
+
+            ComboData aData = new ComboData();
+            aData.Code = (int) ObjUser.getAttribute("USER_ID").getVal();
+            aData.Text = ObjUser.getAttribute("USER_NAME").getString();
+
+            boolean IncludeUser = false;
+            //Decide to include user or not
+            if (EditMode == EITLERPGLOBAL.EDIT) {
+                if (OpgApprove.isSelected()) {
+                    IncludeUser = clsFeltProductionApprovalFlow.IncludeUserInApproval(632, txtAmendID.getText(), (int) ObjUser.getAttribute("USER_ID").getVal(), EITLERPGLOBAL.gNewUserID);
+                }
+
+                if (OpgReject.isSelected()) {
+                    IncludeUser = clsFeltProductionApprovalFlow.IncludeUserInRejection(632, txtAmendID.getText(), (int) ObjUser.getAttribute("USER_ID").getVal(), EITLERPGLOBAL.gNewUserID);
+                }
+
+                if (IncludeUser && (((int) ObjUser.getAttribute("USER_ID").getVal()) != EITLERPGLOBAL.gNewUserID)) {
+                    cmbSendToModel.addElement(aData);
+                }
+            } else {
+                if (((int) ObjUser.getAttribute("USER_ID").getVal()) != EITLERPGLOBAL.gNewUserID) {
+                    cmbSendToModel.addElement(aData);
+                }
+            }
+
+        }
+
+        if (EditMode == EITLERPGLOBAL.EDIT) {
+            int Creator = clsFeltProductionApprovalFlow.getCreator(632, txtAmendID.getText());
+            EITLERPGLOBAL.setComboIndex(cmbSendTo, Creator);
+        }
+    }
+
+    //Generates User Name Combo Box
+    private void SetupApproval() {
+        /*// --- Hierarchy Change Rights Check --------
+         if(clsUser.IsFunctionGranted(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gNewUserID, 0,75)) {
+         cmbHierarchy.setEnabled(true);
+         }else {
+         cmbHierarchy.setEnabled(false);
+         }*/
+
+        // select hold for default approval
+        OpgHold.setSelected(true);
+
+        if (EditMode == EITLERPGLOBAL.ADD) {
+            cmbHierarchy.setEnabled(true);
+            OpgReject.setEnabled(false);
+        } else {
+            cmbHierarchy.setEnabled(false);
+        }
+
+        //Set Default Hierarchy ID for User
+        int DefaultID = clsHierarchy.getDefaultHierarchy((int) EITLERPGLOBAL.gCompanyID);
+        EITLERPGLOBAL.setComboIndex(cmbHierarchy, DefaultID);
+
+        if (EditMode == EITLERPGLOBAL.ADD) {
+            lnFromUserId = (int) EITLERPGLOBAL.gNewUserID;
+            txtFrom.setText(clsUser.getUserName(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gNewUserID));
+            txtFromRemarks.setText("Creator of Document");
+        } else {
+            int FromUserID = clsFeltProductionApprovalFlow.getFromID(632, ObjFeltOrderUpd.getAttribute("FELT_AMEND_ID").getString());
+            lnFromUserId = FromUserID;
+            String strFromUser = clsUser.getUserName(EITLERPGLOBAL.gCompanyID, FromUserID);
+            String strFromRemarks = clsFeltProductionApprovalFlow.getFromRemarks(632, FromUserID, ObjFeltOrderUpd.getAttribute("FELT_AMEND_ID").getString());
+
+            txtFrom.setText(strFromUser);
+            txtFromRemarks.setText(strFromRemarks);
+        }
+
+        SelHierarchyID = EITLERPGLOBAL.getComboCode(cmbHierarchy);
+        GenerateSendToCombo();
+
+        if (clsHierarchy.CanSkip(EITLERPGLOBAL.gCompanyID, SelHierarchyID, EITLERPGLOBAL.gNewUserID)) {
+            cmbSendTo.setEnabled(true);
+        } else {
+            cmbSendTo.setEnabled(false);
+        }
+
+        if (clsHierarchy.CanFinalApprove(EITLERPGLOBAL.gCompanyID, SelHierarchyID, EITLERPGLOBAL.gNewUserID)) {
+            OpgFinal.setEnabled(true);
+        } else {
+            OpgFinal.setEnabled(false);
+            OpgFinal.setSelected(false);
+        }
+
+        //In Edit Mode Hierarchy and Reject Should be disabled
+        if (EditMode == EITLERPGLOBAL.EDIT) {
+            cmbHierarchy.setEnabled(false);
+            if (clsFeltProductionApprovalFlow.IsCreator(632, txtAmendID.getText())) {
+                OpgReject.setEnabled(false);
+            }
+        }
+
+        if (EditMode == 0) {
+            //Disable all hierarchy controls if not in Add/Edit Mode
+            cmbHierarchy.setEnabled(false);
+            txtFrom.setEnabled(false);
+            txtFromRemarks.setEnabled(false);
+            OpgApprove.setEnabled(false);
+            OpgFinal.setEnabled(false);
+            OpgReject.setEnabled(false);
+            cmbSendTo.setEnabled(false);
+            txtToRemarks.setEnabled(false);
+        }
+    }
+
+    private void SetMenuForRights() {
+        // --- Add Rights --
+        if (clsUser.IsFunctionGranted(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gNewUserID, 6128, 61281)) {
+            cmdNew.setEnabled(true);
+        } else {
+            cmdNew.setEnabled(false);
+        }
+
+        // --- Edit Rights --
+        if (clsUser.IsFunctionGranted(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gNewUserID, 6128, 61282)) {
+            cmdEdit.setEnabled(true);
+        } else {
+            cmdEdit.setEnabled(false);
+        }
+
+        // --- Delete Rights --
+        if (clsUser.IsFunctionGranted(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gNewUserID, 6128, 61283)) {
+            cmdDelete.setEnabled(true);
+        } else {
+            cmdDelete.setEnabled(false);
+        }
+
+        // --- Print Rights --
+        if (clsUser.IsFunctionGranted(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gNewUserID, 6128, 61284)) {
+            cmdPreview.setEnabled(true);
+            cmdPrint.setEnabled(true);
+        } else {
+            cmdPreview.setEnabled(false);
+            cmdPrint.setEnabled(false);
+        }
+    }
+
+    private void Add() {
+        //  EditMode=EITLERPGLOBAL.ADD;
+
+//        cmbAmendReason.setEnabled(true);
+        //Now Generate new document no.
+        SelectFirstFree aList = new SelectFirstFree();
+        aList.ModuleID = 632;
+
+        if (aList.ShowList()) {
+            EditMode = EITLERPGLOBAL.ADD;
+            SetFields(true);
+//            cmdAddPO.setEnabled(true);
+            cmdRemovePO.setEnabled(true);
+            DisableToolbar();
+            ClearFields();
+            SelPrefix = aList.Prefix; //Selected Prefix;
+            SelSuffix = aList.Suffix;
+            FFNo = aList.FirstFreeNo;
+            SetupApproval();
+            //Display newly generated document no.
+            txtAmendID.setText(clsFirstFree.getNextFreeNo(EITLERPGLOBAL.gCompanyID, 632, FFNo, false));
+            EITLERPGLOBAL.setComboIndex(cmbAmendReason, 0);
+//            cmbAmendReason.setEnabled(true);
+            txtAmendDate.requestFocus();
+
+            lblTitle.setText("PO No and Date Updation - " + txtAmendID.getText());
+            lblTitle.setBackground(Color.BLUE);
+        } else {
+            JOptionPane.showMessageDialog(null, "You must select doucment number prefix. If no prefixes found in the list, Please do entry in First Free Nos.");
+        }
+
+        /*  
+         SetFields(true);
+         DisableToolbar();
+         ClearFields();
+         SetupApproval();
+         lblTitle.setBackground(Color.GRAY);*/
+    }
+
+    private void Edit() {
+
+        String productionDocumentNo = (String) ObjFeltOrderUpd.getAttribute("FELT_AMEND_ID").getObj();
+        if (ObjFeltOrderUpd.IsEditable(productionDocumentNo, EITLERPGLOBAL.gNewUserID)) {
+            EditMode = EITLERPGLOBAL.EDIT;
+
+            DisableToolbar();
+            GenerateHierarchyCombo();
+            GenerateSendToCombo();
+            DisplayData();
+//            cmbAmendReason.setEnabled(true);
+            if (clsFeltProductionApprovalFlow.IsCreator(632, productionDocumentNo)) {
+                SetFields(true);
+                txtAmendDate.setEnabled(false);
+                //            txtFormNo.setEnabled(false);
+//                cmdAddPO.setEnabled(true);
+                cmdRemovePO.setEnabled(true);
+            } else {
+                EnableApproval();
+//                cmdAddPO.setEnabled(false);
+                cmdRemovePO.setEnabled(false);
+                DataModelDoc.SetReadOnly(1);
+                DataModelDoc.SetReadOnly(3);
+            }
+        } else {
+            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "You cannot edit this record. It is either approved/rejected or waiting approval for other user", "EDITING ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void Delete() {
+        if (ObjFeltOrderUpd.CanDelete(txtAmendID.getText(), txtAmendDate.getText(), EITLERPGLOBAL.gNewUserID)) {
+            DisplayData();
+        } else {
+            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, ObjFeltOrderUpd.LastError, "DELETION ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void Save() {
+        String AmendDate, productionDocumentNo, AmendReason;
+        float weight = 0, length = 0, width = 0, gsm = 0, sqmtr = 0, billlength = 0, billwidth = 0, billgsm = 0, billweight = 0, bilsqmtr = 0;
+        int loomNo = 0, i = 0, j = 0, weave_diff_days = 0;
+        String pieceNo = "", AmendID = "", partyCode = "", orderdate = "", productcode = "", style = "", billproductcode = "";
+        String weightString = "", widthString = "", lengthString = "", gsmString = "", groupString = "", sqmtrString = "";
+        String billlengthString = "", billwidthString = "", billgsmString = "", billweightString = "", billsqmtrString = "";
+        String req_dateString = "", comm_dateString = "", agreeddateString = "";
+        String rev_req_dateString = "", rev_comm_dateString = "", rev_agreeddateString = "";
+        String rev_req_reasonString = "", rev_comm_reasonString = "";
+        String machineno = "", positionno = "", refno = "", confno = "", po_no = "", po_date = "", po_remark = "";
+        String wvg_dateString = "", ndl_dateString = "", mnd_dateString = "";
+        String Amend_Reason = "", agreedindstring = "", prodindstring = "", amendremarkstring = "", mfgstatusstring = "", partyname = "", inchargename = "";
+        String poNo = "", poDate = "";
+        String materialCode = "";
+
+//        int DeptID =  EITLERPGLOBAL.gUserDeptID;
+        AmendDate = txtAmendDate.getText().trim();
+        AmendID = txtAmendID.getText().trim();
+//        Amend_Reason = Integer.toString(cmbAmendReason.getSelectedIndex());
+        Amend_Reason = String.valueOf(cmbAmendReasonModel.getCode(cmbAmendReason.getSelectedIndex()));
+
+        //Form level validations
+        if (AmendDate.equals("") || !EITLERPGLOBAL.isDate(AmendDate)) {
+            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Enter Valid UpdationDate.", "Wrong Updation Date", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // check Production Date is Within Financial Year?
+        java.sql.Date FinFromDate = java.sql.Date.valueOf(EITLERPGLOBAL.FinFromDateDB);
+        java.sql.Date FinToDate = java.sql.Date.valueOf(EITLERPGLOBAL.FinToDateDB);
+        java.sql.Date Amend_Date = java.sql.Date.valueOf(EITLERPGLOBAL.formatDateDB(AmendDate));
+        if ((Amend_Date.after(FinFromDate) || Amend_Date.compareTo(FinFromDate) == 0) && (Amend_Date.before(FinToDate) || Amend_Date.compareTo(FinToDate) == 0)) {
+            //Within the year
+        } else {
+            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Updation Date is Not Within Financial Year.", "FINANCIAL YEAR ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (Amend_Date.compareTo(java.sql.Date.valueOf(EITLERPGLOBAL.getCurrentDateDB())) > 0) {
+            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Updation Date Must be Before or the Same Date as Today.", "Wrong Production Date", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        //Check the no. of items in table
+        if (Table.getRowCount() <= 0) {
+            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Enter Piece Updation Details Before Saving.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            // check duplicate piece no in table
+            for (int k = 0; k <= Table.getRowCount() - 1; k++) {
+                for (int l = k; l <= Table.getRowCount() - 1; l++) {
+                    if (l != k && ((String) Table.getValueAt(k, 1)).trim().equals(((String) Table.getValueAt(l, 1)).trim())) {
+                        JOptionPane.showMessageDialog(this, "Same Piece No at Row " + (k + 1) + " and " + (l + 1), "ERROR", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
+
+            ObjFeltOrderUpd.hmFeltOrderUpdDetails.clear();
+
+            //Check the entered details in Table.
+            for (i = 0; i <= Table.getRowCount() - 1; i++) {
+
+                // Piece no Validation before Saving  
+                j++;
+                pieceNo = ((String) Table.getValueAt(i, 1)).trim().toUpperCase();
+                if (pieceNo.equals("") || pieceNo.equals(null)) {
+                    JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Enter Piece No.", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                j++;
+                partyCode = ((String) Table.getValueAt(i, 2)).trim();
+                if (partyCode.equals("") || partyCode.equals(null)) {
+                    JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Enter Party Code.", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                j++;
+                partyname = ((String) Table.getValueAt(i, 3)).trim();
+                if (partyCode.equals("") || partyCode.equals(null)) {
+                    JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Enter Party Name", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                j++;
+                poNo = ((String) Table.getValueAt(i, 4)).trim();
+                if (poNo.equals("") || poNo.equals(null)) {
+                    JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Enter PO No", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                j++;
+                poDate = ((String) Table.getValueAt(i, 5)).trim();
+                if (poDate.equals("") || !EITLERPGLOBAL.isDate(poDate)) {
+                    JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Enter Valid PO Date (i.e dd/mm/yyyy)", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                j++;
+                amendremarkstring = ((String) Table.getValueAt(i, 6)).trim();
+
+                j++;
+                mfgstatusstring = ((String) Table.getValueAt(i, 7)).trim();
+
+                j++;
+                materialCode = ((String) Table.getValueAt(i, 8)).trim();
+
+                // check piece no is already weaved?
+                clsFeltPieceAmendDetails ObjFeltOrderUpdDetails = new clsFeltPieceAmendDetails();
+
+                ObjFeltOrderUpdDetails.setAttribute("FELT_AMEND_PIECE_NO", pieceNo);
+                ObjFeltOrderUpdDetails.setAttribute("FELT_AMEND_PARTY_CODE", partyCode);
+                ObjFeltOrderUpdDetails.setAttribute("FELT_AMEND_PARTY_NAME", partyname);
+                ObjFeltOrderUpdDetails.setAttribute("FELT_AMEND_PO_NO", poNo);
+                ObjFeltOrderUpdDetails.setAttribute("FELT_AMEND_PO_DATE", EITLERPGLOBAL.formatDateDB(poDate));
+                ObjFeltOrderUpdDetails.setAttribute("FELT_AMEND_REMARK", amendremarkstring);
+                ObjFeltOrderUpdDetails.setAttribute("FELT_AMEND_MFG_STATUS", mfgstatusstring);
+                ObjFeltOrderUpdDetails.setAttribute("FELT_AMEND_MATERIAL_CODE", materialCode);
+
+                ObjFeltOrderUpd.hmFeltOrderUpdDetails.put(Integer.toString(ObjFeltOrderUpd.hmFeltOrderUpdDetails.size() + 1), ObjFeltOrderUpdDetails);
+            }
+        } catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Enter Correct Details at Row " + (i + 1) + " and Column " + (j + 1) + ". Error is " + nfe.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            j = 0;
+            nfe.printStackTrace();
+            return;
+        }
+
+        // check po no in attachment table
+        String poAttach = "";
+        for (int k = 0; k <= Table.getRowCount() - 1; k++) {
+            poNo = ((String) Table.getValueAt(k, 4)).trim();
+            int noCnt = 1;
+            for (int l = 0; l <= DocTable.getRowCount() - 1; l++) {
+                poAttach = ((String) DocTable.getValueAt(l, 2)).trim();
+                if (poNo.equals(poAttach)) {
+                    noCnt = 0;
+                }
+            }
+            if (noCnt == 1) {
+                JOptionPane.showMessageDialog(this, "P.O. Attachment is required for PO No : " + poNo + ".", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        for (int k = 0; k < DocTable.getRowCount(); k++) {
+            if (DataModelDoc.getValueAt(k, 5).toString().trim().equals("")) {
+                JOptionPane.showMessageDialog(this, "File not Uploaded at row : " + (k + 1) + ".", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        if (cmbHierarchy.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Select the hierarchy.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if ((!OpgApprove.isSelected()) && (!OpgReject.isSelected()) && (!OpgFinal.isSelected()) && (!OpgHold.isSelected())) {
+            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Select the Approval Action.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (OpgReject.isSelected() && txtToRemarks.getText().trim().equals("")) {
+            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Enter the remarks for rejection", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if ((OpgApprove.isSelected() || OpgReject.isSelected()) && cmbSendTo.getItemCount() <= 0) {
+            JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Select the user, to whom rejected document to be send", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        //set data for insert/update
+        ObjFeltOrderUpd.setAttribute("FELT_AMEND_DATE", AmendDate);
+        ObjFeltOrderUpd.setAttribute("FELT_AMEND_ID", AmendID);
+        ObjFeltOrderUpd.setAttribute("FELT_AMEND_REASON", Amend_Reason);
+
+        //     ObjFeltOrderUpd.setAttribute("PRODUCTION_FORM_NO",formNo);
+        SetData();
+
+        if (EditMode == EITLERPGLOBAL.ADD) {
+            if (ObjFeltOrderUpd.Insert()) {
+                DisplayData();
+            } else {
+                JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Error occured while saving. Error is " + ObjFeltOrderUpd.LastError, "SAVING ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        if (EditMode == EITLERPGLOBAL.EDIT) {
+            if (ObjFeltOrderUpd.Update()) {
+                DisplayData();
+            } else {
+                JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, "Error occured while saving editing. Error is " + ObjFeltOrderUpd.LastError, "SAVING ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        EditMode = 0;
+        SetFields(false);
+//        cmdAddPO.setEnabled(false);
+        cmdRemovePO.setEnabled(false);
+        DataModelDoc.SetReadOnly(1);
+        DataModelDoc.SetReadOnly(3);
+        EnableToolbar();
+        cmbAmendReason.setEnabled(false);
+        SetMenuForRights();
+        try {
+            if (PENDING_DOCUMENT) {
+                frmPA.RefreshView();
+                PENDING_DOCUMENT = false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    //Sets data to the Details Class Object
+    private void SetData() {
+        //-------- Update Approval Specific Fields -----------//
+        ObjFeltOrderUpd.setAttribute("HIERARCHY_ID", EITLERPGLOBAL.getComboCode(cmbHierarchy));
+        ObjFeltOrderUpd.setAttribute("FROM", EITLERPGLOBAL.gNewUserID);
+        ObjFeltOrderUpd.setAttribute("TO", EITLERPGLOBAL.getComboCode(cmbSendTo));
+        ObjFeltOrderUpd.setAttribute("FROM_REMARKS", txtToRemarks.getText().trim());
+        //    ObjFeltOrderUpd.setAttribute("UPDATED_BY",EITLERPGLOBAL.getComboCode(cmbUserName));
+        ObjFeltOrderUpd.setAttribute("UPDATED_BY", EITLERPGLOBAL.gNewUserID);
+        if (OpgApprove.isSelected()) {
+            ObjFeltOrderUpd.setAttribute("APPROVAL_STATUS", "A");
+        }
+
+        if (OpgFinal.isSelected()) {
+            ObjFeltOrderUpd.setAttribute("APPROVAL_STATUS", "F");
+        }
+
+        if (OpgReject.isSelected()) {
+            ObjFeltOrderUpd.setAttribute("APPROVAL_STATUS", "R");
+            ObjFeltOrderUpd.setAttribute("SEND_DOC_TO", EITLERPGLOBAL.getComboCode(cmbSendTo));
+        }
+
+        if (OpgHold.isSelected()) {
+            ObjFeltOrderUpd.setAttribute("APPROVAL_STATUS", "H");
+        }
+        //-------------------------------------------------//
+
+        if (EditMode == EITLERPGLOBAL.ADD) {
+            ObjFeltOrderUpd.setAttribute("CREATED_BY", EITLERPGLOBAL.gNewUserID);
+        } else {
+            ObjFeltOrderUpd.setAttribute("CREATED_BY", (int) ObjFeltOrderUpd.getAttribute("CREATED_BY").getVal());
+            ObjFeltOrderUpd.setAttribute("CREATED_DATE", ObjFeltOrderUpd.getAttribute("CREATED_DATE").getString());
+            ObjFeltOrderUpd.setAttribute("MODIFIED_BY", EITLERPGLOBAL.gNewUserID);
+        }
+    }
+
+    private void Cancel() {
+        DisplayData();
+        EditMode = 0;
+        SetFields(false);
+//        cmdAddPO.setEnabled(false);
+        cmdRemovePO.setEnabled(false);
+        EnableToolbar();
+        SetMenuForRights();
+        cmbAmendReason.setEnabled(false);
+    }
+
+    private void Find() {
+        Loader ObjLoader = new Loader(this, "EITLERP.FeltSales.FeltPieceAmend.frmFindFeltPieceAmend", true);
+        frmFindFeltPieceAmend ObjFindFeltOrderUpd = (frmFindFeltPieceAmend) ObjLoader.getObj();
+
+        if (ObjFindFeltOrderUpd.Cancelled == false) {
+            if (!ObjFeltOrderUpd.Filter(ObjFindFeltOrderUpd.stringFindQuery)) {
+                JOptionPane.showMessageDialog(frmFeltPieceAmendmentPO.this, " No records found.", "Find Felt Weaving Details", JOptionPane.YES_OPTION);
+            }
+            MoveLast();
+        }
+    }
+
+    // find details by production date
+    public void Find(String AmendID) {
+        ObjFeltOrderUpd.Filter(" FELT_AMEND_ID='" + AmendID + "'");
+        SetMenuForRights();
+        DisplayData();
+    }
+
+    // find details by piece no.
+    public void Find(String pieceNo, String prodDate) {
+        ObjFeltOrderUpd.Filter(" FELT_AMEND_PIECE_NO='" + pieceNo + "'");
+        SetMenuForRights();
+        DisplayData();
+    }
+
+    // find all pending document
+    public void FindWaiting() {
+        ObjFeltOrderUpd.Filter(" AND PROD_DOC_NO IN (SELECT DISTINCT PROD_DOC_NO FROM PRODUCTION.FELT_PROD_DATA, PRODUCTION.FELT_PROD_DOC_DATA WHERE PROD_DOC_NO=DOC_NO AND USER_ID=" + EITLERPGLOBAL.gNewUserID + " AND STATUS='W' AND MODULE_ID=632 AND CANCELED=0) ");
+        SetMenuForRights();
+        DisplayData();
+
+    }
+
+    public void FindEx(int pCompanyID, String AmendID) {
+        ObjFeltOrderUpd.Filter(" FELT_AMEND_ID='" + AmendID + "'");
+        ObjFeltOrderUpd.MoveFirst();
+        DisplayData();
+    }
+
+    private void MoveFirst() {
+        ObjFeltOrderUpd.MoveFirst();
+        DisplayData();
+    }
+
+    private void MovePrevious() {
+        ObjFeltOrderUpd.MovePrevious();
+        DisplayData();
+    }
+
+    private void MoveNext() {
+        ObjFeltOrderUpd.MoveNext();
+        DisplayData();
+    }
+
+    private void MoveLast() {
+        ObjFeltOrderUpd.MoveLast();
+        DisplayData();
+    }
+
+    private void ShowMessage(String pMessage) {
+        lblStatus.setText(" " + pMessage);
+    }
+
+    private void EnableApproval() {
+        cmbSendTo.setEnabled(true);
+        OpgApprove.setEnabled(true);
+        OpgFinal.setEnabled(true);
+        OpgReject.setEnabled(true);
+        OpgHold.setEnabled(true);
+        txtToRemarks.setEnabled(true);
+        SetupApproval();
+
+        //========== Setting Up Header Fields ================//
+        String FieldName = "";
+        int SelHierarchy = EITLERPGLOBAL.getComboCode(cmbHierarchy);
+
+        for (int i = 0; i < Tab1.getComponentCount() - 1; i++) {
+            if (Tab1.getComponent(i).getName() != null) {
+
+                FieldName = Tab1.getComponent(i).getName();
+                if (clsHierarchy.CanEditField(EITLERPGLOBAL.gCompanyID, EITLERPGLOBAL.gNewUserID, SelHierarchy, "H", FieldName)) {
+                    Tab1.getComponent(i).setEnabled(true);
+                }
+            }
+        }
+        //=============== Header Fields Setup Complete =================//
+
+        //=============== Setting Table Fields ==================//
+        //   DataModel.ClearAllReadOnly();
+        Table.setEnabled(true);
+    }
+
+    private void FormatGridApprovalStatus() {
+        DataModelApprovalStatus = new EITLTableModel();
+
+        TableApprovalStatus.removeAll();
+        TableApprovalStatus.setModel(DataModelApprovalStatus);
+
+        //Set the table Readonly
+        DataModelApprovalStatus.TableReadOnly(true);
+
+        //Add the columns
+        DataModelApprovalStatus.addColumn("Sr.");
+        DataModelApprovalStatus.addColumn("User");
+        DataModelApprovalStatus.addColumn("Department");
+        DataModelApprovalStatus.addColumn("Status");
+        DataModelApprovalStatus.addColumn("Received Date");
+        DataModelApprovalStatus.addColumn("Action Date");
+        DataModelApprovalStatus.addColumn("Remarks");
+    }
+
+    private void FormatGridUpdateHistory() {
+        DataModelUpdateHistory = new EITLTableModel();
+
+        TableUpdateHistory.removeAll();
+        TableUpdateHistory.setModel(DataModelUpdateHistory);
+
+        //Set the table Readonly
+        DataModelUpdateHistory.TableReadOnly(true);
+
+        //Add the columns
+        DataModelUpdateHistory.addColumn("Rev No.");
+        DataModelUpdateHistory.addColumn("User");
+        DataModelUpdateHistory.addColumn("Date");
+        DataModelUpdateHistory.addColumn("Status");
+        DataModelUpdateHistory.addColumn("Remarks");
+    }
+
+    /*
+     private void GenerateAmendReasonCombo()
+     {
+     cmbAmendReasonModel=new EITLComboModel();
+     cmbAmendReason.removeAllItems();
+     cmbAmendReason.setModel(cmbAmendReasonModel);
+        
+     HashMap List=clsFeltPieceAmend.getAmendReasonList(EITLERPGLOBAL.gCompanyID,EITLERPGLOBAL.gNewUserID);
+        
+     for(int i=1;i<=List.size();i++) {
+     clsFeltPieceAmend ObjReason=(clsFeltPieceAmend) List.get(Integer.toString(i));
+     ComboData aData=new ComboData();
+     aData.Code=(int) ObjReason.getAttribute("PARA_CODE").getVal();
+     aData.Text=(String)ObjReason.getAttribute("PARA_DESC").getObj();
+     cmbAmendReasonModel.addElement(aData);
+     }
+        
+     }
+     */
+    private void GenerateAmendReasonCombo() {
+        HashMap hmAmendList = new HashMap();
+
+        cmbAmendReasonModel = new EITLComboModel();
+        cmbAmendReason.removeAllItems();
+        cmbAmendReason.setModel(cmbAmendReasonModel);
+
+        hmAmendList = clsFeltPieceAmendmentPO.getAmendReasonList();
+        for (int i = 1; i <= hmAmendList.size(); i++) {
+            cmbAmendReasonModel.addElement((ComboData) hmAmendList.get(new Integer(i)));
+        }
+    }
+
+    private void ReasonReadOnly() {
+        DataModel.SetReadOnly(0);
+        DataModel.SetReadOnly(1);
+        DataModel.SetReadOnly(2);
+        DataModel.SetReadOnly(3);
+//        DataModel.SetReadOnly(4);
+//        DataModel.SetReadOnly(5);
+        DataModel.SetReadOnly(6);
+        DataModel.SetReadOnly(7);
+        DataModel.SetReadOnly(8);
+    }
+
+    private void ReasonResetReadonly() {
+
+        if (EditMode == EITLERPGLOBAL.ADD) {
+
+            //    txtamendreasonname.setText((String)cmbAmendReason.getSelectedItem());
+            int AmdReason = Integer.parseInt(txtamendreasoncode.getText());
+            System.out.println("AMEND REASON : " + AmdReason);
+
+            //DataModel.TableReadOnly(false);
+            //ReasonReadOnly();
+            if (AmdReason == 12) {
+
+                DataModel.SetReadOnly(1);
+                DataModel.SetReadOnly(2);
+                DataModel.SetReadOnly(3);
+//                DataModel.SetReadOnly(4);
+//                DataModel.SetReadOnly(5);
+                DataModel.SetReadOnly(6);
+                DataModel.SetReadOnly(7);
+//                DataModel.SetReadOnly(8);
+            }
+        } else {
+            DataModel.SetReadOnly(1);
+            DataModel.SetReadOnly(2);
+            DataModel.SetReadOnly(3);
+            DataModel.SetReadOnly(4);
+            DataModel.SetReadOnly(5);
+            DataModel.SetReadOnly(6);
+            DataModel.SetReadOnly(7);
+            DataModel.SetReadOnly(8);
+        }
+    }
+
+    private void RearrangeSrNo() {
+        String mno;
+        for (int m = 0; m < DocTable.getRowCount(); m++) {
+            mno = String.valueOf(m + 1);
+            DocTable.setValueAt(mno, m, 0);
+        }
+    }
+
+    class ButtonRenderer extends JButton implements TableCellRenderer {
+
+        public ButtonRenderer() {
+            setOpaque(true);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            if (isSelected) {
+                setForeground(table.getSelectionForeground());
+                setBackground(table.getSelectionBackground());
+            } else {
+                setForeground(table.getForeground());
+                setBackground(UIManager.getColor("Button.background"));
+            }
+            setText((value == null) ? "" : value.toString());
+            return this;
+        }
+    }
+
+    class ButtonEditor extends DefaultCellEditor {
+
+        protected JButton button;
+        private String label;
+        private boolean isPushed;
+
+        public ButtonEditor(JCheckBox checkBox) {
+            super(checkBox);
+            button = new JButton();
+            button.setOpaque(true);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    fireEditingStopped();
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                boolean isSelected, int row, int column) {
+            if (isSelected) {
+                button.setForeground(table.getSelectionForeground());
+                button.setBackground(table.getSelectionBackground());
+            } else {
+                button.setForeground(table.getForeground());
+                button.setBackground(table.getBackground());
+            }
+            label = (value == null) ? "" : value.toString();
+            button.setText(label);
+            isPushed = true;
+            return button;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            if (isPushed) {
+                //JOptionPane.showMessageDialog(button, label + ": Ouch!");
+                if (DocTable.getSelectedColumn() == 3) {
+                    uploadDocument();
+                }
+                if (DocTable.getSelectedColumn() == 4) {
+                    openFile();
+                }
+
+            }
+            isPushed = false;
+            return label;
+        }
+
+        @Override
+        public boolean stopCellEditing() {
+            isPushed = false;
+            return super.stopCellEditing();
+        }
+    }
+
+    public void uploadDocument() {
+        try {
+
+            File Source_File;
+            JFileChooser chooser = new JFileChooser();
+            //FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF Files", "pdf", "jpg");
+            //sfilter.
+            //chooser.setFileFilter(filter);
+
+            int n = chooser.showOpenDialog(this);
+
+            Source_File = chooser.getSelectedFile();
+            clsDocPONoUpdation d = new clsDocPONoUpdation();
+            FileInputStream inputStream = new FileInputStream(Source_File);
+            d.setDOC_NAME(Source_File.getName());
+            d.setDOCUMENT(inputStream);
+            d.setDOCUMENT_DOC_NO(txtAmendID.getText().toString().trim());
+            d.setDoc_Sr_No(DocTable.getValueAt(DocTable.getSelectedRow(), 0).toString());
+            d.setDoc_Remark(DocTable.getValueAt(DocTable.getSelectedRow(), 1).toString());
+            d.setDoc_type(DocTable.getValueAt(DocTable.getSelectedRow(), 2).toString());
+            //System.out.println("File Size : "+(int)Source_File.length());
+            if ((int) Source_File.length() < 1000000) {
+                data.Execute("DELETE FROM DOC_MGMT.PO_NO_UPDATION "
+                        + "WHERE DOCUMENT_DOC_NO='" + txtAmendID.getText().toString().trim() + "' AND "
+                        + "DOCUMENT_SR_NO=" + DocTable.getValueAt(DocTable.getSelectedRow(), 0));
+                d.saveDocumentFile((int) Source_File.length());
+                DocTable.setValueAt(Source_File.getName(), DocTable.getSelectedRow(), 5);
+                //System.out.println("Uploding Done...!");
+            } else {
+                JOptionPane.showMessageDialog(this, "File size not more than 1 MB allowed");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void openFile() {
+
+        try {
+
+//            clsDocPONoUpdation obj = new clsDocPONoUpdation();
+//            dataList = obj.getStatus(S_O_NO.getText().toString().trim());
+//            obj = dataList.get(0);
+//            int PDocId = obj.getDOC_ID();
+//            String PFileName = obj.getDOC_NAME().toString().trim();
+            int PDocId = data.getIntValueFromDB("SELECT DOC_ID FROM DOC_MGMT.PO_NO_UPDATION "
+                    + "WHERE DOCUMENT_DOC_NO='" + txtAmendID.getText().toString().trim() + "' AND "
+                    + "DOCUMENT_SR_NO=" + DocTable.getValueAt(DocTable.getSelectedRow(), 0));
+            String PFileName = DocTable.getValueAt(DocTable.getSelectedRow(), 5).toString().trim();
+
+            ResultSet rs = null;
+            rs = sdml.felt.commonUI.data.getResult("SELECT DOCUMENT FROM DOC_MGMT.PO_NO_UPDATION where DOC_ID=" + PDocId + " AND DOC_NAME='" + PFileName + "' ");
+
+            File file = new File(PFileName);
+
+            try {
+                FileOutputStream output = new FileOutputStream(file);
+                System.out.println("Writing to file " + file.getAbsolutePath());
+                rs.first();
+                byte[] imagebytes = rs.getBytes("DOCUMENT");
+                output.write(imagebytes);
+                output.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (!Desktop.isDesktopSupported()) {
+                JOptionPane.showMessageDialog(null, "Desktop Not Supported");
+                return;
+            } else {
+                Desktop desk = Desktop.getDesktop();
+                if (file.exists()) {
+                    desk.open(file);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void GenerateAttachmentTab(String poNo) {
+        int gNoCnt = 1;
+        for (int l = 0; l <= DocTable.getRowCount() - 1; l++) {
+            String gPoNo = ((String) DocTable.getValueAt(l, 2)).trim();
+            if (poNo.equals(gPoNo)) {
+                gNoCnt = 0;
+            }
+        }
+        if (gNoCnt == 1) {
+            Object[] rowData = new Object[12];
+            rowData[0] = Integer.toString(DocTable.getRowCount() + 1);
+            rowData[1] = "";
+            rowData[2] = poNo;
+            rowData[3] = "UPLOAD";
+            rowData[4] = "VIEW";
+            rowData[5] = "";
+            DataModelDoc.addRow(rowData);
+        }
+    }
+}

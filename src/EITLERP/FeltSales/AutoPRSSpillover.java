@@ -1,0 +1,210 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package EITLERP.FeltSales;
+
+import EITLERP.EITLERPGLOBAL;
+import EITLERP.data;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+/**
+ *
+ * @author root
+ */
+public class AutoPRSSpillover {
+
+    public static void main(String[] args) {
+        if (EITLERPGLOBAL.getCurrentDay() == 11) {
+            runNonSDFQuery();
+            runSDFQuery();
+        }
+    }
+
+    private static void runNonSDFQuery() {
+
+        try {
+            String pCPRSmth = data.getStringValueFromDB("SELECT CONCAT(DATE_FORMAT(ADDDATE(CURDATE(),INTERVAL 1 MONTH),'%b'),' - ',YEAR(ADDDATE(CURDATE(),INTERVAL 1 MONTH))) FROM DUAL");
+            String pSpillover = data.getStringValueFromDB("SELECT CONCAT(DATE_FORMAT(ADDDATE(CURDATE(),INTERVAL 2 MONTH),'%b'),' - ',YEAR(ADDDATE(CURDATE(),INTERVAL 2 MONTH))) FROM DUAL");
+            Connection Conn1;
+            Statement stmt1;
+            ResultSet rsData1;
+            Conn1 = data.getConn();
+            stmt1 = Conn1.createStatement();
+            rsData1 = stmt1.executeQuery("SELECT * FROM PRODUCTION.FELT_ORDER_FOLLOWUP_DETAIL "
+                    + "WHERE CPRS_MONTH='" + pCPRSmth + "' AND COALESCE(ORDER_STATUS,'')='' AND PRODUCT_CATEGORY NOT IN ('SDF') ");
+            rsData1.first();
+
+            if (rsData1.getRow() > 0) {
+
+                data.Execute("INSERT INTO PRODUCTION.ORDER_CPRS_SPILLOVER_DETAIL (DOC_NO, SR_NO, DOC_MONTH, DOC_YEAR, SELECT_IND, ORDER_STATUS, UPN, DUMMY_PIECE_NO, ASSIGNED_PIECE_NO, PARTY_CODE, PARTY_NAME, CPRS_MONTH, CPRS_MONTH_DATE, OPRS_MONTH, OPRS_MONTH_DATE, INCHARGE, UNABLE_TO_CONTACT, DATE_OF_COMMUNICATION, MODE_OF_COMMUNICATION, CONTACT_PERSON, CONTACTED_NO, PARTY_JUSTIFICATION, AREA_MANAGER_COMMENT, NEW_FOLLOW_UP_DATE, DELAY_REASON, FOLLOW_UP_DATE, ASSIGNED_CATEGORY, CPRS_QUARTER, CPRS_OPEN_DATE, CPRS_CLOSE_DATE, PRODUCT_CATEGORY, SELECTED_DIVERSION_PIECE, EXPECTED_CPRS, EXPECTED_CPRS_REASON, ENTRY_RUNTIME) "
+                        + "SELECT DOC_NO, SR_NO, DOC_MONTH, DOC_YEAR, SELECT_IND, ORDER_STATUS, UPN, DUMMY_PIECE_NO, ASSIGNED_PIECE_NO, PARTY_CODE, PARTY_NAME, CPRS_MONTH, CPRS_MONTH_DATE, OPRS_MONTH, OPRS_MONTH_DATE, INCHARGE, UNABLE_TO_CONTACT, DATE_OF_COMMUNICATION, MODE_OF_COMMUNICATION, CONTACT_PERSON, CONTACTED_NO, PARTY_JUSTIFICATION, AREA_MANAGER_COMMENT, NEW_FOLLOW_UP_DATE, DELAY_REASON, FOLLOW_UP_DATE, ASSIGNED_CATEGORY, CPRS_QUARTER, CPRS_OPEN_DATE, CPRS_CLOSE_DATE, PRODUCT_CATEGORY, SELECTED_DIVERSION_PIECE, EXPECTED_CPRS, EXPECTED_CPRS_REASON, NOW() "
+                        + "FROM PRODUCTION.FELT_ORDER_FOLLOWUP_DETAIL "
+                        + "WHERE CPRS_MONTH='" + pCPRSmth + "' AND COALESCE(ORDER_STATUS,'')='' AND PRODUCT_CATEGORY NOT IN ('SDF') ");
+
+                while (!rsData1.isAfterLast()) {
+                    String pUPN = rsData1.getString("UPN");
+                    String pDummy = rsData1.getString("DUMMY_PIECE_NO");
+                    String pCPRS = rsData1.getString("CPRS_MONTH");
+
+                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER "
+                            + "SET PLANNED_REQUIREMENT_SCHEDULE='" + pSpillover + "' "
+                            + "WHERE UPN='" + pUPN + "' AND DUMMY_PIECE_NO='" + pDummy + "' AND PLANNED_REQUIREMENT_SCHEDULE='" + pCPRS + "' ");
+
+                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER "
+                            + "SET PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE=COALESCE(LAST_DAY(STR_TO_DATE(CONCAT('00 - ',PLANNED_REQUIREMENT_SCHEDULE), '%d-%b-%Y')),'0000-00-00') "
+                            + "WHERE UPN='" + pUPN + "' AND DUMMY_PIECE_NO='" + pDummy + "' ");
+
+                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER, PRODUCTION.FELT_MACHINE_MASTER_DETAIL "
+                            + "SET FUP_CPRS_OPEN_DATE=DATE_SUB(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 2 MONTH), INTERVAL DAY(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 2 MONTH))-11 DAY), "
+                            + "FUP_CPRS_CLOSE_DATE=DATE_SUB(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 1 MONTH), INTERVAL DAY(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 1 MONTH))-10 DAY) "
+                            + "WHERE UPN=MM_UPN_NO AND MM_GRUP NOT IN ('SDF') AND UPN='" + pUPN + "' AND DUMMY_PIECE_NO='" + pDummy + "' ");
+
+//                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER, PRODUCTION.FELT_MACHINE_MASTER_DETAIL "
+//                            + "SET FUP_CPRS_OPEN_DATE=DATE_SUB(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 1 MONTH), INTERVAL DAY(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 1 MONTH))-11 DAY), "
+//                            + "FUP_CPRS_CLOSE_DATE=DATE_SUB(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 0 MONTH), INTERVAL DAY(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 0 MONTH))-10 DAY) "
+//                            + "WHERE UPN=MM_UPN_NO AND MM_GRUP IN ('SDF') AND UPN='" + pUPN + "' AND DUMMY_PIECE_NO='"+pDummy+"' ");
+                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER, PRODUCTION.FELT_MACHINE_MASTER_DETAIL "
+                            + "SET PRS_QUARTER = CASE WHEN FUP_CPRS_OPEN_DATE>='2022-02-11' AND FUP_CPRS_OPEN_DATE<='2022-05-10' THEN 'Q1' "
+                            + "WHEN FUP_CPRS_OPEN_DATE>='2022-05-11' AND FUP_CPRS_OPEN_DATE<='2022-08-10' THEN 'Q2' "
+                            + "WHEN FUP_CPRS_OPEN_DATE>='2022-08-11' AND FUP_CPRS_OPEN_DATE<='2022-11-10' THEN 'Q3' "
+                            + "WHEN FUP_CPRS_OPEN_DATE>='2022-11-11' AND FUP_CPRS_OPEN_DATE<='2023-02-10' THEN 'Q4' END "
+                            + "WHERE UPN=MM_UPN_NO AND MM_GRUP NOT IN ('SDF') AND UPN='" + pUPN + "' AND DUMMY_PIECE_NO='" + pDummy + "' ");
+
+//                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER, PRODUCTION.FELT_MACHINE_MASTER_DETAIL "
+//                            + "SET PRS_QUARTER = CASE WHEN FUP_CPRS_OPEN_DATE>='2022-03-11' AND FUP_CPRS_OPEN_DATE<='2022-06-10' THEN 'Q1' "
+//                            + "WHEN FUP_CPRS_OPEN_DATE>='2022-06-11' AND FUP_CPRS_OPEN_DATE<='2022-09-10' THEN 'Q2' "
+//                            + "WHEN FUP_CPRS_OPEN_DATE>='2022-09-11' AND FUP_CPRS_OPEN_DATE<='2022-12-10' THEN 'Q3' "
+//                            + "WHEN FUP_CPRS_OPEN_DATE>='2022-12-11' AND FUP_CPRS_OPEN_DATE<='2023-03-10' THEN 'Q4' END "
+//                            + "WHERE UPN=MM_UPN_NO AND MM_GRUP IN ('SDF') AND UPN='" + pUPN + "' AND DUMMY_PIECE_NO='"+pDummy+"' ");
+                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_FOLLOWUP_DETAIL OFP, PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER OPR "
+                            + "SET OFP.CPRS_MONTH='" + pSpillover + "', OFP.CPRS_MONTH_DATE=COALESCE(LAST_DAY(STR_TO_DATE(CONCAT('00 - ','" + pSpillover + "'), '%d-%b-%Y')),'0000-00-00'), "
+                            + "OFP.CPRS_QUARTER=OPR.PRS_QUARTER, OFP.FOLLOW_UP_DATE=CURDATE(), OFP.EXPECTED_CPRS='" + pSpillover + "' "
+                            + "WHERE OFP.UPN = OPR.UPN AND OFP.DUMMY_PIECE_NO=OPR.DUMMY_PIECE_NO "
+                            + "AND OFP.UPN='" + pUPN + "' AND OFP.CPRS_MONTH='" + pCPRS + "' AND OFP.DUMMY_PIECE_NO='" + pDummy + "' ");
+
+                    data.Execute("UPDATE PRODUCTION.FELT_BUDGET_REVIEW_DETAIL BGT, (SELECT UPN,PARTY_CODE,PARTY_NAME,COUNT(CPRS_MONTH), "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Apr - 2022' THEN 1 ELSE 0 END,0)) AS APR_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='May - 2022' THEN 1 ELSE 0 END,0)) AS MAY_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Jun - 2022' THEN 1 ELSE 0 END,0)) AS JUN_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Jul - 2022' THEN 1 ELSE 0 END,0)) AS JUL_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Aug - 2022' THEN 1 ELSE 0 END,0)) AS AUG_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Sep - 2022' THEN 1 ELSE 0 END,0)) AS SEP_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Oct - 2022' THEN 1 ELSE 0 END,0)) AS OCT_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Nov - 2022' THEN 1 ELSE 0 END,0)) AS NOV_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Dec - 2022' THEN 1 ELSE 0 END,0)) AS DEC_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Jan - 2023' THEN 1 ELSE 0 END,0)) AS JAN_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Feb - 2023' THEN 1 ELSE 0 END,0)) AS FEB_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Mar - 2023' THEN 1 ELSE 0 END,0)) AS MAR_CNT "
+                            + "FROM PRODUCTION.FELT_ORDER_FOLLOWUP_DETAIL "
+                            + "WHERE UPN='" + pUPN + "' GROUP BY UPN,PARTY_CODE,PARTY_NAME) AS OFP "
+                            + "SET BGT.APR_BUDGET=OFP.APR_CNT, BGT.MAY_BUDGET=OFP.MAY_CNT, BGT.JUN_BUDGET=OFP.JUN_CNT, "
+                            + "BGT.JUL_BUDGET=OFP.JUL_CNT, BGT.AUG_BUDGET=OFP.AUG_CNT, BGT.SEP_BUDGET=OFP.SEP_CNT, "
+                            + "BGT.OCT_BUDGET=OFP.OCT_CNT, BGT.NOV_BUDGET=OFP.NOV_CNT, BGT.DEC_BUDGET=OFP.DEC_CNT, "
+                            + "BGT.JAN_BUDGET=OFP.JAN_CNT, BGT.FEB_BUDGET=OFP.FEB_CNT, BGT.MAR_BUDGET=OFP.MAR_CNT "
+//                            + "WHERE BGT.UPN=OFP.UPN AND BGT.UPN='" + pUPN + "' AND BGT.DOC_NO LIKE ('N2223%') ");
+                            + "WHERE BGT.UPN=OFP.UPN AND BGT.UPN='" + pUPN + "' AND BGT.DOC_NO LIKE ('B2223%') AND COALESCE(BGT.APPROVED,0)=0 AND COALESCE(BGT.CANCELED,0)=0 ");
+
+                    rsData1.next();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void runSDFQuery() {
+
+        try {
+            String pCPRSmth = data.getStringValueFromDB("SELECT CONCAT(DATE_FORMAT(ADDDATE(CURDATE(),INTERVAL 0 MONTH),'%b'),' - ',YEAR(ADDDATE(CURDATE(),INTERVAL 0 MONTH))) FROM DUAL");
+            String pSpillover = data.getStringValueFromDB("SELECT CONCAT(DATE_FORMAT(ADDDATE(CURDATE(),INTERVAL 1 MONTH),'%b'),' - ',YEAR(ADDDATE(CURDATE(),INTERVAL 1 MONTH))) FROM DUAL");
+            Connection Conn1;
+            Statement stmt1;
+            ResultSet rsData1;
+            Conn1 = data.getConn();
+            stmt1 = Conn1.createStatement();
+            rsData1 = stmt1.executeQuery("SELECT * FROM PRODUCTION.FELT_ORDER_FOLLOWUP_DETAIL "
+                    + "WHERE CPRS_MONTH='" + pCPRSmth + "' AND COALESCE(ORDER_STATUS,'')='' AND PRODUCT_CATEGORY IN ('SDF') ");
+            rsData1.first();
+
+            if (rsData1.getRow() > 0) {
+
+                data.Execute("INSERT INTO PRODUCTION.ORDER_CPRS_SPILLOVER_DETAIL (DOC_NO, SR_NO, DOC_MONTH, DOC_YEAR, SELECT_IND, ORDER_STATUS, UPN, DUMMY_PIECE_NO, ASSIGNED_PIECE_NO, PARTY_CODE, PARTY_NAME, CPRS_MONTH, CPRS_MONTH_DATE, OPRS_MONTH, OPRS_MONTH_DATE, INCHARGE, UNABLE_TO_CONTACT, DATE_OF_COMMUNICATION, MODE_OF_COMMUNICATION, CONTACT_PERSON, CONTACTED_NO, PARTY_JUSTIFICATION, AREA_MANAGER_COMMENT, NEW_FOLLOW_UP_DATE, DELAY_REASON, FOLLOW_UP_DATE, ASSIGNED_CATEGORY, CPRS_QUARTER, CPRS_OPEN_DATE, CPRS_CLOSE_DATE, PRODUCT_CATEGORY, SELECTED_DIVERSION_PIECE, EXPECTED_CPRS, EXPECTED_CPRS_REASON, ENTRY_RUNTIME) "
+                        + "SELECT DOC_NO, SR_NO, DOC_MONTH, DOC_YEAR, SELECT_IND, ORDER_STATUS, UPN, DUMMY_PIECE_NO, ASSIGNED_PIECE_NO, PARTY_CODE, PARTY_NAME, CPRS_MONTH, CPRS_MONTH_DATE, OPRS_MONTH, OPRS_MONTH_DATE, INCHARGE, UNABLE_TO_CONTACT, DATE_OF_COMMUNICATION, MODE_OF_COMMUNICATION, CONTACT_PERSON, CONTACTED_NO, PARTY_JUSTIFICATION, AREA_MANAGER_COMMENT, NEW_FOLLOW_UP_DATE, DELAY_REASON, FOLLOW_UP_DATE, ASSIGNED_CATEGORY, CPRS_QUARTER, CPRS_OPEN_DATE, CPRS_CLOSE_DATE, PRODUCT_CATEGORY, SELECTED_DIVERSION_PIECE, EXPECTED_CPRS, EXPECTED_CPRS_REASON, NOW() "
+                        + "FROM PRODUCTION.FELT_ORDER_FOLLOWUP_DETAIL "
+                        + "WHERE CPRS_MONTH='" + pCPRSmth + "' AND COALESCE(ORDER_STATUS,'')='' AND PRODUCT_CATEGORY IN ('SDF') ");
+
+                while (!rsData1.isAfterLast()) {
+                    String pUPN = rsData1.getString("UPN");
+                    String pDummy = rsData1.getString("DUMMY_PIECE_NO");
+                    String pCPRS = rsData1.getString("CPRS_MONTH");
+
+                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER "
+                            + "SET PLANNED_REQUIREMENT_SCHEDULE='" + pSpillover + "' "
+                            + "WHERE UPN='" + pUPN + "' AND DUMMY_PIECE_NO='" + pDummy + "' AND PLANNED_REQUIREMENT_SCHEDULE='" + pCPRS + "' ");
+
+                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER "
+                            + "SET PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE=COALESCE(LAST_DAY(STR_TO_DATE(CONCAT('00 - ',PLANNED_REQUIREMENT_SCHEDULE), '%d-%b-%Y')),'0000-00-00') "
+                            + "WHERE UPN='" + pUPN + "' AND DUMMY_PIECE_NO='" + pDummy + "' ");
+
+//                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER, PRODUCTION.FELT_MACHINE_MASTER_DETAIL "
+//                            + "SET FUP_CPRS_OPEN_DATE=DATE_SUB(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 2 MONTH), INTERVAL DAY(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 2 MONTH))-11 DAY), "
+//                            + "FUP_CPRS_CLOSE_DATE=DATE_SUB(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 1 MONTH), INTERVAL DAY(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 1 MONTH))-10 DAY) "
+//                            + "WHERE UPN=MM_UPN_NO AND MM_GRUP NOT IN ('SDF') AND UPN='" + pUPN + "' AND DUMMY_PIECE_NO='"+pDummy+"' ");
+                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER, PRODUCTION.FELT_MACHINE_MASTER_DETAIL "
+                            + "SET FUP_CPRS_OPEN_DATE=DATE_SUB(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 1 MONTH), INTERVAL DAY(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 1 MONTH))-11 DAY), "
+                            + "FUP_CPRS_CLOSE_DATE=DATE_SUB(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 0 MONTH), INTERVAL DAY(DATE_SUB(PLANNED_REQUIREMENT_SCHEDULE_LAST_DATE, INTERVAL 0 MONTH))-10 DAY) "
+                            + "WHERE UPN=MM_UPN_NO AND MM_GRUP IN ('SDF') AND UPN='" + pUPN + "' AND DUMMY_PIECE_NO='" + pDummy + "' ");
+
+//                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER, PRODUCTION.FELT_MACHINE_MASTER_DETAIL "
+//                            + "SET PRS_QUARTER = CASE WHEN FUP_CPRS_OPEN_DATE>='2022-02-11' AND FUP_CPRS_OPEN_DATE<='2022-05-10' THEN 'Q1' "
+//                            + "WHEN FUP_CPRS_OPEN_DATE>='2022-05-11' AND FUP_CPRS_OPEN_DATE<='2022-08-10' THEN 'Q2' "
+//                            + "WHEN FUP_CPRS_OPEN_DATE>='2022-08-11' AND FUP_CPRS_OPEN_DATE<='2022-11-10' THEN 'Q3' "
+//                            + "WHEN FUP_CPRS_OPEN_DATE>='2022-11-11' AND FUP_CPRS_OPEN_DATE<='2023-02-10' THEN 'Q4' END "
+//                            + "WHERE UPN=MM_UPN_NO AND MM_GRUP NOT IN ('SDF') AND UPN='" + pUPN + "' AND DUMMY_PIECE_NO='"+pDummy+"' ");
+                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER, PRODUCTION.FELT_MACHINE_MASTER_DETAIL "
+                            + "SET PRS_QUARTER = CASE WHEN FUP_CPRS_OPEN_DATE>='2022-03-11' AND FUP_CPRS_OPEN_DATE<='2022-06-10' THEN 'Q1' "
+                            + "WHEN FUP_CPRS_OPEN_DATE>='2022-06-11' AND FUP_CPRS_OPEN_DATE<='2022-09-10' THEN 'Q2' "
+                            + "WHEN FUP_CPRS_OPEN_DATE>='2022-09-11' AND FUP_CPRS_OPEN_DATE<='2022-12-10' THEN 'Q3' "
+                            + "WHEN FUP_CPRS_OPEN_DATE>='2022-12-11' AND FUP_CPRS_OPEN_DATE<='2023-03-10' THEN 'Q4' END "
+                            + "WHERE UPN=MM_UPN_NO AND MM_GRUP IN ('SDF') AND UPN='" + pUPN + "' AND DUMMY_PIECE_NO='" + pDummy + "' ");
+
+                    data.Execute("UPDATE PRODUCTION.FELT_ORDER_FOLLOWUP_DETAIL OFP, PRODUCTION.FELT_ORDER_REQUIREMENT_PIECE_REGISTER OPR "
+                            + "SET OFP.CPRS_MONTH='" + pSpillover + "', OFP.CPRS_MONTH_DATE=COALESCE(LAST_DAY(STR_TO_DATE(CONCAT('00 - ','" + pSpillover + "'), '%d-%b-%Y')),'0000-00-00'), "
+                            + "OFP.CPRS_QUARTER=OPR.PRS_QUARTER, OFP.FOLLOW_UP_DATE=CURDATE(), OFP.EXPECTED_CPRS='" + pSpillover + "' "
+                            + "WHERE OFP.UPN = OPR.UPN AND OFP.DUMMY_PIECE_NO=OPR.DUMMY_PIECE_NO "
+                            + "AND OFP.UPN='" + pUPN + "' AND OFP.CPRS_MONTH='" + pCPRS + "' AND OFP.DUMMY_PIECE_NO='" + pDummy + "' ");
+
+                    data.Execute("UPDATE PRODUCTION.FELT_BUDGET_REVIEW_DETAIL BGT, (SELECT UPN,PARTY_CODE,PARTY_NAME,COUNT(CPRS_MONTH), "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Apr - 2022' THEN 1 ELSE 0 END,0)) AS APR_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='May - 2022' THEN 1 ELSE 0 END,0)) AS MAY_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Jun - 2022' THEN 1 ELSE 0 END,0)) AS JUN_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Jul - 2022' THEN 1 ELSE 0 END,0)) AS JUL_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Aug - 2022' THEN 1 ELSE 0 END,0)) AS AUG_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Sep - 2022' THEN 1 ELSE 0 END,0)) AS SEP_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Oct - 2022' THEN 1 ELSE 0 END,0)) AS OCT_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Nov - 2022' THEN 1 ELSE 0 END,0)) AS NOV_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Dec - 2022' THEN 1 ELSE 0 END,0)) AS DEC_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Jan - 2023' THEN 1 ELSE 0 END,0)) AS JAN_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Feb - 2023' THEN 1 ELSE 0 END,0)) AS FEB_CNT, "
+                            + "SUM(COALESCE(CASE WHEN CPRS_MONTH ='Mar - 2023' THEN 1 ELSE 0 END,0)) AS MAR_CNT "
+                            + "FROM PRODUCTION.FELT_ORDER_FOLLOWUP_DETAIL "
+                            + "WHERE UPN='" + pUPN + "' GROUP BY UPN,PARTY_CODE,PARTY_NAME) AS OFP "
+                            + "SET BGT.APR_BUDGET=OFP.APR_CNT, BGT.MAY_BUDGET=OFP.MAY_CNT, BGT.JUN_BUDGET=OFP.JUN_CNT, "
+                            + "BGT.JUL_BUDGET=OFP.JUL_CNT, BGT.AUG_BUDGET=OFP.AUG_CNT, BGT.SEP_BUDGET=OFP.SEP_CNT, "
+                            + "BGT.OCT_BUDGET=OFP.OCT_CNT, BGT.NOV_BUDGET=OFP.NOV_CNT, BGT.DEC_BUDGET=OFP.DEC_CNT, "
+                            + "BGT.JAN_BUDGET=OFP.JAN_CNT, BGT.FEB_BUDGET=OFP.FEB_CNT, BGT.MAR_BUDGET=OFP.MAR_CNT "                            
+//                            + "WHERE BGT.UPN=OFP.UPN AND BGT.UPN='" + pUPN + "' AND BGT.DOC_NO LIKE ('N2223%') ");
+                            + "WHERE BGT.UPN=OFP.UPN AND BGT.UPN='" + pUPN + "' AND BGT.DOC_NO LIKE ('B2223%') AND COALESCE(BGT.APPROVED,0)=0 AND COALESCE(BGT.CANCELED,0)=0 ");
+
+                    rsData1.next();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,0 +1,1142 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+/**
+ *
+ * @author  DAXESH PRAJAPATI
+ *
+ */
+package EITLERP.FeltSales.Order;
+
+import EITLERP.EITLERPGLOBAL;
+import EITLERP.EITLTableModel;
+import EITLERP.*;
+import java.util.*;
+import javax.swing.*;
+import java.awt.*;
+import javax.swing.table.*;
+import java.sql.*;
+import java.awt.Frame;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+public class searchkey_diversionlist extends javax.swing.JApplet {
+
+    /**
+     * Initializes the applet searchkey
+     */
+    public String SQL, MSQL;
+    public int ReturnCol;
+    public int SecondCol = -1;
+    public boolean ShowReturnCol;
+    public int DefaultSearchOn;
+    public String Party_Code;
+    public String QueryCode;
+    public boolean Cancelled = true;
+    public boolean UseSpecifiedConn = false;
+    public String dbURL = "";
+    public String Title = "Suitable Obsolete Pieces for selected UPN";
+    public String Order_Group = "";
+    public String ReturnVal = "";
+    public String SecondVal = "";
+
+    private JDialog aDialog;
+
+    private EITLTableModel DataModel;
+
+    public boolean UseCreatedConn = false;
+
+    private int mfnd = 0;
+    private int mtotcol = 0;
+    Connection Conn = null;
+    Statement stmt = null;
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    HashMap hmPieceList=new HashMap();
+    
+    public searchkey_diversionlist() {
+        System.gc();
+        initComponents();
+        DataModel = new EITLTableModel();
+        SQL = "";
+        MSQL = "";
+        ReturnCol = 0;
+        ShowReturnCol = false;
+        DefaultSearchOn = 0;
+        lblSearch.setDisplayedMnemonic('S');
+        lblSearch.setLabelFor((Component) txtSearch);
+        try {
+            if (UseSpecifiedConn) {
+                Conn = data.getConn(EITLERPGLOBAL.DatabaseURL_Production);
+            } else {
+                if (UseCreatedConn) {
+                    //Conn=data.getCreatedConn();
+                    Conn = data.getConn(EITLERPGLOBAL.DatabaseURL_Production);
+                } else {
+                    Conn = data.getConn(EITLERPGLOBAL.DatabaseURL_Production);
+                }
+            }
+            stmt = Conn.createStatement();
+        } catch (Exception e) {
+              System.out.println("Error on connectrion = "+e.getMessage());  
+        }
+        jLabel1.setForeground(Color.WHITE);
+        jLabel35.setVisible(false);
+        txtstyle.setVisible(false);
+        
+    }
+
+    public searchkey_diversionlist(String pSQL, int pReturnCol, boolean pShowReturnCol, int pDefaultSearchOn) {
+        System.gc();
+        initComponents();
+        DataModel = new EITLTableModel();
+        SQL = pSQL;
+        MSQL = pSQL;
+        ReturnCol = pReturnCol;
+        ShowReturnCol = pShowReturnCol;
+        DefaultSearchOn = pDefaultSearchOn;
+        
+    }
+
+    @Override
+    public void init() {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(searchkey.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(searchkey.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(searchkey.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(searchkey.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the applet */
+        try {
+            java.awt.EventQueue.invokeAndWait(new Runnable() {
+                public void run() {
+                    initComponents();
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+       
+    }
+
+    /**
+     * This method is called from within the init() method to initialize the
+     * form. WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        lblSearch = new javax.swing.JLabel();
+        txtSearch = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Table = new javax.swing.JTable();
+        cmdOK = new javax.swing.JButton();
+        cmdCancel = new javax.swing.JButton();
+        jLabel18 = new javax.swing.JLabel();
+        txtlengthfrom = new javax.swing.JTextField();
+        txtlengthto = new javax.swing.JTextField();
+        txtwidthto = new javax.swing.JTextField();
+        txtwidthfrom = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        txtgsqfrom = new javax.swing.JTextField();
+        txtgsqto = new javax.swing.JTextField();
+        txtproductcode = new javax.swing.JTextField();
+        jLabel35 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        txtpieceno = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        txtstyle = new javax.swing.JTextField();
+        jLabel36 = new javax.swing.JLabel();
+
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
+        getContentPane().setLayout(null);
+
+        lblSearch.setText("Enter PIECE NO from Diverasion List and Press \"Enter\".");
+        getContentPane().add(lblSearch);
+        lblSearch.setBounds(10, 30, 530, 40);
+
+        txtSearch.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSearchKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSearchKeyTyped(evt);
+            }
+        });
+        getContentPane().add(txtSearch);
+        txtSearch.setBounds(10, 60, 530, 30);
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        Table.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        Table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        Table.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        Table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableMouseClicked(evt);
+            }
+        });
+        Table.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                TableKeyPressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(Table);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(10, 100, 1010, 260);
+
+        cmdOK.setText("OK");
+        cmdOK.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        cmdOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdOKActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cmdOK);
+        cmdOK.setBounds(850, 370, 70, 30);
+
+        cmdCancel.setText("Cancel");
+        cmdCancel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        cmdCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdCancelActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cmdCancel);
+        cmdCancel.setBounds(940, 370, 70, 30);
+
+        jLabel18.setText("Length (M)");
+        getContentPane().add(jLabel18);
+        jLabel18.setBounds(20, 530, 70, 20);
+
+        txtlengthfrom = new JTextFieldHint(new JTextField(),"From");
+        txtlengthfrom.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtlengthfromKeyPressed(evt);
+            }
+        });
+        getContentPane().add(txtlengthfrom);
+        txtlengthfrom.setBounds(110, 520, 50, 30);
+
+        txtlengthto = new JTextFieldHint(new JTextField(),"To");
+        txtlengthto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtlengthtoKeyPressed(evt);
+            }
+        });
+        getContentPane().add(txtlengthto);
+        txtlengthto.setBounds(170, 520, 50, 30);
+
+        txtwidthto = new JTextFieldHint(new JTextField(),"To");
+        txtwidthto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtwidthtoKeyPressed(evt);
+            }
+        });
+        getContentPane().add(txtwidthto);
+        txtwidthto.setBounds(170, 550, 50, 30);
+
+        txtwidthfrom = new JTextFieldHint(new JTextField(),"From");
+        txtwidthfrom.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtwidthfromKeyPressed(evt);
+            }
+        });
+        getContentPane().add(txtwidthfrom);
+        txtwidthfrom.setBounds(110, 550, 50, 30);
+
+        jLabel19.setText("Width (M)");
+        getContentPane().add(jLabel19);
+        jLabel19.setBounds(20, 560, 70, 20);
+
+        jLabel20.setText("GSM");
+        getContentPane().add(jLabel20);
+        jLabel20.setBounds(230, 560, 70, 20);
+
+        txtgsqfrom = new JTextFieldHint(new JTextField(),"From");
+        txtgsqfrom.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtgsqfromKeyPressed(evt);
+            }
+        });
+        getContentPane().add(txtgsqfrom);
+        txtgsqfrom.setBounds(300, 550, 50, 30);
+
+        txtgsqto = new JTextFieldHint(new JTextField(),"To");
+        txtgsqto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtgsqtoKeyPressed(evt);
+            }
+        });
+        getContentPane().add(txtgsqto);
+        txtgsqto.setBounds(360, 550, 50, 30);
+
+        txtproductcode.setToolTipText("Press F! key to search Product Code");
+        txtproductcode = new JTextFieldHint(new JTextField(),"Search By Press F1");
+        txtproductcode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtproductcodeKeyPressed(evt);
+            }
+        });
+        getContentPane().add(txtproductcode);
+        txtproductcode.setBounds(510, 520, 180, 19);
+
+        jLabel35.setText("Style");
+        getContentPane().add(jLabel35);
+        jLabel35.setBounds(420, 550, 90, 30);
+
+        jLabel34.setText("Piece No");
+        getContentPane().add(jLabel34);
+        jLabel34.setBounds(230, 530, 61, 20);
+
+        txtpieceno.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtpiecenoFocusLost(evt);
+            }
+        });
+        txtpieceno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtpiecenoKeyPressed(evt);
+            }
+        });
+        getContentPane().add(txtpieceno);
+        txtpieceno.setBounds(300, 520, 110, 19);
+
+        jLabel1.setBackground(new java.awt.Color(0, 102, 153));
+        jLabel1.setText("List of Pieces");
+        jLabel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabel1.setOpaque(true);
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(0, 10, 1030, 25);
+
+        jButton2.setText("Show List");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2);
+        jButton2.setBounds(710, 550, 100, 30);
+
+        jButton1.setText("Clear All");
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setMargin(new java.awt.Insets(2, 7, 2, 7));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(820, 550, 90, 30);
+
+        txtstyle.setToolTipText("Press F1 key for search Party Code");
+        txtstyle = new JTextFieldHint(new JTextField(),"Search by F1");
+        txtstyle.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtstyleFocusLost(evt);
+            }
+        });
+        txtstyle.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtstyleKeyPressed(evt);
+            }
+        });
+        getContentPane().add(txtstyle);
+        txtstyle.setBounds(510, 550, 180, 19);
+
+        jLabel36.setText("Product Code");
+        getContentPane().add(jLabel36);
+        jLabel36.setBounds(420, 520, 90, 30);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void cmdOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOKActionPerformed
+        // Add your handling code here:
+        if (Table.getRowCount() <= 0) {
+            Cancelled = true;
+        } else {
+            Cancelled = false;
+            ReturnVal = (String) DataModel.getValueAt(Table.getSelectedRow(), ReturnCol - 1);
+            
+            try {
+                if (SecondCol >= 0) {
+                    SecondVal = (String) DataModel.getValueAt(Table.getSelectedRow(), SecondCol - 1);
+                }
+            } catch (Exception e) {
+
+            }
+
+        }
+        System.gc();
+        aDialog.dispose();
+    }//GEN-LAST:event_cmdOKActionPerformed
+
+    private void cmdCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
+        // Add your handling code here:
+        Cancelled = true;
+        ReturnVal = "";
+        System.gc();
+        aDialog.dispose();
+    }//GEN-LAST:event_cmdCancelActionPerformed
+
+    private void txtSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyTyped
+        // TODO add your handling code here:
+        String mscrhtxt = "", mnwtxt = "";
+        char mchr = ' ';
+        mchr = evt.getKeyChar();
+        if (mchr == '\b') {
+            mscrhtxt = txtSearch.getText();
+        } else {
+            
+                mscrhtxt = txtSearch.getText() + evt.getKeyChar();
+                
+        }
+        mnwtxt = mscrhtxt.replace("*", "%");
+        
+        //SQL = "SELECT MM_MACHINE_NO,MM_MACHINE_POSITION,MM_MACHINE_POSITION_DESC,MM_ITEM_CODE,MM_GRUP,MM_FELT_LENGTH,MM_FELT_WIDTH,MM_FELT_GSM,MM_FELT_STYLE FROM PRODUCTION.FELT_MACHINE_MASTER_DETAIL where CONCAT(MM_COMBINATION_CODE,MM_FELT_LENGTH,MM_FELT_WIDTH,MM_FELT_GSM) like '"+mscrhtxt+"%' AND MM_PARTY_CODE='"+Party_Code+"'";
+       // SQL = "SELECT PR_PIECE_NO,PR_MACHINE_NO,PR_POSITION_NO,PR_PARTY_CODE,PR_PRODUCT_CODE,PR_GROUP,PR_STYLE,PR_LENGTH,PR_WIDTH,PR_GSM,PR_PIECE_STAGE FROM PRODUCTION.FELT_SALES_PIECE_REGISTER where "" AND ";
+//        String SQL_TEMP = "SELECT PR_PIECE_NO,PR_MACHINE_NO,PR_POSITION_NO,PR_PARTY_CODE,PR_PRODUCT_CODE,PR_GROUP,PR_STYLE,PR_LENGTH,PR_WIDTH,PR_GSM,PR_PIECE_STAGE,PR_DELINK,'' AS GROUP_WISE "
+//                            + " FROM PRODUCTION.FELT_SALES_PIECE_REGISTER where PR_MACHINE_NO!='' AND PR_POSITION_NO!='' AND PR_LENGTH!='' AND PR_WIDTH!='' AND PR_GSM!='' AND PR_DIVERSION_FLAG='READY' AND PR_PIECE_STAGE IN ('FINISHING','SEAMING','NEEDLING','MENDING','WARPING','IN STOCK') AND PR_PARTY_CODE!='"+Party_Code+"' "
+//                            + " AND PR_PIECE_NO like '"+mscrhtxt+"%'"
+//                            + " UNION ALL SELECT PR_PIECE_NO,PR_MACHINE_NO,PR_POSITION_NO,PR_PARTY_CODE,PR_PRODUCT_CODE,PR_GROUP,PR_STYLE,PR_LENGTH,PR_WIDTH,PR_GSM,PR_PIECE_STAGE,PR_DELINK,'' AS GROUP_WISE " +
+//                                "FROM PRODUCTION.FELT_SALES_PIECE_REGISTER  WHERE " +
+//                                "PR_MACHINE_NO!='' AND PR_POSITION_NO!='' AND  " +
+//                                "PR_LENGTH!='' AND PR_WIDTH!='' AND PR_GSM!='' AND " +
+//                                "PR_PARTY_CODE='"+Party_Code+"' AND PR_DIVERSION_FLAG='READY' " +
+//                                "AND PR_PIECE_STAGE IN ('FINISHING','SEAMING','NEEDLING','MENDING','WARPING','IN STOCK') " +
+//                              //  "AND COALESCE(PR_DELINK,'') NOT IN ('DELINK') " +
+//                                "AND PR_PIECE_NO like '"+mscrhtxt+"%'" +
+//                                " UNION ALL SELECT PR_PIECE_NO,PR_MACHINE_NO,PR_POSITION_NO,PR_PARTY_CODE,PR_PRODUCT_CODE, " +
+//                                " PR_GROUP,PR_STYLE,PR_LENGTH,PR_WIDTH,PR_GSM,PR_PIECE_STAGE,PR_DELINK,'GROUP_WISE' AS GROUP_WISE  " +
+//                                " FROM PRODUCTION.FELT_SALES_PIECE_REGISTER  WHERE " +
+//                                " PR_MACHINE_NO!='' AND PR_POSITION_NO!='' AND  " +
+//                                " PR_LENGTH!='' AND PR_WIDTH!='' AND PR_GSM!='' AND PR_DIVERSION_FLAG!='READY' AND " +
+//                                " PR_PIECE_STAGE IN ('FINISHING','SEAMING','NEEDLING','MENDING','WARPING','IN STOCK')  " +
+//                                " AND PR_PARTY_CODE IN (SELECT PARTY_CODE FROM PRODUCTION.FELT_GROUP_MASTER_DETAIL where GROUP_CODE IN (SELECT GROUP_CODE FROM PRODUCTION.FELT_GROUP_MASTER_DETAIL where PARTY_CODE='"+Party_Code+"')) " +
+//                                " AND PR_PARTY_CODE != '"+Party_Code+"' AND PR_PIECE_NO like '"+mscrhtxt+"%'";
+
+                            String SQL_TEMP = "SELECT PR_PIECE_NO,PR_MACHINE_NO,PR_POSITION_NO,PR_PARTY_CODE,PR_PRODUCT_CODE,PR_GROUP,PR_STYLE,PR_LENGTH,PR_WIDTH,PR_GSM,PR_PIECE_STAGE,PR_DELINK,'' AS GROUP_WISE "
+                                            + " FROM PRODUCTION.FELT_SALES_PIECE_REGISTER where PR_MACHINE_NO!='' AND PR_POSITION_NO!='' AND PR_LENGTH!='' AND PR_WIDTH!='' AND PR_GSM!='' AND PR_DIVERSION_FLAG='READY' "
+                                            + "AND (PR_PIECE_STAGE IN ('SEAMING','SPLICING','FINISHING','NEEDLING','MENDING','WARPING','IN STOCK') OR (PR_PIECE_STAGE IN ('WEAVING') AND PR_DELINK='OBSOLETE'  ) ) AND PR_PARTY_CODE!='"+Party_Code+"' "
+                                            + " AND PR_PIECE_NO like '"+mscrhtxt+"%'"
+                                            + " UNION ALL SELECT PR_PIECE_NO,PR_MACHINE_NO,PR_POSITION_NO,PR_PARTY_CODE,PR_PRODUCT_CODE,PR_GROUP,PR_STYLE,PR_LENGTH,PR_WIDTH,PR_GSM,PR_PIECE_STAGE,PR_DELINK,'' AS GROUP_WISE " +
+                                            "FROM PRODUCTION.FELT_SALES_PIECE_REGISTER WHERE " +
+                                            "PR_MACHINE_NO!='' AND PR_POSITION_NO!='' AND " +
+                                            "PR_LENGTH!='' AND PR_WIDTH!='' AND PR_GSM!='' AND " +
+                                            "PR_PARTY_CODE='"+Party_Code+"' AND PR_DIVERSION_FLAG='READY' " +
+                                            //"AND PR_PIECE_STAGE IN ('SEAMING','SPLICING','FINISHING','NEEDLING','MENDING','WARPING','IN STOCK') " +
+                                            " AND (PR_PIECE_STAGE IN ('FINISHING','SEAMING','NEEDLING','MENDING','WARPING','IN STOCK') "+
+                                            " OR (PR_PIECE_STAGE IN ('WEAVING') AND PR_DELINK='OBSOLETE'  )) "+
+                                            // "AND COALESCE(PR_DELINK,'') NOT IN ('DELINK') " +
+                                            "AND PR_PIECE_NO like '"+mscrhtxt+"%'" +
+                                            " UNION ALL SELECT PR_PIECE_NO,PR_MACHINE_NO,PR_POSITION_NO,PR_PARTY_CODE,PR_PRODUCT_CODE, " +
+                                            " PR_GROUP,PR_STYLE,PR_LENGTH,PR_WIDTH,PR_GSM,PR_PIECE_STAGE,PR_DELINK,'GROUP_WISE' AS GROUP_WISE " +
+                                            " FROM PRODUCTION.FELT_SALES_PIECE_REGISTER WHERE " +
+                                            " PR_MACHINE_NO!='' AND PR_POSITION_NO!='' AND " +
+                                            " PR_LENGTH!='' AND PR_WIDTH!='' AND PR_GSM!='' AND PR_DIVERSION_FLAG!='READY' AND " +
+                                            " (PR_PIECE_STAGE IN ('SEAMING','SPLICING','FINISHING','NEEDLING','MENDING','WARPING','IN STOCK') OR (PR_PIECE_STAGE IN ('WEAVING') AND PR_DELINK='OBSOLETE'  ) )" +
+                                            " AND PR_PARTY_CODE IN (SELECT PARTY_CODE FROM PRODUCTION.FELT_GROUP_MASTER_DETAIL where GROUP_CODE IN (SELECT GROUP_CODE FROM PRODUCTION.FELT_GROUP_MASTER_DETAIL where PARTY_CODE='"+Party_Code+"')) " +
+                                            " AND PR_PARTY_CODE != '"+Party_Code+"' AND PR_PIECE_NO like '"+mscrhtxt+"%'"
+                                            + " UNION ALL SELECT PR_PIECE_NO,PR_MACHINE_NO,PR_POSITION_NO,PR_PARTY_CODE,PR_PRODUCT_CODE,PR_GROUP,PR_STYLE,PR_LENGTH,PR_WIDTH,PR_GSM,PR_PIECE_STAGE,PR_DELINK,'' AS GROUP_WISE FROM "
+                                            + " PRODUCTION.FELT_SALES_PIECE_REGISTER WHERE PR_MACHINE_NO!='' AND PR_POSITION_NO!='' AND PR_LENGTH!='' AND PR_WIDTH!='' AND PR_GSM!='' AND "
+                                            + " (PR_DIVERSION_FLAG='InProcess') AND (PR_PIECE_STAGE IN ('SEAMING','SPLICING','FINISHING','NEEDLING','MENDING','WARPING','STOCK','IN STOCK')  OR (PR_PIECE_STAGE IN ('WEAVING') AND PR_DELINK='OBSOLETE'  ) )"
+                                            + " AND PR_PIECE_NO IN (SELECT distinct(PIECE_NO) FROM PRODUCTION.FELT_SALES_UPNWISE_OBSOLETE_LIST "
+                                            + " WHERE DIVERSION_NO!='' AND PIECE_NO like '"+mscrhtxt+"%') "; 
+             
+                
+        //SQL = SQL + " AND PR_PIECE_NO like '"+mscrhtxt+"%'";
+        SQL = SQL_TEMP;
+        System.out.println("Query after update1234 : "+SQL);
+        QueryCode = mnwtxt;
+         //JOptionPane.showMessageDialog(null, "SQL Query :" + SQL);
+        if (mscrhtxt.trim().length() > 2) {
+            FilterLOV();
+        }
+    }//GEN-LAST:event_txtSearchKeyTyped
+
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchKeyReleased
+
+    private void TableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TableKeyPressed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_TableKeyPressed
+
+    private void txtSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyPressed
+        // TODO add your handling code here:
+        try {
+            if (evt.getKeyCode() == 10) //Enter key pressed
+            {
+                if (Table.getRowCount() <= 0) {
+                    Cancelled = true;
+                } else {
+                    Cancelled = false;
+                    ReturnVal = (String) DataModel.getValueAt(Table.getSelectedRow(), ReturnCol - 1);
+                     //  SecondVal = (String) DataModel.getValueAt(Table.getSelectedRow(), SecondCol - 1); 
+                            
+                    try {
+                        if (SecondCol >= 0) {
+                            SecondVal = (String) DataModel.getValueAt(Table.getSelectedRow(), SecondCol - 1);
+                        }
+                    } catch (Exception e) {
+                           System.out.println("Error on second value = "+e.getMessage()); 
+                    }
+
+                }
+                aDialog.dispose();
+                return;
+            }
+
+            if (evt.getKeyCode() == 27) //Escape key pressed
+            {
+                Cancelled = true;
+                ReturnVal = "";
+                aDialog.dispose();
+                return;
+            }
+
+            if (evt.getKeyCode() == 40) //Down Arrow key pressed
+            {
+                if (Table.getSelectedRow() < Table.getRowCount()) {
+                    Table.changeSelection(Table.getSelectedRow() + 1, DefaultSearchOn - 1, false, false);
+                    mfnd = 1;
+                }
+                return;
+            }
+
+            if (evt.getKeyCode() == 38) //Up Arrow key pressed
+            {
+                if (Table.getSelectedRow() >= 0) {
+                    Table.changeSelection(Table.getSelectedRow() - 1, DefaultSearchOn - 1, false, false);
+                    mfnd = 1;
+                }
+
+                return;
+            }
+
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_txtSearchKeyPressed
+
+    private void txtproductcodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtproductcodeKeyPressed
+
+        if(evt.getKeyCode()==112) //F1 Key pressed
+        {
+            LOV aList=new LOV();
+            //aList.SQL="SELECT PARTY_CODE,NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER ORDER BY NAME";
+            aList.SQL = "SELECT SUBSTRING(ITEM_CODE,1,6) AS ITEM_CODE,ITEM_DESC,GRUP FROM PRODUCTION.FELT_RATE_MASTER ORDER BY ITEM_CODE ";
+            aList.ReturnCol=1;
+            aList.ShowReturnCol=true;
+            aList.DefaultSearchOn=2;
+            if(aList.ShowLOV()) {
+                //txtpartycode.setText(aList.ReturnVal);
+                //txtpartyname.setText(clsSales_Party.getPartyName(EITLERPGLOBAL.gCompanyID,aList.ReturnVal));
+                txtproductcode.setText(aList.ReturnVal);
+            }
+        }
+        if (evt.getKeyCode() == 27) //Escape key pressed
+        {
+            Cancelled = true;
+            ReturnVal = "";
+            aDialog.dispose();
+            return;
+        }
+    }//GEN-LAST:event_txtproductcodeKeyPressed
+
+    private void txtpiecenoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtpiecenoFocusLost
+
+    }//GEN-LAST:event_txtpiecenoFocusLost
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+        //SQL = "SELECT PR_PIECE_NO,PR_MACHINE_NO,PR_POSITION_NO,PR_PARTY_CODE,PR_PRODUCT_CODE,PR_GROUP,PR_STYLE,PR_LENGTH,PR_WIDTH,PR_GSM,PR_PIECE_STAGE FROM PRODUCTION.FELT_SALES_PIECE_REGISTER  WHERE  PR_DIVERSION_FLAG='READY'  AND PR_PIECE_STAGE IN ('FINISHING','NEEDLING','MENDING','WARPING','STOCK','IN STOCK') ";
+        SQL = "SELECT PR_PIECE_NO,PR_MACHINE_NO,PR_POSITION_NO,PR_PARTY_CODE,PR_PRODUCT_CODE,PR_GROUP,PR_STYLE,PR_LENGTH,PR_WIDTH,PR_GSM,PR_PIECE_STAGE,PR_DELINK,'' AS GROUP_WISE FROM PRODUCTION.FELT_SALES_PIECE_REGISTER  WHERE  PR_DIVERSION_FLAG='READY'  AND PR_PIECE_STAGE IN ('FINISHING','SEAMING','NEEDLING','MENDING','WARPING','STOCK','IN STOCK') AND PR_PARTY_CODE != '"+Party_Code+"' ";
+            boolean flag=false;
+            
+            String  Length_from=txtlengthfrom.getText(), 
+                    Length_to=txtlengthto.getText(), 
+                    Width_from=txtwidthfrom.getText(), 
+                    Width_to=txtwidthto.getText(), 
+                    GSM_from=txtgsqfrom.getText(), 
+                    GSM_to=txtgsqto.getText(), 
+                    Piece_No=txtpieceno.getText(), 
+                    Product_Code=txtproductcode.getText();
+           
+            String SQL_1 = " ";
+            if(!Length_from.equals("") && !Length_to.equals(""))
+            {
+                 
+                SQL_1 = SQL_1 + " AND (PR_LENGTH BETWEEN  '"+Length_from+"' AND '"+Length_to+"') ";
+                flag =true;
+            }
+            else if(!Length_from.equals("") && Length_to.equals(""))
+            {
+                SQL_1 = SQL_1 + " AND PR_LENGTH >= '"+Length_from+"' ";
+                flag =true;
+            }
+            else if(Length_from.equals("") && !Length_to.equals(""))
+            {
+                SQL_1 = SQL_1 + " AND PR_LENGTH <= '"+Length_to+"' ";
+                flag =true;
+            }
+            
+            if(!Width_from.equals("") && !Width_to.equals(""))
+            {
+                 SQL_1 = SQL_1 + " AND (PR_WIDTH BETWEEN  '"+Width_from+"' AND '"+Width_to+"') ";
+                flag =true;
+            }
+            else if(!Width_from.equals("") && Width_to.equals(""))
+            {
+                SQL_1 = SQL_1 + " AND PR_WIDTH >= '"+Width_from+"' ";
+                flag =true;
+            }
+            else if(Width_from.equals("") && !Width_to.equals(""))
+            {
+                SQL_1 = SQL_1 + " AND PR_WIDTH <= '"+Width_to+"' ";
+                flag =true;
+            }
+            
+            if(!GSM_from.equals("") && !GSM_to.equals(""))
+            {
+                SQL_1 = SQL_1 + " AND (PR_GSM BETWEEN  '"+GSM_from+"' AND '"+GSM_to+"') ";
+                flag =true;
+            }
+            else if(!GSM_from.equals("") && GSM_to.equals(""))
+            {
+                SQL_1 = SQL_1 + " AND PR_GSM >= '"+GSM_from+"' ";
+                flag =true;
+            }
+            else if(GSM_from.equals("") && !GSM_to.equals(""))
+            {
+               // criteria.add(Restrictions.lt("prGsm", Float.parseFloat(GSM_to)));
+                SQL_1 = SQL_1 + " AND PR_GSM <= '"+GSM_to+"' ";
+                flag =true;
+            }
+            
+            if(!Piece_No.equals(""))
+            {
+                //criteria.add(Restrictions.eq("prPieceNo", Integer.parseInt(Piece_No)));
+                SQL_1 = SQL_1 + " AND PR_PIECE_NO = '"+Piece_No+"' ";
+                flag =true;
+            }
+            
+            if(!Product_Code.equals(""))
+            {
+               // criteria.add(Restrictions.eq("prProductCode", Product_Code));
+                 SQL_1 = SQL_1 + " AND PR_PRODUCT_CODE = '"+Product_Code+"' ";
+                flag =true;
+            }
+            
+            SQL =SQL + SQL_1 + " UNION ALL SELECT PR_PIECE_NO,PR_MACHINE_NO,PR_POSITION_NO,PR_PARTY_CODE,PR_PRODUCT_CODE,PR_GROUP,PR_STYLE,PR_LENGTH,PR_WIDTH,PR_GSM,PR_PIECE_STAGE,PR_DELINK,'' AS GROUP_WISE FROM PRODUCTION.FELT_SALES_PIECE_REGISTER  WHERE " +
+                        "PR_MACHINE_NO!='' AND PR_POSITION_NO!='' AND " +
+                        "PR_LENGTH!='' AND PR_WIDTH!='' AND PR_GSM!='' AND " +
+                        "PR_PARTY_CODE='"+Party_Code+"' AND PR_DIVERSION_FLAG='READY' " +
+                        //"AND PR_PIECE_STAGE IN ('FINISHING','NEEDLING','SEAMING','MENDING','WARPING','STOCK','IN STOCK') " +
+                    
+                       " AND (PR_PIECE_STAGE IN ('FINISHING','SEAMING','NEEDLING','MENDING','WARPING','IN STOCK') " 
+                            + " OR (PR_PIECE_STAGE IN ('WEAVING') AND PR_DELINK='OBSOLETE'  )) " +
+                       // "AND COALESCE(PR_DELINK,'') NOT IN ('DELINK') " +
+                        SQL_1 +
+                    " UNION ALL SELECT PR_PIECE_NO,PR_MACHINE_NO,PR_POSITION_NO,PR_PARTY_CODE,PR_PRODUCT_CODE, " +
+                                " PR_GROUP,PR_STYLE,PR_LENGTH,PR_WIDTH,PR_GSM,PR_PIECE_STAGE,PR_DELINK,'GROUP_WISE' AS GROUP_WISE  " +
+                                " FROM PRODUCTION.FELT_SALES_PIECE_REGISTER  WHERE " +
+                                " PR_MACHINE_NO!='' AND PR_POSITION_NO!='' AND  " +
+                                " PR_LENGTH!='' AND PR_WIDTH!='' AND PR_GSM!='' AND PR_DIVERSION_FLAG!='READY' AND " +
+                                " PR_PIECE_STAGE IN ('FINISHING','SEAMING','NEEDLING','MENDING','WARPING','STOCK','IN STOCK')  " +
+                                " AND PR_PARTY_CODE IN (SELECT PARTY_CODE FROM PRODUCTION.FELT_GROUP_MASTER_DETAIL where GROUP_CODE IN (SELECT GROUP_CODE FROM PRODUCTION.FELT_GROUP_MASTER_DETAIL where PARTY_CODE='"+Party_Code+"')) " +
+                                " AND PR_PARTY_CODE != '"+Party_Code+"' "+SQL_1;
+            
+            
+            DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+            DateFormat df1 = new SimpleDateFormat("yyyy-mm-dd");
+            
+            System.out.println("Before Generate LOV Query : "+SQL);
+            FilterLOV();
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //txtpartyname.setText("");
+        //txtpartycode.setText("");
+        txtlengthfrom.setText("");
+        txtlengthto.setText("");
+        txtwidthfrom.setText("");
+        txtwidthto.setText("");
+        txtgsqfrom.setText("");
+        txtgsqto.setText("");
+        txtpieceno.setText("");
+        txtproductcode.setText("");
+       
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtstyleFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtstyleFocusLost
+      
+    }//GEN-LAST:event_txtstyleFocusLost
+
+    private void txtstyleKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtstyleKeyPressed
+        if(evt.getKeyCode()==112) //F1 Key pressed
+        {
+            LOV aList=new LOV();
+
+            //aList.SQL="SELECT PARTY_CODE,NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER ORDER BY NAME";
+            aList.SQL="SELECT PARTY_CODE,PARTY_NAME FROM DINESHMILLS.D_SAL_PARTY_MASTER WHERE MAIN_ACCOUNT_CODE='210010'";
+            aList.ReturnCol=1;
+            aList.ShowReturnCol=true;
+            aList.DefaultSearchOn=2;
+            //aList.DefaultSearchOn=1;
+
+            if(aList.ShowLOV()) {
+                txtstyle.setText(aList.ReturnVal);
+                //txtpartyname.setText(clsSales_Part.getPartyName(EITLERPGLOBAL.gCompanyID,aList.ReturnVal));
+            }
+        }
+        if (evt.getKeyCode() == 27) //Escape key pressed
+        {
+            Cancelled = true;
+            ReturnVal = "";
+            aDialog.dispose();
+            return;
+        }
+    }//GEN-LAST:event_txtstyleKeyPressed
+
+    private void TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableMouseClicked
+        // TODO add your handling code here:
+        if(evt.getClickCount() == 2)
+        {
+            if (Table.getRowCount() <= 0) {
+                    Cancelled = true;
+                } else {
+                    Cancelled = false;
+                    ReturnVal = (String) DataModel.getValueAt(Table.getSelectedRow(), ReturnCol - 1);
+                     //  SecondVal = (String) DataModel.getValueAt(Table.getSelectedRow(), SecondCol - 1); 
+                            
+                    try {
+                        if (SecondCol >= 0) {
+                            SecondVal = (String) DataModel.getValueAt(Table.getSelectedRow(), SecondCol - 1);
+                        }
+                    } catch (Exception e) {
+                           System.out.println("Error on second value = "+e.getMessage()); 
+                    }
+
+                }
+                aDialog.dispose();
+                return;
+        }
+    }//GEN-LAST:event_TableMouseClicked
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == 27) //Escape key pressed
+        {
+            Cancelled = true;
+            ReturnVal = "";
+            aDialog.dispose();
+            return;
+        }
+    }//GEN-LAST:event_formKeyPressed
+
+    private void txtlengthfromKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtlengthfromKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == 27) //Escape key pressed
+        {
+            Cancelled = true;
+            ReturnVal = "";
+            aDialog.dispose();
+            return;
+        }
+    }//GEN-LAST:event_txtlengthfromKeyPressed
+
+    private void txtlengthtoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtlengthtoKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == 27) //Escape key pressed
+        {
+            Cancelled = true;
+            ReturnVal = "";
+            aDialog.dispose();
+            return;
+        }
+    }//GEN-LAST:event_txtlengthtoKeyPressed
+
+    private void txtpiecenoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpiecenoKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == 27) //Escape key pressed
+        {
+            Cancelled = true;
+            ReturnVal = "";
+            aDialog.dispose();
+            return;
+        }
+    }//GEN-LAST:event_txtpiecenoKeyPressed
+
+    private void txtwidthfromKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtwidthfromKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == 27) //Escape key pressed
+        {
+            Cancelled = true;
+            ReturnVal = "";
+            aDialog.dispose();
+            return;
+        }
+    }//GEN-LAST:event_txtwidthfromKeyPressed
+
+    private void txtwidthtoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtwidthtoKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == 27) //Escape key pressed
+        {
+            Cancelled = true;
+            ReturnVal = "";
+            aDialog.dispose();
+            return;
+        }
+    }//GEN-LAST:event_txtwidthtoKeyPressed
+
+    private void txtgsqfromKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtgsqfromKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == 27) //Escape key pressed
+        {
+            Cancelled = true;
+            ReturnVal = "";
+            aDialog.dispose();
+            return;
+        }
+    }//GEN-LAST:event_txtgsqfromKeyPressed
+
+    private void txtgsqtoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtgsqtoKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == 27) //Escape key pressed
+        {
+            Cancelled = true;
+            ReturnVal = "";
+            aDialog.dispose();
+            return;
+        }
+    }//GEN-LAST:event_txtgsqtoKeyPressed
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable Table;
+    private javax.swing.JButton cmdCancel;
+    private javax.swing.JButton cmdOK;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblSearch;
+    public javax.swing.JTextField txtSearch;
+    private javax.swing.JTextField txtgsqfrom;
+    private javax.swing.JTextField txtgsqto;
+    private javax.swing.JTextField txtlengthfrom;
+    private javax.swing.JTextField txtlengthto;
+    private javax.swing.JTextField txtpieceno;
+    private javax.swing.JTextField txtproductcode;
+    private javax.swing.JTextField txtstyle;
+    private javax.swing.JTextField txtwidthfrom;
+    private javax.swing.JTextField txtwidthto;
+    // End of variables declaration//GEN-END:variables
+
+    public void setsearchText(String pstxt) {
+        System.out.println("Data in Search Box = "+pstxt);
+        txtSearch.setText(pstxt);
+    }
+    
+    public boolean ShowRSLOV() {
+        try {
+            GenerateLOV();
+
+            //setSize(930, 600);
+            Frame f = findParentFrame(this);
+
+            aDialog = new JDialog(f, Title, true);
+            
+            aDialog.getContentPane().add("Center", this);
+            Dimension appletSize = this.getSize();
+            aDialog.setSize(1030, 440);
+            aDialog.setResizable(true);
+            aDialog.addWindowListener(null);
+           
+            //Place it to center of the screen
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            aDialog.setLocation(50, (int) (screenSize.height - appletSize.getHeight()) / 6);
+
+            aDialog.setDefaultCloseOperation(javax.swing.JDialog.DISPOSE_ON_CLOSE);
+            aDialog.show();
+            
+        } catch (Exception e) {
+        }
+        return !Cancelled;
+    }
+
+    private void GenerateLOV() {
+        try {
+            System.out.println("ShowLOV1 SQL = "+SQL); 
+            ResultSet rsData = stmt.executeQuery(SQL);
+            //System.out.println("Data on rsData = "+rsData.getString(1));
+            ResultSetMetaData rsInfo = rsData.getMetaData();
+
+            //Format the table from the resultset meta data
+            for (int i = 1; i <= rsInfo.getColumnCount(); i++) {
+                DataModel.addColumn(rsInfo.getColumnName(i));
+            }
+
+            Table.setModel(DataModel);
+            Table.setColumnSelectionAllowed(true);
+            Table.setRowSelectionAllowed(true);
+            DataModel.TableReadOnly(true);
+
+            //Now Populate the table
+            rsData.first();
+            mtotcol = rsInfo.getColumnCount();
+            while (!rsData.isAfterLast()) {
+                Object[] rowData = new Object[rsInfo.getColumnCount()];
+
+                //Fillup the array
+                for (int i = 1; i <= rsInfo.getColumnCount(); i++) {
+                            
+                    switch (rsInfo.getColumnType(i)) {
+                        case -5: //Long
+                            rowData[i - 1] = Long.toString(rsData.getLong(i));
+                            break;
+                        case 4: //Integer,Small int
+                            rowData[i - 1] = Integer.toString(rsData.getInt(i));
+                            break;
+                        case 5: //Integer,Small int
+                            rowData[i - 1] = Integer.toString(rsData.getInt(i));
+                            break;
+                        case -6: //Integer,Small int
+                            rowData[i - 1] = Integer.toString(rsData.getInt(i));
+                            break;
+                        
+                        case 91: //Date
+                            rowData[i - 1] = EITLERPGLOBAL.formatDate(rsData.getDate(i));
+                            break;
+                        case 8: //Double
+                            rowData[i - 1] = Double.toString(rsData.getDouble(i));
+                            break;
+                        case 6: //Float
+                            rowData[i - 1] = Float.toString(rsData.getFloat(i));
+                            break;
+                        case 12://Varchar
+                            rowData[i - 1] = rsData.getString(i);
+                            break;
+                        default: //Varchar
+                            rowData[i - 1] = rsData.getString(i);
+                            break;
+                    } //Switch
+                }// for
+
+                //Add a row to the table
+                DataModel.addRow(rowData);
+
+                //Move to the next row
+                rsData.next();
+            }
+
+            TableColumnModel ColModel = Table.getColumnModel();
+            //Table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            //Table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+            
+            Table.changeSelection(0, 0, false, false);
+            txtSearch.requestFocus();
+
+            if (ShowReturnCol == false) {
+                System.out.println("Return Col = "+ReturnCol);
+                ColModel.getColumn(ReturnCol - 1).setMinWidth(0);
+                ColModel.getColumn(ReturnCol - 1).setPreferredWidth(0);
+            }
+            Table.getColumnModel().getColumn(0).setMinWidth(100);
+            Table.getColumnModel().getColumn(1).setMinWidth(100);
+            Table.getColumnModel().getColumn(2).setMinWidth(100);
+            Table.getColumnModel().getColumn(3).setMinWidth(130);
+            Table.getColumnModel().getColumn(4).setMinWidth(100);
+            Table.getColumnModel().getColumn(5).setMinWidth(150);
+            Table.getColumnModel().getColumn(6).setMinWidth(100);
+            Table.getColumnModel().getColumn(7).setMinWidth(100);
+            Table.getColumnModel().getColumn(8).setMinWidth(100);
+            Table.getColumnModel().getColumn(9).setMinWidth(100);
+            Table.getColumnModel().getColumn(10).setMinWidth(100);
+            Table.getColumnModel().getColumn(11).setMinWidth(100);
+//            Table.getColumnModel().getColumn(12).setMinWidth(100);
+//            Table.getColumnModel().getColumn(13).setMinWidth(100);
+//            Table.getColumnModel().getColumn(14).setMinWidth(120);
+//            Table.getColumnModel().getColumn(15).setMinWidth(120);
+//            Table.getColumnModel().getColumn(16).setMinWidth(120);
+//            Table.getColumnModel().getColumn(17).setMinWidth(120);
+            
+        } catch (Exception e) {
+            //JOptionPane.showMessageDialog(null,e.getMessage());
+            e.printStackTrace();
+        }
+        
+    }
+
+    private void FilterLOV() {
+        try {
+
+            ResultSet rsData = stmt.executeQuery(SQL);
+            
+            ResultSetMetaData rsInfo = rsData.getMetaData();
+            //JOptionPane.showMessageDialog(null, "Data Loaded");
+            //Format the table from the resultset meta data
+            Table.setModel(DataModel);
+            Table.setColumnSelectionAllowed(true);
+            Table.setRowSelectionAllowed(true);
+            DataModel.TableReadOnly(true);
+
+            int rowCount = DataModel.getRowCount();
+//Remove rows one by one from the end of the table
+            for (int i = rowCount - 1; i >= 0; i--) {
+                DataModel.removeRow(i);
+            }
+
+            //Now Populate the table
+            rsData.first();
+            
+            while (!rsData.isAfterLast()) {
+                Object[] rowData = new Object[rsInfo.getColumnCount()];
+                 //Fillup the array
+                for (int i = 1; i <= rsInfo.getColumnCount(); i++) {
+                    switch (rsInfo.getColumnType(i)) {
+//                        case -5: //Long
+//                            rowData[i - 1] = Long.toString(rsData.getLong(i));
+//                            break;
+//                        case 4: //Integer,Small int
+//                            rowData[i - 1] = Integer.toString(rsData.getInt(i));
+//                            break;
+//                        case 5: //Integer,Small int
+//                            rowData[i - 1] = Integer.toString(rsData.getInt(i));
+//                            break;
+//                        case -6: //Integer,Small int
+//                            rowData[i - 1] = Integer.toString(rsData.getInt(i));
+//                            break;
+//                        case 16: //Boolean
+//                            if (rsData.getBoolean(i) == true) {
+//                                rowData[i - 1] = "Yes";
+//                            } else {
+//                                rowData[i - 1] = "No";
+//                            }
+//                            break;
+//                        case 91: //Date
+//                            rowData[i - 1] = EITLERPGLOBAL.formatDate(rsData.getDate(i));
+//                            break;
+//                        case 8: //Double
+//                            rowData[i - 1] = Double.toString(rsData.getDouble(i));
+//                            break;
+//                        case 6: //Float
+//                            rowData[i - 1] = Float.toString(rsData.getFloat(i));
+//                            break;
+//                        case 12://Varchar
+//                            rowData[i - 1] = rsData.getString(i);
+//                            break;
+                        default: //Varchar
+                            rowData[i - 1] = rsData.getString(i);
+                            break;
+                    } //Switch
+                }// for
+
+                //Add a row to the table
+                DataModel.addRow(rowData);
+
+                //Move to the next row
+                rsData.next();
+            }
+
+            TableColumnModel ColModel = Table.getColumnModel();
+            //Table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            Table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+
+            Table.changeSelection(0, 0, false, false);
+            txtSearch.requestFocus();
+
+            if (ShowReturnCol == false) {
+                ColModel.getColumn(ReturnCol - 1).setMinWidth(0);
+                ColModel.getColumn(ReturnCol - 1).setPreferredWidth(0);
+            }
+
+        } catch (Exception e) {
+           // JOptionPane.showMessageDialog(null,"Error on filter"+e.getMessage());
+            JOptionPane.showMessageDialog(null,"PIECE NOT FOUND! ");
+            jButton1.doClick();
+            jButton2.doClick();
+            //e.printStackTrace();
+        }
+    }
+
+    private Frame findParentFrame(JApplet pApplet) {
+        Container c = (Container) pApplet;
+        while (c != null) {
+            if (c instanceof Frame) {
+                return (Frame) c;
+            }
+
+            c = c.getParent();
+        }
+        return (Frame) null;
+    }
+
+    public void destroy() {
+        try {
+            stmt.close();
+            Conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="TravellingPlaceVisit"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="595"
+		 columnWidth="798"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="14"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<queryString><![CDATA[select ROUND(TSD_AMOUNT/TSD_RATE,2) AS TDAY,
+CASE WHEN TSD_RATE>0 THEN TSD_RATE END AS TRATE,
+CASE WHEN TSD_AMOUNT>0 THEN TSD_AMOUNT END AS TAMT,
+VP.VISITPLACE,DATE_FORMAT(VP.DEPDATE,'%d/%m/%Y %T') AS DEPDATE,DATE_FORMAT(VP.ARRIVAL,'%d/%m/%Y %T') AS ARRIVAL,D.* FROM SDMLATTPAY.TRAVEL_VOUCHER_DETAIL D
+LEFT JOIN (SELECT TSD_DOC_NO AS DOC,GROUP_CONCAT(DISTINCT CASE WHEN TSD_IS_VISIT_PLACE='YES' THEN TSD_VISIT_PLACE END) AS VISITPLACE,MIN(CONCAT(TSD_START_DATE,' ',TSD_START_TIME)) AS DEPDATE,MAX(CONCAT(TSD_ARRIVAL_DATE,' ',TSD_ARRIVAL_TIME)) AS ARRIVAL FROM SDMLATTPAY.TRAVEL_VOUCHER_DETAIL WHERE TSD_DOC_NO='TV2122000002' ) AS VP ON D.TSD_DOC_NO=VP.DOC
+WHERE D.TSD_DOC_NO='TV2122000002'  
+ORDER BY TSD_START_DATE,TSD_START_TIME]]></queryString>
+
+	<field name="TDAY" class="java.lang.String"/>
+	<field name="TRATE" class="java.lang.String"/>
+	<field name="TAMT" class="java.lang.String"/>
+	<field name="VISITPLACE" class="java.lang.String"/>
+	<field name="DEPDATE" class="java.lang.String"/>
+	<field name="ARRIVAL" class="java.lang.String"/>
+	<field name="TSD_DOC_NO" class="java.lang.String"/>
+	<field name="TSD_DOC_DATE" class="java.sql.Date"/>
+	<field name="TSD_PAY_EMP_NO" class="java.lang.String"/>
+	<field name="TSD_DEPARTMENT" class="java.lang.String"/>
+	<field name="TSD_DESIGNATION" class="java.lang.String"/>
+	<field name="TSD_LEVEL" class="java.lang.String"/>
+	<field name="TSD_NAME" class="java.lang.String"/>
+	<field name="TSD_CATEGORY" class="java.lang.String"/>
+	<field name="TSD_PURPOSE_OF_VISIT" class="java.lang.String"/>
+	<field name="TSD_AUDIT_REMARK" class="java.lang.String"/>
+	<field name="TSD_SR_NO" class="java.lang.Integer"/>
+	<field name="TSD_START_PLACE" class="java.lang.String"/>
+	<field name="TSD_START_DATE" class="java.sql.Date"/>
+	<field name="TSD_START_TIME" class="java.sql.Time"/>
+	<field name="TSD_TRAVEL_MODE" class="java.lang.String"/>
+	<field name="TSD_KMS" class="java.lang.Double"/>
+	<field name="TSD_FARE" class="java.lang.Double"/>
+	<field name="TSD_ACTUAL_FARE" class="java.lang.Double"/>
+	<field name="TSD_VISIT_PLACE" class="java.lang.String"/>
+	<field name="TSD_IS_VISIT_PLACE" class="java.lang.String"/>
+	<field name="TSD_ARRIVAL_DATE" class="java.sql.Date"/>
+	<field name="TSD_ARRIVAL_TIME" class="java.sql.Time"/>
+	<field name="TSD_SEMINAR" class="java.lang.String"/>
+	<field name="TSD_TOTAL_FARE" class="java.lang.Double"/>
+	<field name="TSD_TOTAL_EXPENSE" class="java.lang.Double"/>
+	<field name="TSD_TOTAL" class="java.lang.Double"/>
+	<field name="TSD_ADVANCE" class="java.lang.Double"/>
+	<field name="TSD_INFO" class="java.lang.String"/>
+	<field name="CREATED_BY" class="java.lang.Integer"/>
+	<field name="CREATED_DATE" class="java.sql.Timestamp"/>
+	<field name="MODIFIED_BY" class="java.lang.Integer"/>
+	<field name="MODIFIED_DATE" class="java.sql.Timestamp"/>
+	<field name="APPROVED" class="java.lang.Integer"/>
+	<field name="APPROVED_DATE" class="java.sql.Timestamp"/>
+	<field name="REJECTED" class="java.lang.Integer"/>
+	<field name="REJECTED_DATE" class="java.sql.Timestamp"/>
+	<field name="CANCELED" class="java.lang.Integer"/>
+	<field name="HIERARCHY_ID" class="java.lang.Integer"/>
+	<field name="CHANGED" class="java.lang.Integer"/>
+	<field name="CHANGED_DATE" class="java.sql.Date"/>
+	<field name="REJECTED_REMARKS" class="java.lang.String"/>
+	<field name="FROM_IP" class="java.lang.String"/>
+	<field name="TSD_RATE" class="java.lang.String"/>
+	<field name="TSD_AMOUNT" class="java.lang.String"/>
+	<field name="TSD_DAYS" class="java.lang.String"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="110"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="2"
+						y="1"
+						width="794"
+						height="18"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[SHRI DINESH MILLS LTD.,]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="21"
+						width="794"
+						height="18"
+						key="staticText-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[DETAILS OF PLACE VISITED & ALLOWANCES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="45"
+						width="35"
+						height="18"
+						key="staticText-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Sr.No.]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="1"
+						y="42"
+						width="796"
+						height="0"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="43"
+						y="45"
+						width="299"
+						height="15"
+						key="staticText-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[D e t a i l s    o f    D e p a r t u r e]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="43"
+						y="65"
+						width="72"
+						height="18"
+						key="staticText-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[From Place]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="2"
+						y="85"
+						width="35"
+						height="18"
+						key="staticText-6"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[(1)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="63"
+						y="85"
+						width="35"
+						height="18"
+						key="staticText-7"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[(2)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="270"
+						y="65"
+						width="39"
+						height="18"
+						key="staticText-8"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="273"
+						y="85"
+						width="35"
+						height="18"
+						key="staticText-9"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[(3)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="310"
+						y="65"
+						width="35"
+						height="18"
+						key="staticText-10"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Time]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="310"
+						y="85"
+						width="35"
+						height="18"
+						key="staticText-11"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[(4)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="351"
+						y="45"
+						width="200"
+						height="15"
+						key="staticText-12"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[D e t a i l s    o f    A r r i v a l]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="345"
+						y="65"
+						width="55"
+						height="18"
+						key="staticText-13"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[To Place]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="355"
+						y="85"
+						width="35"
+						height="18"
+						key="staticText-14"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[(5)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="552"
+						y="45"
+						width="80"
+						height="36"
+						key="staticText-19"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Transit Days/
+Visit Days]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="580"
+						y="85"
+						width="35"
+						height="18"
+						key="staticText-20"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[(8)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="633"
+						y="45"
+						width="70"
+						height="36"
+						key="staticText-21"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Rate of T.A.
+per Day (Rs.)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="654"
+						y="85"
+						width="35"
+						height="18"
+						key="staticText-22"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[(9)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="704"
+						y="45"
+						width="93"
+						height="36"
+						key="staticText-23"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Travelling 
+Allowance (Rs.)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="737"
+						y="85"
+						width="35"
+						height="18"
+						key="staticText-24"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[(10)]]></text>
+				</staticText>
+				<line direction="TopDown">
+					<reportElement
+						x="1"
+						y="106"
+						width="796"
+						height="0"
+						key="line-2"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="476"
+						y="65"
+						width="39"
+						height="18"
+						key="staticText-25"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="479"
+						y="85"
+						width="35"
+						height="18"
+						key="staticText-26"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[(6)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="517"
+						y="65"
+						width="35"
+						height="18"
+						key="staticText-27"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Time]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="517"
+						y="85"
+						width="35"
+						height="18"
+						key="staticText-28"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[(7)]]></text>
+				</staticText>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="22"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2"
+						y="1"
+						width="32"
+						height="16"
+						key="textField-1">
+							<printWhenExpression><![CDATA[$F{TSD_INFO}.equals("CURRENT") ? Boolean.TRUE : Boolean.FALSE]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{TSD_SR_NO}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="1"
+						y="19"
+						width="796"
+						height="0"
+						key="line-3"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="42"
+						y="1"
+						width="227"
+						height="16"
+						key="textField-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TSD_START_PLACE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="270"
+						y="1"
+						width="44"
+						height="16"
+						key="textField-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{TSD_START_DATE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="HH.mm" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="320"
+						y="1"
+						width="23"
+						height="16"
+						key="textField-4">
+							<printWhenExpression><![CDATA[$F{TSD_INFO}.equals("CURRENT") ? Boolean.TRUE : Boolean.FALSE]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.sql.Time"><![CDATA[$F{TSD_START_TIME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="349"
+						y="1"
+						width="130"
+						height="16"
+						key="textField-5">
+							<printWhenExpression><![CDATA[$F{TSD_INFO}.equals("CURRENT") ? Boolean.TRUE : Boolean.FALSE]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TSD_VISIT_PLACE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="480"
+						y="1"
+						width="44"
+						height="16"
+						key="textField-6">
+							<printWhenExpression><![CDATA[$F{TSD_INFO}.equals("CURRENT") ? Boolean.TRUE : Boolean.FALSE]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{TSD_ARRIVAL_DATE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="HH.mm" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="528"
+						y="1"
+						width="23"
+						height="16"
+						key="textField-7">
+							<printWhenExpression><![CDATA[$F{TSD_INFO}.equals("CURRENT") ? Boolean.TRUE : Boolean.FALSE]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.sql.Time"><![CDATA[$F{TSD_ARRIVAL_TIME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="552"
+						y="1"
+						width="82"
+						height="16"
+						key="textField-8">
+							<printWhenExpression><![CDATA[$F{TSD_INFO}.equals("CURRENT") ? Boolean.TRUE : Boolean.FALSE]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TDAY}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="636"
+						y="1"
+						width="65"
+						height="16"
+						key="textField-9">
+							<printWhenExpression><![CDATA[$F{TSD_INFO}.equals("CURRENT") ? Boolean.TRUE : Boolean.FALSE]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TRATE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="707"
+						y="1"
+						width="74"
+						height="16"
+						key="textField-10">
+							<printWhenExpression><![CDATA[$F{TSD_INFO}.equals("CURRENT") ? Boolean.TRUE : Boolean.FALSE]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TAMT}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="28"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="627"
+						y="3"
+						width="72"
+						height="18"
+						key="staticText-29"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total Rs.]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="###0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="707"
+						y="4"
+						width="74"
+						height="16"
+						key="textField-11"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TSD_TOTAL_EXPENSE}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="655"
+						y="25"
+						width="141"
+						height="0"
+						key="line-4"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+			</band>
+		</summary>
+</jasperReport>
